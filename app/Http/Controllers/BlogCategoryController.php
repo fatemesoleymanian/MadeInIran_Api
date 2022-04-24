@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Blog;
+use App\Models\BlogCategory;
+use App\Models\BlogTag;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
+
+class BlogCategoryController extends Controller
+{
+    ////////////////********* this controller has been tested => OK!
+    public function showAll()
+    {
+        return BlogCategory::orderByDesc('id')->get();
+    }
+    public function showOne($id)
+    {
+        return BlogCategory::where('id',$id)->first();
+    }
+    public function showAllWithBlog()
+    {
+        return BlogCategory::with(['blog'])->orderByDesc('id')->get();
+    }
+    public function showOneWithBlog($id)
+    {
+        return BlogCategory::with(['blog'])->where('id',$id)->first();
+    }
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+        return BlogCategory::where('id', $request->id)->update([
+            'name' => $request->name,
+        ]);
+    }
+    public  function destroy($id)
+    {
+        return BlogCategory::where('id', $id)->delete();
+    }
+
+    public function save(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+        return BlogCategory::create([
+            'name' => $request->name,
+        ]);
+    }
+}
