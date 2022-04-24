@@ -9,7 +9,7 @@ class ProductStateController extends Controller
 {
     public function filterOnState($type)
     {
-        return ProductState::with(['product'])->where('type','=',$type)->get();
+        return ProductState::with(['product'])->where('type','=',$type)->paginate(10);
     }
 
 }

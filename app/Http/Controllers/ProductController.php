@@ -189,7 +189,7 @@ class ProductController extends Controller
     }
     public function showAll()
     {
-        return Product::orderByDesc('id')->get();
+        return Product::orderByDesc('id')->paginate(10);
     }
     public function showOneWithCategory($id)
     {
@@ -198,7 +198,7 @@ class ProductController extends Controller
     }
     public function showAllWithCategory()
     {        //with tags and category
-        return Product::with(['category','tag'])->orderByDesc('id')->get();
+        return Product::with(['category','tag'])->orderByDesc('id')->paginate(10);
     }
     public function showOneWithState($id)
     {
@@ -206,13 +206,20 @@ class ProductController extends Controller
     }
     public function showAllWithState()
     {
-        return Product::with(['state'])->orderByDesc('id')->get();
+        return Product::with(['state'])->orderByDesc('id')->paginate(10);
     }
 
     ////*************** search suggestion in store *********
     public function searchSuggestion()
     {
-        return Product::orderByDesc('id')->get('name');
+        $product = Product::orderByDesc('id')->get('name');
+        $tag = DB::table('tags')->orderByDesc('id')->get('name');
+        $blog = Blog::orderByDesc('id')->get('title');
+        return response()->json([
+            'products'=>$product,
+            'blogs'=>$blog,
+            'tags'=>$tag
+        ]);
     }
     ///*************** search product and blogs in store*******
     public function search($str)
@@ -292,7 +299,7 @@ class ProductController extends Controller
     }
 
 
-
+//rajebe filter krdn voice grfti too gushit
     ///************ Filter Product in both panel and store
     /// there is no search string
 //    public function filter(Request $request)

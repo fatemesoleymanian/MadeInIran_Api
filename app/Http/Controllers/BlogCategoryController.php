@@ -15,7 +15,7 @@ class BlogCategoryController extends Controller
     ////////////////********* this controller has been tested => OK!
     public function showAll()
     {
-        return BlogCategory::orderByDesc('id')->get();
+        return BlogCategory::orderByDesc('id')->paginate(10);
     }
     public function showOne($id)
     {
@@ -23,7 +23,7 @@ class BlogCategoryController extends Controller
     }
     public function showAllWithBlog()
     {
-        return BlogCategory::with(['blog'])->orderByDesc('id')->get();
+        return BlogCategory::with(['blog'])->orderByDesc('id')->paginate(10);
     }
     public function showOneWithBlog($id)
     {

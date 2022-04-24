@@ -26,7 +26,7 @@ class BlogController extends Controller
     ////////////////********* this methods have been tested => OK!
     public function showAll()
     {
-        return Blog::with(['tag', 'category'])->orderByDesc('id')->get();
+        return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
     }
     public function showOne($id)
     {

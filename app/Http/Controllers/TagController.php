@@ -24,7 +24,7 @@ class TagController extends Controller
     }
     public function showAll()
     {
-        return Tag::orderByDesc('id')->get();
+        return Tag::orderByDesc('id')->paginate(10);
     }
     public function showOne($id)
     {
@@ -39,7 +39,7 @@ class TagController extends Controller
     }
     public function showAllWithBlog()
     {
-        return Tag::with(['blog'])->where('type',0)->get();
+        return Tag::with(['blog'])->where('type',0)->paginate(10);
     }
     public function showOneWithProduct($id)
     {
@@ -50,7 +50,7 @@ class TagController extends Controller
     }
     public function showAllWithProduct()
     {
-        return Tag::with(['product'])->where('type',1)->get();
+        return Tag::with(['product'])->where('type',1)->paginate(10);
     }
     public function update(Request $request)
     {

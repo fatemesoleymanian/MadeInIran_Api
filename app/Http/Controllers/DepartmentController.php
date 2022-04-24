@@ -105,7 +105,7 @@ class DepartmentController extends Controller
     }
     public function showAll()
     {
-        return Department::orderByDesc('id')->get();
+        return Department::orderByDesc('id')->paginate(10);
     }
     public function showOne($id)
     {
@@ -113,7 +113,7 @@ class DepartmentController extends Controller
     }
     public function showAllWithCategory()
     {
-        return Department::with(['category'])->orderByDesc('id')->get();
+        return Department::with(['category'])->orderByDesc('id')->paginate(10);
     }
     public function showOneWithCategory($id)
     {

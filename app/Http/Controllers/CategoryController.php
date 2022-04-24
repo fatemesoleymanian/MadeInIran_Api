@@ -111,7 +111,7 @@ class CategoryController extends Controller
     }
     public function showAll()
     {
-        return Category::orderByDesc('id')->get();
+        return Category::orderByDesc('id')->paginate(10);
     }
     public function showOne($id)
     {
@@ -123,7 +123,7 @@ class CategoryController extends Controller
     }
     public function showAllWithDepartment(Request $request)
     {
-        return Category::with(['department'])->orderByDesc('id')->get();
+        return Category::with(['department'])->orderByDesc('id')->paginate(10);
     }
     public function showOneWithProduct($id)
     {
@@ -131,6 +131,6 @@ class CategoryController extends Controller
     }
     public function showAllWithProduct()
     {
-     return Category::with(['product'])->orderByDesc('id')->get();
+     return Category::with(['product'])->orderByDesc('id')->paginate(10);
     }
 }
