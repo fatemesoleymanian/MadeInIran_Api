@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_states', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->float('price');
-            $table->float('discounted_price')->default(0);
-            //            $table->foreignId('product_id')
-//                ->constrained()
-//                ->onUpdate('cascade')
-//                ->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -33,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_states');
+        Schema::dropIfExists('roles');
     }
 };

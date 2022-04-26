@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ProductController;
@@ -115,6 +117,16 @@ Route::post('/remove_uploads', [Upload::class, 'deleteGroupImages']);
     //product filter
     Route::get('/products_filter/{type}' ,[ProductStateController::class,'filterOnState']);
 
+    //bookmark
+    Route::post('/bookmark',[BookmarkController::class,'save']);
+    Route::get('/bookmark',[BookmarkController::class,'show']);
+    Route::get('/bookmark/{user}',[BookmarkController::class,'showByUser']);
+    Route::delete('/bookmark',[BookmarkController::class,'remove']);
+
+    //card
+    Route::post('/card',[CardController::class,'save']);
+    Route::get('/card/{user}',[CardController::class,'showByUser']);
+    Route::delete('/card',[CardController::class,'remove']);
 //    Route::post('auth/logout', [AuthController::class, 'logout']);
 //});
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

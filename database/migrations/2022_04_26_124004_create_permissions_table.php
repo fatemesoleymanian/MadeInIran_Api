@@ -13,21 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('inventory')->nullable(true);
-            $table->string('image');
-            $table->string('description_excerpt');
-            $table->text('description');
-            $table->string('metaDescription');
-            $table->string('metaKeyword');
-            $table->string('pageTitle');
-            $table->float('discount')->default(0);
-            //            $table->foreignId('category_id')
+            $table->bigInteger('role_id',false,true);
+            //            $table->foreignId('role_id')
 //                ->constrained()
 //                ->onUpdate('cascade')
 //                ->onDelete('cascade');
+            $table->string('permission');
+            $table->boolean('create');
+            $table->boolean('read');
+            $table->boolean('update');
+            $table->boolean('delete');
             $table->timestamps();
         });
     }
@@ -39,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('permissions');
     }
 };

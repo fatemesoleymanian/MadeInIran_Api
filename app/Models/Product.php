@@ -15,7 +15,8 @@ class Product extends Model
         'image',
         'description_excerpt',
         'description',
-        'category_id'
+        'category_id',
+        'discount'
     ];
     public function category()
     {
@@ -28,6 +29,10 @@ class Product extends Model
     public function state()
     {
         return $this->hasMany(ProductState::class,'product_id');
+    }
+    public function card()
+    {
+        return $this->belongsToMany(Card::class,'card_products');
     }
     use HasFactory;
 }

@@ -13,18 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('cards', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('inventory')->nullable(true);
-            $table->string('image');
-            $table->string('description_excerpt');
-            $table->text('description');
-            $table->string('metaDescription');
-            $table->string('metaKeyword');
-            $table->string('pageTitle');
-            $table->float('discount')->default(0);
-            //            $table->foreignId('category_id')
+            $table->boolean('status');
+                //            $table->foreignId('user_id')
 //                ->constrained()
 //                ->onUpdate('cascade')
 //                ->onDelete('cascade');
@@ -39,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('cards');
     }
 };

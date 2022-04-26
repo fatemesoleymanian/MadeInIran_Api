@@ -17,7 +17,8 @@ class ProductController extends Controller
 {
     public function save(Request $request)
     {
-        Validator::validate($request->all(),[
+        Validator::validate($request->all(),
+            [
 
             'name'=>"bail|required|string",
             'image'=>"bail|required|string",
@@ -28,7 +29,7 @@ class ProductController extends Controller
             'metaKeyword' => 'bail|required|max:20',
             'pageTitle' => 'required|max:100',
             'states' => 'required',
-            'costs' => 'required',
+            'costs' => 'required'
         ],
             [
                 'name.required'=>'لطفا نام محصول را وارد کنید!',
@@ -51,6 +52,7 @@ class ProductController extends Controller
             ]);
         $states = $request->states;
         $costs = $request->costs;
+        $off = $request->off;
         $dynamic_info =[] ;
 
         DB::beginTransaction();
@@ -65,6 +67,7 @@ class ProductController extends Controller
                 'metaKeyword' => $request->metaKeyword,
                 'pageTitle' => $request->pageTitle,
                 'inventory' => $request->inventory,
+                'discount' => $request->discount,
             ]);
 
 
@@ -72,7 +75,8 @@ class ProductController extends Controller
                 array_push($dynamic_info ,[
                     'type' => $states[$x],
                     'price' => $costs[$x],
-                    'product_id' => $product_id->id
+                    'product_id' => $product_id->id,
+                    'discounted_price' => $off[$x]
                 ] );
             }
             ProductState::insert($dynamic_info);
@@ -128,6 +132,7 @@ class ProductController extends Controller
             ]);
         $states = $request->states;
         $costs = $request->costs;
+        $off = $request->off;
         $dynamic_info =[] ;
 
         DB::beginTransaction();
@@ -142,6 +147,7 @@ class ProductController extends Controller
                 'metaKeyword' => $request->metaKeyword,
                 'pageTitle' => $request->pageTitle,
                 'inventory' => $request->inventory,
+                'discount' => $request->discount,
             ]);
             ProductState::where('product_id',$id)->delete();
 
@@ -149,7 +155,8 @@ class ProductController extends Controller
                 array_push($dynamic_info ,[
                     'type' => $states[$x],
                     'price' => $costs[$x],
-                    'product_id' => $id
+                    'product_id' => $id,
+                    'discounted_price' => $off[$x]
                 ] );
             }
             ProductState::insert($dynamic_info);
