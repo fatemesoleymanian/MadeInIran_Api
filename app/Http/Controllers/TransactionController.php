@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    //badaz pardakht status order va card bayad 0 she
     public function showAll()
     {
 

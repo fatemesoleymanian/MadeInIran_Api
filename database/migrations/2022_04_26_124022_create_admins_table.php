@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
-            $table->string('phone_number',11);
+            $table->string('username')->nullable();
+            $table->string('phone_number',11)->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->text('address')->nullable();
@@ -26,6 +26,7 @@ return new class extends Migration
 //                ->constrained()
 //                ->onUpdate('cascade')
 //                ->onDelete('cascade');
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
     }

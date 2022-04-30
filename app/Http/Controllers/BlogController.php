@@ -15,15 +15,14 @@ use Throwable;
 
 class BlogController extends Controller
 {
-    //////////////* like method has NOT been tested cuz lack of user *//////////
-    public function like($user_id , $blog_id)
+    ////////////////********* this methods have been tested => OK!
+    public function like(Request $request)
     {
         return BlogLike::create([
-            'blog_id' => $blog_id ,
-            'user_id' => $user_id
+            'blog_id' => $request->blog_id ,
+            'user_id' => $request->user_id
         ]);
     }
-    ////////////////********* this methods have been tested => OK!
     public function showAll()
     {
         return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);

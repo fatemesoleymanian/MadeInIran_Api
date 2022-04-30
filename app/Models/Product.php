@@ -34,5 +34,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Card::class,'card_products');
     }
+    public function bookmark()
+    {
+        return $this->hasMany(Bookmark::class,'product_id');
+    }
     use HasFactory;
 }

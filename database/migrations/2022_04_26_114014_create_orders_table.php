@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->float('total');
+            $table->string('total',15);
+            $table->string('current_state')->nullable();
             $table->boolean('status');
             //            $table->foreignId('card_id')
 //                ->constrained()

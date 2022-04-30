@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('product_states', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->float('price');
-            $table->float('discounted_price')->default(0);
+            $table->string('price',15);
+            $table->string('discounted_price',15)->default(0);
             //            $table->foreignId('product_id')
 //                ->constrained()
 //                ->onUpdate('cascade')

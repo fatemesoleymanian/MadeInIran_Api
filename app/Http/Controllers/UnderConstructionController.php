@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\under_construction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mailer\Exception\ExceptionInterface;
 
 class UnderConstructionController extends Controller
 {
-    ////////////////********* this controller hase been tested => OK!
+    ////////////////********* this controller has been tested => OK!
     public function save(Request $request){
         $request->validate([
             'full_name' => 'required|string',
@@ -25,6 +28,39 @@ class UnderConstructionController extends Controller
             'user' => $user ,
             'msg' => Lang::get('messages.under_const_appreciation')
         ];
+        try {
+            Mail::send('mail.under_construction', [
+                'full_name' => $request->full_name,
+                'phone_number' => $request->phone_number,
+                'description' => $request->description,
+            ], function ($message) use ($request) {
+                $message->to('sarkhosh.niloufar@gmail.com');
+                $message->subject('Under Construction Form');
+            });
+
+        }catch (ExceptionInterface $e){
+                return response()->json([
+                    'msg' => '0'
+                ]);
+        }
+
         return response()->json($response , 201);
+    }
+    public function showAll()
+    {
+        $users = under_construction::orderByDesc('id')->get();
+        try {
+            Mail::send('mail.under_construction', [
+                'users'=>$users
+            ], function ($message) {
+                $message->to('sarkhosh.niloufar@gmail.com');
+                $message->subject('Under Construction Forms till here');
+            });
+
+        }catch (ExceptionInterface $e){
+            return response()->json([
+                'msg' => '0'
+            ]);
+        }
     }
 }
