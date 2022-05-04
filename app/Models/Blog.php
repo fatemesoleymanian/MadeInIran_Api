@@ -18,6 +18,7 @@ class Blog extends Model
         'pageTitle',
         'views',
         'category_id',
+
     ];
     public function sluggable()
     {
@@ -29,11 +30,11 @@ class Blog extends Model
     }
     public  function category()
     {
-        return $this->belongsTo(BlogCategory::class,'category_id');
+        return $this->belongsTo(BlogCategory::class, 'category_id');
     }
     public  function tag()
     {
-        return $this->belongsToMany(Tag::class,BlogTag::class);
+        return $this->belongsToMany(Tag::class, BlogTag::class);
     }
     use HasFactory;
 }

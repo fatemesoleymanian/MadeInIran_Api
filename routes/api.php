@@ -16,6 +16,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnderConstructionController;
 use App\Http\Controllers\Upload;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AdminCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -71,6 +72,11 @@ use Illuminate\Support\Facades\Route;
     Route::post('/login_or_reg', [UserController::class, 'loginOrRegister']);
     Route::post('/confirm_code', [UserController::class, 'finishLogin']);
 
+    //admin panel
+    Route::post('admin/forget_password', [AdminController::class, 'forgetPassword']);
+    Route::post('admin/reset_password', [AdminController::class, 'resetPassword']);
+    Route::post('admin/auth/login', [AdminController::class, 'login']);
+Route::put('/products/{id}', [ProductController::class, 'update']);
 ///////////////////**************** Needs Authentication *************************//////////
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -84,10 +90,19 @@ use Illuminate\Support\Facades\Route;
 //admin panel
     Route::get('/admin_search/{str}', [ProductController::class, 'adminSearch']);
     Route::post('admin/auth/register', [AdminController::class, 'register']);
-    Route::post('admin/auth/login', [AdminController::class, 'login']);
+    Route::post('admin/logout', [AdminController::class, 'logout']);
+    Route::get('admin/show/{id}', [AdminController::class, 'showOne']);
+    Route::get('admins/show', [AdminController::class, 'showAll']);
+    Route::put('admin/edit', [AdminController::class, 'update']);
+    Route::delete('admin/delete', [AdminController::class, 'delete']);
+
 
     //role
      Route::post('admin/role',[RoleController::class,'save']);
+     Route::put('admin/role',[RoleController::class,'update']);
+     Route::get('admin/role',[RoleController::class,'showAll']);
+     Route::get('admin/role/{id}',[RoleController::class,'showOne']);
+     Route::delete('admin/role',[RoleController::class,'delete']);
 
 
 //upload image
@@ -123,7 +138,7 @@ use Illuminate\Support\Facades\Route;
 
     //products
     Route::post('/products', [ProductController::class, 'save']);
-    Route::put('/products/{id}', [ProductController::class, 'update']);
+//    Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     //product filter
     Route::get('/products_filter/{type}', [ProductStateController::class, 'filterOnState']);
@@ -153,9 +168,38 @@ use Illuminate\Support\Facades\Route;
     Route::get('order/state/{id}', [OrderController::class, 'showState']);
 
 });
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+
+    //inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe
+//    Route::group(['middleware' => ['auth:sanctum'],[AdminCheck::class]], function () {
+//
+//    //admin panel
+//        Route::post('admin/auth/register', [AdminController::class, 'register']);
+//        Route::get('admin/show/{id}', [AdminController::class, 'showOne']);
+//        Route::get('admins/show', [AdminController::class, 'showAll']);
+//        Route::put('admin/edit', [AdminController::class, 'update']);
+//        Route::delete('admin/delete', [AdminController::class, 'delete']);
+//
+//
+//        //role
+//        Route::post('admin/role',[RoleController::class,'save']);
+//        Route::put('admin/role',[RoleController::class,'update']);
+//        Route::get('admin/role',[RoleController::class,'showAll']);
+//        Route::get('admin/role/{id}',[RoleController::class,'showOne']);
+//        Route::delete('admin/role',[RoleController::class,'delete']);
+//
+//
+//        //category for blog
+//        Route::put('/blog_categories', [BlogCategoryController::class, 'update']);
+//        Route::delete('/blog_categories/{id}', [BlogCategoryController::class, 'destroy']);
+//        Route::post('/blog_categories', [BlogCategoryController::class, 'save']);
+//
+//        //tag
+//        Route::post('/tags', [TagController::class, 'save']);
+//        Route::put('/tags', [TagController::class, 'update']);
+//        Route::delete('/tags/{id}', [TagController::class, 'destroy']);
+//
+//    });
+
 Route::get('/test', function () {
     return response()->json(
         'salam'
@@ -168,3 +212,4 @@ Route::get('/cache-clear', function () {
 Route::get('/config-clear', function () {
     Artisan::call('config:clear');
 });
+

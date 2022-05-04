@@ -18,6 +18,7 @@ return new class extends Migration
             $table->float('total');
             $table->string('provider');
             $table->boolean('status');
+            $table->integer('transactionId');
             //            $table->foreignId('order_id')
 //                ->constrained()
 //                ->onUpdate('cascade')

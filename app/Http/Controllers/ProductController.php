@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Models\ProductState;
@@ -15,41 +17,9 @@ use Throwable;
 
 class ProductController extends Controller
 {
-    public function save(Request $request)
+    public function save(CreateProductRequest $request)
     {
-        Validator::validate($request->all(),
-            [
-
-                'name' => "bail|required|string",
-                'image' => "bail|required|string",
-                'description_excerpt' => "bail|required|string",
-                'description' => "bail|required",
-                'category_id' => "bail|required|integer",
-                'metaDescription' => 'bail|required|max:100',
-                'metaKeyword' => 'bail|required|max:20',
-                'pageTitle' => 'required|max:100',
-                'states' => 'required',
-                'costs' => 'required'
-            ],
-            [
-                'name.required' => 'لطفا نام محصول را وارد کنید!',
-                'description_excerpt.required' => 'لطفا چکیده توضیحات محصول را وارد کنید!',
-                'description.required' => 'لطفا توضیحات محصول را وارد کنید!',
-                'category_id.required' => 'لطفا دسته بندی محصول را وارد کنید!',
-                'category_id.integer' => 'لطفا دسته بندی محصول را به درستی وارد کنید!',
-                'name.string' => 'لطفا نام محصول را به درستی وارد کنید!',
-                'description_excerpt.string' => 'لطفا چکیده توضیحات محصول را به درستی وارد کنید!',
-                'image.required' => 'لطفا ادرس فایل را وارد کنید!',
-                'image.string' => 'لطفا آدرس فایل را به درستی وارد کنید!',
-                'metaDescription.required' => 'لطفا توضیحات متا را به درستی وارد کنید!',
-                'metaDescription.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
-                'metaKeyword.required' => 'لطفا کلمه کلیدی متا را به درستی وارد کنید!',
-                'metaKeyword.max' => 'حداکثر تعداد حروف 20 حرف میباشد!',
-                'pageTitle.required' => 'لطفا تیتر صفحه را به درستی وارد کنید!',
-                'states.required' => 'لطفا اطلاعات متغیر محصول را وارد کنید!',
-                'costs.required' => 'لطفا اطلاعات متغیر محصول را وارد کنید!',
-                'pageTitle.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
-            ]);
+       $request->validated();
         $states = $request->states;
         $costs = $request->costs;
         $off = $request->off;
@@ -95,82 +65,89 @@ class ProductController extends Controller
 
     }
 
-    //!!!!!!!!!!!!!!PROBLEM IN UPDATING
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-        Validator::validate($request->all(), [
-
-            'name' => "bail|required|string",
-            'image' => "bail|required|string",
-            'description_excerpt' => "bail|required|string",
-            'description' => "bail|required",
-            'category_id' => "bail|required|integer",
-            'metaDescription' => 'bail|required|max:100',
-            'metaKeyword' => 'bail|required|max:20',
-            'pageTitle' => 'required|max:100',
-            'states' => 'required',
-            'costs' => 'required',
-        ],
-            [
-                'name.required' => 'لطفا نام محصول را وارد کنید!',
-                'description_excerpt.required' => 'لطفا چکیده توضیحات محصول را وارد کنید!',
-                'description.required' => 'لطفا توضیحات محصول را وارد کنید!',
-                'category_id.required' => 'لطفا دسته بندی محصول را وارد کنید!',
-                'category_id.integer' => 'لطفا دسته بندی محصول را به درستی وارد کنید!',
-                'name.string' => 'لطفا نام محصول را به درستی وارد کنید!',
-                'description_excerpt.string' => 'لطفا چکیده توضیحات محصول را به درستی وارد کنید!',
-                'image.required' => 'لطفا ادرس فایل را وارد کنید!',
-                'image.string' => 'لطفا آدرس فایل را به درستی وارد کنید!',
-                'metaDescription.required' => 'لطفا توضیحات متا را به درستی وارد کنید!',
-                'metaDescription.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
-                'metaKeyword.required' => 'لطفا کلمه کلیدی متا را به درستی وارد کنید!',
-                'metaKeyword.max' => 'حداکثر تعداد حروف 20 حرف میباشد!',
-                'pageTitle.required' => 'لطفا تیتر صفحه را به درستی وارد کنید!',
-                'states.required' => 'لطفا اطلاعات متغیر محصول را وارد کنید!',
-                'costs.required' => 'لطفا اطلاعات متغیر محصول را وارد کنید!',
-                'pageTitle.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
-            ]);
+       $request->validated();
         $states = $request->states;
         $costs = $request->costs;
         $off = $request->off;
+        $ids = $request->ids;
         $dynamic_info = array();
 
-//        DB::beginTransaction();
-//        try {
-            $product_id = Product::where('id', $id)->update([
-                'name' => $request->name,
-                'image' => $request->image,
-                'description_excerpt' => $request->description_excerpt,
-                'description' => $request->description,
-                'category_id' => $request->category_id,
-                'metaDescription' => $request->metaDescription,
-                'metaKeyword' => $request->metaKeyword,
-                'pageTitle' => $request->pageTitle,
-                'inventory' => $request->inventory,
-                'discount' => $request->discount,
+        DB::beginTransaction();
+        try {
+        $product_id = Product::where('id', $id)->update([
+            'name' => $request->name,
+            'image' => $request->image,
+            'description_excerpt' => $request->description_excerpt,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'metaDescription' => $request->metaDescription,
+            'metaKeyword' => $request->metaKeyword,
+            'pageTitle' => $request->pageTitle,
+            'inventory' => $request->inventory,
+            'discount' => $request->discount,
+        ]);
+        for ($x = 0; $x < sizeof($states); $x++) {
+            array_push($dynamic_info, [
+                'type' => $states[$x],
+                'price' => $costs[$x],
+                'discounted_price' => $off[$x],
+                'product_id' => $id,
             ]);
-                for ($x = 0; $x < sizeof($states); $x++) {
-                    array_push($dynamic_info, [
-                        'type' => $states[$x],
-                        'price' => $costs[$x],
-                        'discounted_price' => $off[$x],
-                        'product_id' => $id,
-                    ]);
-                }
-                ProductState::where('product_id',$id)->delete();
-                ProductState::insert($dynamic_info);
+        }
+        $old = ProductState::where('product_id',$id)->get('id');
 
-            DB::commit();
+        if (sizeof($old) >sizeof($dynamic_info))
+        {
+            $x=0;
+            foreach ($old as $o)
+            {
+                $x=0;
+                $flag = false;
+                foreach ($ids as $i)
+                {
+                    if ($o->id == $i) {
+                        ProductState::find($i)->update($dynamic_info[$x]);
+                        $flag = true;
+                        break;
+                    } $x++;
+                }
+                if ($flag == false)  ProductState::find($o->id)->delete();
+            }
+        }
+        else if (sizeof($old) <sizeof($dynamic_info))
+        {
+            $x=0;
+            foreach ($dynamic_info as $d)
+            {
+                if (isset($dynamic_info[$x]) && isset($ids[$x])) ProductState::find($ids[$x])->update($dynamic_info[$x]);
+                if (!isset($ids[$x])) ProductState::insert($d);
+                $x++;
+            }
+        }
+        else
+        {
+            $x=0;
+            foreach ($old as $o)
+            {
+                ProductState::find($ids[$x])->update($dynamic_info[$x]);
+                $x++;
+            }
+        }
+
+
+        DB::commit();
+        return response()->json([
+            'msg' => Lang::get('messages.success', ['attribute' => 'محصول']),
+            'product' => $product_id
+        ]);
+        } catch (Throwable $throwable) {
+            DB::rollBack();
             return response()->json([
-                'msg' => Lang::get('messages.success', ['attribute' => 'محصول']),
-                'product' => $product_id
-            ]);
-//        } catch (Throwable $throwable) {
-//            DB::rollBack();
-//            return response()->json([
-//                'errors' => Lang::get('messages.fail', ['attribute' => 'محصول'])
-//            ], 401);
-//        }
+                'errors' => Lang::get('messages.fail', ['attribute' => 'محصول'])
+            ], 401);
+        }
         return 'Not done!';
 
 
@@ -235,23 +212,25 @@ class ProductController extends Controller
     }
 
     ///*************** search product and blogs in store*******
-    public function search($str)
+    public function search(Request $request, $str)
     {
         if ($str) {
-
-            $product = Product::with(['category', 'state', 'tag'])
-                ->when($str != '', function (Builder $q) use ($str) {
-                    $q->where('name', 'LIKE', "%{$str}%")
-                        ->orWhereHas('category', function (Builder $builder) use ($str) {
-                            $builder->where('name', 'LIKE', "%{$str}%");
-                        })
-                        ->orWhereHas('tag', function (Builder $builder) use ($str) {
-                            $builder->where('name', 'LIKE', "%{$str}%");
-                        })
-                        ->orWhereHas('state', function (Builder $builder) use ($str) {
-                            $builder->where('type', 'LIKE', "%{$str}%");
-                        });
-                })->paginate(10);
+            $product = null;
+            if ($request->role_id == 12) {
+                $product = Product::with(['category', 'state', 'tag'])
+                    ->when($str != '', function (Builder $q) use ($str) {
+                        $q->where('name', 'LIKE', "%{$str}%")
+                            ->orWhereHas('category', function (Builder $builder) use ($str) {
+                                $builder->where('name', 'LIKE', "%{$str}%");
+                            })
+                            ->orWhereHas('tag', function (Builder $builder) use ($str) {
+                                $builder->where('name', 'LIKE', "%{$str}%");
+                            })
+                            ->orWhereHas('state', function (Builder $builder) use ($str) {
+                                $builder->where('type', 'LIKE', "%{$str}%");
+                            });
+                    })->paginate(10);
+            }
 
             $blog = Blog::with(['tag', 'category'])
                 ->when($str != '', function (Builder $q) use ($str) {

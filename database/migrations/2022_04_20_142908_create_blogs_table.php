@@ -25,10 +25,10 @@ return new class extends Migration
             $table->string('metaKeyword');
             $table->string('pageTitle');
             $table->integer('views')->default(0);
-//            $table->foreignId('blog_category_id')
-//                ->constrained()
-//                ->onUpdate('cascade')
-//                ->onDelete('cascade');
+            //            $table->foreignId('blog_category_id')
+            //                ->constrained()
+            //                ->onUpdate('cascade')
+            //                ->onDelete('cascade');
 
             $table->timestamps();
         });
