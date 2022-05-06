@@ -174,7 +174,8 @@ class ProductController extends Controller
 
     public function showAll()
     {
-        return Product::with('bookmark')->orderByDesc('id')->paginate(10);
+        //front will handle pagination
+        return Product::with('bookmark')->orderByDesc('id')->get();
     }
 
     public function showOneWithCategory($id)
