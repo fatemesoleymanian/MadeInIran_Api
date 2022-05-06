@@ -20,6 +20,14 @@ class Blog extends Model
         'category_id',
 
     ];
+    public function getCreatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
+    public function getUpdatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
     public function sluggable()
     {
         return [

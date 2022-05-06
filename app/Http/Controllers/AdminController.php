@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -83,7 +84,9 @@ class AdminController extends Controller
 
     public function showAll()
     {
-        $admins = Admin::all();
+        $admins = Cache::remember('admins',now()->addHour(1),function (){
+            return Admin::all();
+        });
         return response()->json(
             [
                 'admins' => $admins

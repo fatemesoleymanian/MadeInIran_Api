@@ -25,6 +25,14 @@ class Admin  extends Authenticatable
         'password',
         'role_id',
     ];
+    public function getCreatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
+    public function getUpdatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

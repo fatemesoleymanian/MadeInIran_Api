@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\Route;
 //Blog
     Route::get('/blogs', [BlogController::class, 'showAll']);
     Route::get('/blogs/{id}', [BlogController::class, 'showOne']);
+    Route::get('/blogs_id/{id}', [BlogController::class, 'showIds']);
+    Route::get('blogs/search/{str}', [BlogController::class, 'search']);
+    Route::get('/blogs_latest', [BlogController::class, 'latestFour']);
 
 //category for blog
     Route::get('/blog_categories', [BlogCategoryController::class, 'showAll']);

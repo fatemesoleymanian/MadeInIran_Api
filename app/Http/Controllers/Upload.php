@@ -24,7 +24,7 @@ class Upload extends Controller
         $request->image->move(public_path($request->location), $picName);
         return response()->json([
             'success'=> 1,
-            'file'=>["url"=>"https://api.madein-iran.com/public/$request->location/$picName"]
+            'file'=>["url"=>"https://api.madein-iran.com/$request->location/$picName"]
 //            'file'=>["url"=> Storage::url("$request->location/$picName")]
         ]);
         //age in response ro ngrfti bedun ke anjam nshde

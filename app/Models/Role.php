@@ -11,7 +11,17 @@ class Role extends Model
 
     public function permission()
     {
-        return $this->hasMany(Permission::class,'role_id');
+        return $this->hasMany(Permission::class, 'role_id');
     }
+
+    public function getCreatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
+    public function getUpdatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
+
     use HasFactory;
 }

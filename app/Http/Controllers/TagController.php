@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BlogTag;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class TagController extends Controller
@@ -24,7 +25,10 @@ class TagController extends Controller
     }
     public function showAll()
     {
-        return Tag::orderByDesc('id')->paginate(10);
+        $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
+            return Tag::orderByDesc('id')->get();
+        });
+        return $tags;
     }
     public function showOne($id)
     {

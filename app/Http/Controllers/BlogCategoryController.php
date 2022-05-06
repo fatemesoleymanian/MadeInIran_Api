@@ -6,6 +6,7 @@ use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\BlogTag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
@@ -15,7 +16,10 @@ class BlogCategoryController extends Controller
     ////////////////********* this controller has been tested => OK!
     public function showAll()
     {
-        return BlogCategory::orderByDesc('id')->paginate(10);
+        $categories = Cache::remember('category_for_blogs',now()->addHour(1),function (){
+        return  BlogCategory::with(['blog'])->orderByDesc('id')->get();
+        });
+        return $categories;
     }
     public function showOne($id)
     {

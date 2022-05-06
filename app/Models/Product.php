@@ -18,25 +18,35 @@ class Product extends Model
         'category_id',
         'discount'
     ];
+
+    public function getCreatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
+    public function getUpdatedAtAttribute($val)
+    {
+        return verta($val)->format('l d %B Y');
+    }
+
     public function category()
     {
-        return $this->belongsTo(Category::class,'category_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
     public function tag()
     {
-        return $this->belongsToMany(Tag::class,'product_tags');
+        return $this->belongsToMany(Tag::class, 'product_tags');
     }
     public function state()
     {
-        return $this->hasMany(ProductState::class,'product_id');
+        return $this->hasMany(ProductState::class, 'product_id');
     }
     public function card()
     {
-        return $this->belongsToMany(Card::class,'card_products');
+        return $this->belongsToMany(Card::class, 'card_products');
     }
     public function bookmark()
     {
-        return $this->hasMany(Bookmark::class,'product_id');
+        return $this->hasMany(Bookmark::class, 'product_id');
     }
     use HasFactory;
 }
