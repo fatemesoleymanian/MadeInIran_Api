@@ -21,34 +21,43 @@ class UserController extends Controller
         // phone number
         if (str_starts_with($key, '09')) {
             $kavenegar = new KavenegarApi(config('kavenegar.apikey'));
-            $kavenegar->Send('0018018949161', '09908285709',
-                'کد تایید ساخت ایران :' . $conf_code);
+            $kavenegar->Send(
+                '0018018949161',
+                '09908285709',
+                'کد تایید ساخت ایران :' . $conf_code
+            );
             cache()->remember($key, 250, function () use ($conf_code) {
                 return $conf_code;
             });
-
-        } //EMAIL
+        }
+        //EMAIL
         else {
-            Validator::validate($request->all(), ['key' => "required|email"],
-                ['key.required' => 'لطفا شماره تلفن همراه یا ایمیل خود را وارد کنید!',
-                    'key.email' => 'لطفا شماره تلفن همراه یا ایمیل خود را به درستی وارد کنید!']);
+            Validator::validate(
+                $request->all(),
+                ['key' => "required|email"],
+                [
+                    'key.required' => 'لطفا شماره تلفن همراه یا ایمیل خود را وارد کنید!',
+                    'key.email' => 'لطفا شماره تلفن همراه یا ایمیل خود را به درستی وارد کنید!'
+                ]
+            );
 
-            $user = User::where('email', $key)->get();
-
+            $user = User::where('email', $key)->first();
             $status = 0;
             //login
             if ($user) $status = 1;
 
             try {
-                Mail::send('mail.conf_code', ['code' => $conf_code],
+                Mail::send(
+                    'mail.conf_code',
+                    ['code' => $conf_code],
                     function ($message) use ($request) {
                         $message->to($request->key);
                         $message->subject('کد تایید ساخت ایران');
-                    });
-                cache()->remember($key, 250, function () use ($conf_code) {
+                    }
+                );
+                cache()->remember($key, 200, function () use ($conf_code) {
                     return $conf_code;
                 });
-
             } catch (ExceptionInterface $e) {
                 return response()->json([
                     'email' => '0'
@@ -61,9 +70,11 @@ class UserController extends Controller
 
     public function finishLogin(Request $request)
     {
-        Validator::validate($request->all(),
+        Validator::validate(
+            $request->all(),
             ['code' => "required"],
-            ['code.required' => 'کد تایید را وارد کنید!']);
+            ['code.required' => 'کد تایید را وارد کنید!']
+        );
         $key = $request->key;
         $code = cache()->get($key);
         $card = null;
@@ -82,9 +93,9 @@ class UserController extends Controller
                         'email' => $key
                     ]);
                 }
-               $card = Card::create([
-                    'user_id'=>$user->id,
-                    'status'=> 1
+                $card = Card::create([
+                    'user_id' => $user->id,
+                    'status' => 1
                 ]);
             }
 
@@ -103,36 +114,20 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        Validator::validate($request->all(),
+        Validator::validate(
+            $request->all(),
             [
-                'name' => 'string',
                 'phone_number' => 'min:11|max:11|digits:11',
-                'home_number' => 'min:11|max:11|digits:11',
-                'national_id' => 'min:10|max:10|digits:10',
-                'job' => 'string',
-                'company_name' => 'string',
-                'email' => 'email',
-                'password' => 'min:6|max:15',
                 'address' => 'string',
+                'name' => 'string',
             ],
             [
-                'name.string' => 'لطفا شماره تلفن همراه یا ایمیل خود را وارد کنید!',
                 'phone_number.min' => 'لطفا شماره تلفن همراه را به درستی  وارد کنید!',
                 'phone_number.max' => 'لطفا شماره تلفن همراه را به درستی  وارد کنید!',
                 'phone_number.digits' => 'لطفا شماره تلفن همراه را به درستی وارد کنید!',
-                'home_number.min' => 'لطفا شماره تلفن ثابت را به درستی وارد کنید!',
-                'home_number.max' => 'لطفا شماره تلفن ثابت را به درستی وارد کنید!',
-                'home_number.digits' => 'لطفا شماره تلفن ثابت را به درستی وارد کنید!',
-                'national_id.min' => 'لطفا کد ملی را به درستی وارد کنید!',
-                'national_id.max' => 'لطفا کد ملی را به درستی وارد کنید!',
-                'national_id.digits' => 'لطفا کد ملی را به درستی وارد کنید!',
-                'job.string' => 'لطفا شغل خود را وارد کنید!',
-                'company_name.string' => 'لطفا نام شرکت را وارد کنید!',
-                'address.string' => 'لطفا آدرس خود را وارد کنید!',
-                'email.email' => 'لطفا آدرس ایمیل را به درستی وارد کنید!',
-                'password.min' => 'رمز عبور حداقل شامل 6 کاراکتر است!',
-                'password.max' => 'رمز عبور حداکثر شامل 15 کاراکتر است!',
-            ]);
+
+            ]
+        );
         $password = str();
         if ($request->password) {
             $password = bcrypt($request->password);
