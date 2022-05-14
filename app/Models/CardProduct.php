@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CardProduct extends Model
 {
-    protected $fillable = ['card_id', 'product_id', 'count'];
+    protected $fillable = ['card_id', 'product_id', 'count', 'state_id'];
 
     public function getCreatedAtAttribute($val)
     {

@@ -22,7 +22,7 @@ class CardController extends Controller
             'state_id' => $request->state
         ]);
         return response()->json([
-            'msg' => $add
+            'msg' => bcrypt($add)
         ]);
     }
 
@@ -33,7 +33,7 @@ class CardController extends Controller
             'status' => 1
         ])->first();
 
-        $products = CardProduct::with(['product','state'])->where('card_id', $card_id->id)->paginate(10);
+        $products = CardProduct::with(['product', 'state'])->where('card_id', $card_id->id)->get();
         return response()->json([
             'products' => $products
         ]);
@@ -69,9 +69,9 @@ class CardController extends Controller
     }
 
     //panel admin
-//    public function showByUser($id)
-//    {
-//
-//    }
+    //    public function showByUser($id)
+    //    {
+    //
+    //    }
 
 }

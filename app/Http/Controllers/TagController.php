@@ -19,42 +19,42 @@ class TagController extends Controller
         ]);
 
         return Tag::create([
-        'name' => $request->name,
-        'type' => $request->type
+            'name' => $request->name,
+            'type' => $request->type
         ]);
     }
     public function showAll()
     {
-        $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
-            return Tag::orderByDesc('id')->get();
-        });
-        return $tags;
+        // $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
+        return Tag::orderByDesc('id')->get();
+        // });
+        // return $tags;
     }
     public function showOne($id)
     {
-        return Tag::where('id',$id)->first();
+        return Tag::where('id', $id)->first();
     }
     public function showOneWithBlog($id)
     {
         return Tag::with(['blog'])->where([
-            'id'=>$id,
-            'type'=>0
+            'id' => $id,
+            'type' => 0
         ])->get();
     }
     public function showAllWithBlog()
     {
-        return Tag::with(['blog'])->where('type',0)->paginate(10);
+        return Tag::with(['blog'])->where('type', 0)->paginate(10);
     }
     public function showOneWithProduct($id)
     {
         return Tag::with(['product'])->where([
-            'id'=>$id,
-            'type'=>1
+            'id' => $id,
+            'type' => 1
         ])->get();
     }
     public function showAllWithProduct()
     {
-        return Tag::with(['product'])->where('type',1)->paginate(10);
+        return Tag::with(['product'])->where('type', 1)->get();
     }
     public function update(Request $request)
     {
@@ -73,4 +73,3 @@ class TagController extends Controller
         return Tag::where('id', $id)->delete();
     }
 }
-

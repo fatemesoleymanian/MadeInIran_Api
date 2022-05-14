@@ -22,75 +22,76 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 
-    Route::post('/under_const/save', [UnderConstructionController::class, 'save']);
-    Route::get('/under_const/show', [UnderConstructionController::class, 'showAll']);
+Route::post('/under_const/save', [UnderConstructionController::class, 'save']);
+Route::get('/under_const/show', [UnderConstructionController::class, 'showAll']);
 
 //Blog
-    Route::get('/blogs', [BlogController::class, 'showAll']);
-    Route::get('/blogs/{id}', [BlogController::class, 'showOne']);
-    Route::get('/blogs_id/{id}', [BlogController::class, 'showIds']);
-    Route::get('blogs/search/{str}', [BlogController::class, 'search']);
-    Route::get('/blogs_latest', [BlogController::class, 'latestFour']);
+Route::get('/blogs', [BlogController::class, 'showAll']);
+Route::get('/blogs/{id}', [BlogController::class, 'showOne']);
+Route::get('/blogs_id/{id}', [BlogController::class, 'showIds']);
+Route::get('blogs/search/{str}', [BlogController::class, 'search']);
+Route::get('/blogs_latest', [BlogController::class, 'latestFour']);
 
 //category for blog
-    Route::get('/blog_categories', [BlogCategoryController::class, 'showAll']);
-    Route::get('/blog_categories/{id}', [BlogCategoryController::class, 'showOne']);
-    Route::get('/blog_categories_with_blog', [BlogCategoryController::class, 'showAllWithBlog']);
-    Route::get('/blog_categories_with_blog/{id}', [BlogCategoryController::class, 'showOneWithBlog']);
+Route::get('/blog_categories', [BlogCategoryController::class, 'showAll']);
+Route::get('/blog_categories/{id}', [BlogCategoryController::class, 'showOne']);
+Route::get('/blog_categories_with_blog', [BlogCategoryController::class, 'showAllWithBlog']);
+Route::get('/blog_categories_with_blog/{id}', [BlogCategoryController::class, 'showOneWithBlog']);
 
 
 //tag
-    Route::get('/tags', [TagController::class, 'showAll']);
-    Route::get('/tags/{id}', [TagController::class, 'showOne']);
-    Route::get('/tags_with_blog', [TagController::class, 'showAllWithBlog']);
-    Route::get('/tags_with_blog/{id}', [TagController::class, 'showOneWithBlog']);
-    Route::get('/tags_with_product', [TagController::class, 'showAllWithProduct']);
-    Route::get('/tags_with_product/{id}', [TagController::class, 'showOneWithProduct']);
+Route::get('/tags', [TagController::class, 'showAll']);
+Route::get('/tags/{id}', [TagController::class, 'showOne']);
+Route::get('/tags_with_blog', [TagController::class, 'showAllWithBlog']);
+Route::get('/tags_with_blog/{id}', [TagController::class, 'showOneWithBlog']);
+Route::get('/tags_with_product', [TagController::class, 'showAllWithProduct']);
+Route::get('/tags_with_product/{id}', [TagController::class, 'showOneWithProduct']);
 
 //department
-    Route::get('/departments', [DepartmentController::class, 'showAll']);
-    Route::get('/departments/{id}', [DepartmentController::class, 'showOne']);
-    Route::get('/departments_with_category', [DepartmentController::class, 'showAllWithCategory']);
-    Route::get('/departments_with_category/{id}', [DepartmentController::class, 'showOneWithCategory']);
+Route::get('/departments', [DepartmentController::class, 'showAll']);
+Route::get('/departments/{id}', [DepartmentController::class, 'showOne']);
+Route::get('/departments_with_category', [DepartmentController::class, 'showAllWithCategory']);
+Route::get('/departments_with_category/{id}', [DepartmentController::class, 'showOneWithCategory']);
 
 //categories for products
-    Route::get('/categories', [CategoryController::class, 'showAll']);
-    Route::get('/categories/{id}', [CategoryController::class, 'showOne']);
-    Route::get('/categories_with_department', [CategoryController::class, 'showAllWithDepartment']);
-    Route::get('/categories_with_department/{id}', [CategoryController::class, 'showOneWithDepartment']);
-    Route::get('/categories_with_product', [CategoryController::class, 'showAllWithProduct']);
-    Route::get('/categories_with_product/{id}', [CategoryController::class, 'showOneWithProduct']);
+Route::get('/categories', [CategoryController::class, 'showAll']);
+Route::get('/categories/{id}', [CategoryController::class, 'showOne']);
+Route::get('/categories_with_department', [CategoryController::class, 'showAllWithDepartment']);
+Route::get('/categories_with_department/{id}', [CategoryController::class, 'showOneWithDepartment']);
+Route::get('/categories_with_product', [CategoryController::class, 'showAllWithProduct']);
+Route::get('/categories_with_product/{id}', [CategoryController::class, 'showOneWithProduct']);
 
 //products
-    Route::get('/products', [ProductController::class, 'showAll']);
-    Route::get('/products/{id}', [ProductController::class, 'showOne']);
-    Route::get('/products_with_category', [ProductController::class, 'showAllWithCategory']);
-    Route::get('/products_with_category/{id}', [ProductController::class, 'showOneWithCategory']);
-    Route::get('/products_with_state', [ProductController::class, 'showAllWithState']);
-    Route::get('/products_with_state/{id}', [ProductController::class, 'showOneWithState']);
-    Route::get('/products_search/{str}', [ProductController::class, 'search']);
-    Route::get('/products_search_suggestion', [ProductController::class, 'searchSuggestion']);
+Route::get('/products', [ProductController::class, 'showAll']);
+Route::get('/products/{id}', [ProductController::class, 'showOne']);
+Route::get('/products_with_category', [ProductController::class, 'showAllWithCategory']);
+Route::get('/products_with_category/{id}', [ProductController::class, 'showOneWithCategory']);
+Route::get('/products_with_state', [ProductController::class, 'showAllWithState']);
+Route::get('/products_with_state/{id}', [ProductController::class, 'showOneWithState']);
+Route::get('/products_search/{str}', [ProductController::class, 'searchBoth']);
+Route::get('/just_products_search/{str}', [ProductController::class, 'searchProducts']);
+Route::get('/products_search_suggestion', [ProductController::class, 'searchSuggestion']);
 
 //store user
-    Route::post('/login_or_reg', [UserController::class, 'loginOrRegister']);
-    Route::post('/confirm_code', [UserController::class, 'finishLogin']);
+Route::post('/login_or_reg', [UserController::class, 'loginOrRegister']);
+Route::post('/confirm_code', [UserController::class, 'finishLogin']);
 
-    //admin panel
-    Route::post('admin/forget_password', [AdminController::class, 'forgetPassword']);
-    Route::post('admin/reset_password', [AdminController::class, 'resetPassword']);
-    Route::post('admin/auth/login', [AdminController::class, 'login']);
+//admin panel
+Route::post('admin/forget_password', [AdminController::class, 'forgetPassword']);
+Route::post('admin/reset_password', [AdminController::class, 'resetPassword']);
+Route::post('admin/auth/login', [AdminController::class, 'login']);
 Route::put('/products/{id}', [ProductController::class, 'update']);
 ///////////////////**************** Needs Authentication *************************//////////
 
-    Route::group(['middleware' => ['auth:sanctum']], function () {
-//store user
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    //store user
     Route::put('/update_acc', [UserController::class, 'update']);
     Route::delete('/delete_acc', [UserController::class, 'deleteAccount']);
     Route::get('/show_acc/{id}', [UserController::class, 'show']);
     Route::post('/logout', [UserController::class, 'logout']);
 
 
-//admin panel
+    //admin panel
     Route::get('/admin_search/{str}', [ProductController::class, 'adminSearch']);
     Route::post('admin/auth/register', [AdminController::class, 'register']);
     Route::post('admin/logout', [AdminController::class, 'logout']);
@@ -101,19 +102,19 @@ Route::put('/products/{id}', [ProductController::class, 'update']);
 
 
     //role
-     Route::post('admin/role',[RoleController::class,'save']);
-     Route::put('admin/role',[RoleController::class,'update']);
-     Route::get('admin/role',[RoleController::class,'showAll']);
-     Route::get('admin/role/{id}',[RoleController::class,'showOne']);
-     Route::delete('admin/role',[RoleController::class,'delete']);
+    Route::post('admin/role', [RoleController::class, 'save']);
+    Route::put('admin/role', [RoleController::class, 'update']);
+    Route::get('admin/role', [RoleController::class, 'showAll']);
+    Route::get('admin/role/{id}', [RoleController::class, 'showOne']);
+    Route::delete('admin/role', [RoleController::class, 'delete']);
 
 
-//upload image
+    //upload image
     Route::post('/upload', [Upload::class, 'uploadImage']);
     Route::post('/remove_upload', [Upload::class, 'deleteUploaded']);
     Route::post('/remove_uploads', [Upload::class, 'deleteGroupImages']);
 
-//blog
+    //blog
     Route::put('/blogs/{id}', [BlogController::class, 'update']);
     Route::post('/blog_like', [BlogController::class, 'like']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
@@ -141,7 +142,7 @@ Route::put('/products/{id}', [ProductController::class, 'update']);
 
     //products
     Route::post('/products', [ProductController::class, 'save']);
-//    Route::put('/products/{id}', [ProductController::class, 'update']);
+    //    Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     //product filter
     Route::get('/products_filter/{type}', [ProductStateController::class, 'filterOnState']);
@@ -169,10 +170,9 @@ Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::get('orders', [OrderController::class, 'showAll']);
     Route::post('order/change_state', [OrderController::class, 'changeState']);
     Route::get('order/state/{id}', [OrderController::class, 'showState']);
-
 });
 
-    //inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe
+//inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe
 //    Route::group(['middleware' => ['auth:sanctum'],[AdminCheck::class]], function () {
 //
 //    //admin panel
@@ -215,4 +215,3 @@ Route::get('/cache-clear', function () {
 Route::get('/config-clear', function () {
     Artisan::call('config:clear');
 });
-
