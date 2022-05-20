@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['card_id', 'status', 'total', 'change_state'];
+    protected $fillable = ['card_id', 'status', 'total', 'current_state'];
 
     public function getCreatedAtAttribute($val)
     {

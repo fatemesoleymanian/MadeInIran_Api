@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-//rize products and factor - total
+    //rize products and factor - total
     public function saveCard(Request $request)
     {
         $card_id = Card::where([
@@ -27,15 +27,15 @@ class OrderController extends Controller
 
         $total = 0;
         foreach ($products as $product) {
-            if ($product->product->discount == 0.00)
-                $total += $product->count * $product->state->price;
-            else
-                $total += $product->count * $product->state->discounted_price;
+            $total += $product->count * $product->state->discounted_price;
         }
         Order::updateOrCreate([
             'card_id' => $card_id->id,
             'status' => 1
-        ], ['total' => $total]);
+        ], [
+            'total' => $total,
+            'current_state' => 'منتظر تایید ادمین برای ثبت .'
+        ]);
 
         return response()->json([
             'products' => $products,
@@ -112,7 +112,8 @@ class OrderController extends Controller
         ])->get('id');
         foreach ($card_id as $c) {
             return Order::where([
-                'card_id' => $c->id])->get();
+                'card_id' => $c->id
+            ])->get();
         }
     }
 
@@ -129,7 +130,6 @@ class OrderController extends Controller
         return response()->json([
             'current_state' => $current_state
         ]);
-
     }
 
     public function changeState(Request $request)

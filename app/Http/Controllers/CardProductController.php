@@ -15,14 +15,14 @@ class CardProductController extends Controller
         return response()->json([
             'count' => $count
         ]);
-
-
     }
 
-    public function changeCount(Request $request)
+    public function increaseQuantity(Request $request)
     {
-       return CardProduct::where('id' , $request->id)->update([
-           'count' => $request->count
-       ]);
+        return CardProduct::where('id', $request->id)->increment('count');
+    }
+    public function decreaseQuantity(Request $request)
+    {
+        return CardProduct::where('id', $request->id)->decrement('count');
     }
 }

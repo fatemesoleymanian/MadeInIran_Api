@@ -19,12 +19,14 @@ class CardController extends Controller
         $add = CardProduct::create([
             'card_id' => $card_id->id,
             'product_id' => $request->product,
-            'state_id' => $request->state
+            'state_id' => $request->state,
+            'count' => $request->count
         ]);
         return response()->json([
-            'msg' => bcrypt($add)
+            'msg' => $add
         ]);
     }
+
 
     public function show($user)
     {
@@ -39,16 +41,18 @@ class CardController extends Controller
         ]);
     }
 
+    public function showOneProduct($id)
+    {
+        $product = CardProduct::with(['product', 'state'])->where('id', $id)->get();
+        return response()->json([
+            'product' => $product
+        ]);
+    }
     public function remove(Request $request)
     {
-        $card_id = Card::where([
-            'user_id' => $request->user_id,
-            'status' => 1
-        ])->first();
+
         $card = CardProduct::where([
-            'card_id' => $card_id->id,
-            'product_id' => $request->product,
-            'state_id' => $request->state
+            'id' => $request->id,
         ])->delete();
         return response()->json([
             'msg' => $card
@@ -65,6 +69,19 @@ class CardController extends Controller
         $products = CardProduct::where('card_id', $card_id->id)->get()->count();
         return response()->json([
             'count' => $products
+        ]);
+    }
+    public function emptyCard(Request $request)
+    {
+        $card_id = Card::where([
+            'user_id' => $request->user_id,
+            'status' => 1
+        ])->first();
+        $card = CardProduct::where([
+            'card_id' => $card_id->id
+        ])->delete();
+        return response()->json([
+            'msg' => $card
         ]);
     }
 

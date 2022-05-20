@@ -23,14 +23,16 @@ class BookmarkController extends Controller
     //can be used in both panel admin and store
     public function show($id)
     {
-        return Bookmark::with(['product'])->where('user_id', $id)->orderByDesc('id')->get();
+        $products = Bookmark::with(['product'])->where('user_id', $id)->orderByDesc('id')->get();
+        return response()->json([
+            'products' => $products
+        ]);
     }
 
     public function remove(Request $request)
     {
         return Bookmark::where([
-            'product_id' => $request->product_id,
-            'user_id' => $request->user_id,
+            'id' => $request->id
         ])->delete();
     }
 

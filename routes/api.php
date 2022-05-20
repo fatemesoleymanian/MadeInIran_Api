@@ -156,15 +156,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //card
     Route::post('/card', [CardController::class, 'save']);
     Route::get('/card/{user}', [CardController::class, 'show']);
+    Route::get('/card_one_pro/{id}', [CardController::class, 'showOneProduct']);
     Route::delete('/card', [CardController::class, 'remove']);
+    Route::delete('/empty_card', [CardController::class, 'emptyCard']);
     Route::get('/show_cards/{product}', [CardProductController::class, 'showCards']);
     Route::get('/card_count/{product}', [CardController::class, 'countOfProduct']);
-    Route::post('/card_change_count', [CardProductController::class, 'changeCount']);
+    Route::post('/card_inc_count', [CardProductController::class, 'increaseQuantity']);
+    Route::post('/card_dec_count', [CardProductController::class, 'decreaseQuantity']);
 
     //order
     Route::post('order/step_1', [OrderController::class, 'saveCard']);
     Route::post('order/step_2', [OrderController::class, 'userInfo']);
-    Route::get('order/step_3', [OrderController::class, 'showOrder']);
+    Route::get('order/step_3/{user}', [OrderController::class, 'showOrder']);
     Route::get('order/user/{user}', [OrderController::class, 'showUserInfo']);
     Route::get('orders/{user}', [OrderController::class, 'showAllByUser']);
     Route::get('orders', [OrderController::class, 'showAll']);
