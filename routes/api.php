@@ -11,6 +11,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductStateController;
+use App\Http\Controllers\RequestForRepresentationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnderConstructionController;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/under_const/save', [UnderConstructionController::class, 'save']);
 Route::get('/under_const/show', [UnderConstructionController::class, 'showAll']);
+Route::post('/catalog/representation',[RequestForRepresentationController::class,'save']);
 
 //Blog
 Route::get('/blogs', [BlogController::class, 'showAll']);
