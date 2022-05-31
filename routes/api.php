@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductStateController;
 use App\Http\Controllers\RequestForRepresentationController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnderConstructionController;
 use App\Http\Controllers\Upload;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/under_const/save', [UnderConstructionController::class, 'save']);
 Route::get('/under_const/show', [UnderConstructionController::class, 'showAll']);
-Route::post('/catalog/representation',[RequestForRepresentationController::class,'save']);
+Route::post('/catalog/representation', [RequestForRepresentationController::class, 'save']);
 
 //Blog
 Route::get('/blogs', [BlogController::class, 'showAll']);
@@ -83,13 +84,31 @@ Route::post('admin/forget_password', [AdminController::class, 'forgetPassword'])
 Route::post('admin/reset_password', [AdminController::class, 'resetPassword']);
 Route::post('admin/auth/login', [AdminController::class, 'login']);
 Route::put('/products/{id}', [ProductController::class, 'update']);
+
+//slider for home page
+Route::get('/slider_home',[SliderController::class,'showHomeSlider']);
+
 ///////////////////**************** Needs Authentication *************************//////////
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+//vghti login register vase panel gozashti inaro hzf kn oon paeiniarm uncomment kn
+Route::post('/products', [ProductController::class, 'save']);
+Route::post('/upload', [Upload::class, 'uploadImage']);
+Route::post('/remove_upload', [Upload::class, 'deleteUploaded']);
+Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+Route::get('/users', [UserController::class, 'showAll']);
+Route::delete('/delete_acc', [UserController::class, 'deleteAccount']);
+Route::get('/show_acc/{id}', [UserController::class, 'show']);
+Route::get('/orders/{user}', [OrderController::class, 'showAllByUser']);
+Route::delete('order/delete', [OrderController::class, 'delete']);
+Route::get('order/items{card}', [OrderController::class, 'showPastOrderItems']);
+
+
+//Route::group(['middleware' => ['auth:sanctum']], function () {
     //store user
     Route::put('/update_acc', [UserController::class, 'update']);
-    Route::delete('/delete_acc', [UserController::class, 'deleteAccount']);
-    Route::get('/show_acc/{id}', [UserController::class, 'show']);
+    // Route::delete('/delete_acc', [UserController::class, 'deleteAccount']);
+    // Route::get('/users', [UserController::class, 'showAll']);
+    // Route::get('/show_acc/{id}', [UserController::class, 'show']);
     Route::post('/logout', [UserController::class, 'logout']);
 
 
@@ -102,6 +121,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('admin/edit', [AdminController::class, 'update']);
     Route::delete('admin/delete', [AdminController::class, 'delete']);
 
+    //slider for admin panel
+    Route::post('/slider',[SliderController::class,'create']);
+    Route::put('/slider',[SliderController::class,'update']);
+    Route::delete('/slider',[SliderController::class,'delete']);
+    Route::get('/slider',[SliderController::class,'showAll']);
+    Route::get('/slider{id}',[SliderController::class,'showOne']);
+
 
     //role
     Route::post('admin/role', [RoleController::class, 'save']);
@@ -112,9 +138,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     //upload image
-    Route::post('/upload', [Upload::class, 'uploadImage']);
-    Route::post('/remove_upload', [Upload::class, 'deleteUploaded']);
+    // Route::post('/upload', [Upload::class, 'uploadImage']);
+    // Route::post('/remove_upload', [Upload::class, 'deleteUploaded']);
     Route::post('/remove_uploads', [Upload::class, 'deleteGroupImages']);
+    Route::post('/upload_slider', [Upload::class, 'uploadSliderImage']);
 
     //blog
     Route::put('/blogs/{id}', [BlogController::class, 'update']);
@@ -143,9 +170,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 
     //products
-    Route::post('/products', [ProductController::class, 'save']);
+    // Route::post('/products', [ProductController::class, 'save']);
     //    Route::put('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    // Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     //product filter
     Route::get('/products_filter/{type}', [ProductStateController::class, 'filterOnState']);
 
@@ -171,11 +198,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('order/step_2', [OrderController::class, 'userInfo']);
     Route::get('order/step_3/{user}', [OrderController::class, 'showOrder']);
     Route::get('order/user/{user}', [OrderController::class, 'showUserInfo']);
-    Route::get('orders/{user}', [OrderController::class, 'showAllByUser']);
+    // Route::get('orders/{user}', [OrderController::class, 'showAllByUser']);
     Route::get('orders', [OrderController::class, 'showAll']);
     Route::post('order/change_state', [OrderController::class, 'changeState']);
     Route::get('order/state/{id}', [OrderController::class, 'showState']);
-});
+    // Route::delete('order/delete', [OrderController::class, 'delete']);
+    // Route::get('order/items{card}',[OrderController::class,'showPastOrderItems']);
+//});
 
 //inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe
 //    Route::group(['middleware' => ['auth:sanctum'],[AdminCheck::class]], function () {

@@ -86,9 +86,9 @@ class CardController extends Controller
     }
 
     //panel admin
-    //    public function showByUser($id)
+    //    public function showByOrder($card)
     //    {
-    //
+
     //    }
 
 }

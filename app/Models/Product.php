@@ -16,7 +16,8 @@ class Product extends Model
         'description_excerpt',
         'description',
         'category_id',
-        'discount'
+        'discount',
+        'slug'
     ];
 
     public function getCreatedAtAttribute($val)

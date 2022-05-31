@@ -30,16 +30,20 @@ class CreateProductRequest extends FormRequest
             'description' => "bail|required",
             'category_id' => "bail|required|integer",
             'metaDescription' => 'bail|required|max:100',
-            'metaKeyword' => 'bail|required|max:20',
+            'metaKeyword' => 'bail|required|max:120',
             'pageTitle' => 'required|max:100',
             'states' => 'required',
-            'costs' => 'required'
+            'costs' => 'required',
+            'tags' => 'required',
+            'slug' => 'required'
         ];
     }
     public function messages()
     {
         return [
             'name.required' => 'لطفا نام محصول را وارد کنید!',
+            'tags.required' => 'لطفا حداقل یک تگ برای محصول وارد کنید!',
+            'slug.required' => 'لطفا نشانک محصول وارد کنید!',
             'description_excerpt.required' => 'لطفا چکیده توضیحات محصول را وارد کنید!',
             'description.required' => 'لطفا توضیحات محصول را وارد کنید!',
             'category_id.required' => 'لطفا دسته بندی محصول را وارد کنید!',

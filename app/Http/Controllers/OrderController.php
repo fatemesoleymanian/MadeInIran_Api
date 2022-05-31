@@ -110,6 +110,7 @@ class OrderController extends Controller
             'user_id' => $user,
             'status' => 0
         ])->get('id');
+
         foreach ($card_id as $c) {
             return Order::where([
                 'card_id' => $c->id
@@ -139,6 +140,33 @@ class OrderController extends Controller
         ]);
         return response()->json([
             'current_state' => $current_state
+        ]);
+    }
+    public function delete(Request $request)
+    {
+        return Order::where('id', $request->id)->delete();
+    }
+    public function showPastOrderItems($card)
+    {
+
+        $products = CardProduct::with(['product', 'state'])->where('card_id', $card)->get();
+
+        //products
+        if (!$products) return response()->json([
+            'msg' => 'این سفارش ثبت نگردیده است!'
+        ]);
+
+        $total = 0;
+        foreach ($products as $product) {
+            if ($product->product->discount == 0.00)
+                $total += $product->count * $product->state->price;
+            else
+                $total += $product->count * $product->state->discounted_price;
+        }
+
+        return response()->json([
+            'products' => $products,
+            'total_price' => $total
         ]);
     }
 }

@@ -168,6 +168,14 @@ class UserController extends Controller
     {
         return User::where('id', $id)->first();
     }
+
+    public function showAll()
+    {
+        $users = User::orderByDesc('id')->get();
+        return response()->json([
+            'users' => $users
+        ]);
+    }
     //forget password dige ndrim chon ramza ye bar msrfe
     //az jadvale reset password vase activation code estefade kn  ya cache
 

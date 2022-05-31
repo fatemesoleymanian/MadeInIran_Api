@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Models\ProductState;
+use App\Models\ProductTag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\DocBlock\Tag;
+use Illuminate\Support\Str;
+
 use Throwable;
 
 class ProductController extends Controller
@@ -26,6 +29,7 @@ class ProductController extends Controller
         $costs = $request->costs;
         $off = $request->off;
         $dynamic_info = [];
+        $tags = [];
 
         DB::beginTransaction();
         try {
@@ -38,9 +42,14 @@ class ProductController extends Controller
                 'metaDescription' => $request->metaDescription,
                 'metaKeyword' => $request->metaKeyword,
                 'pageTitle' => $request->pageTitle,
-                'inventory' => $request->inventory,
                 'discount' => $request->discount,
+                'slug' => Str::slug($request->slug),
             ]);
+
+            foreach ($request->tags as $c) {
+                array_push($tags, ['tag_id' => $c, 'product_id' => $product_id->id]);
+            }
+            ProductTag::insert($tags);
 
 
             for ($x = 0; $x < sizeof($states); $x++) {
@@ -60,7 +69,8 @@ class ProductController extends Controller
         } catch (Throwable $throwable) {
             DB::rollBack();
             return response()->json([
-                'errors' => Lang::get('messages.fail', ['attribute' => 'محصول'])
+                'errors' => Lang::get('messages.fail', ['attribute' => 'محصول']),
+                'throw' => $throwable
             ], 401);
         }
         return 'Not done!';
@@ -69,10 +79,12 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, $id)
     {
         $request->validated();
+        $tags = [];
         $states = $request->states;
         $costs = $request->costs;
         $off = $request->off;
         $ids = $request->ids;
+
         $dynamic_info = array();
 
         DB::beginTransaction();
@@ -88,7 +100,16 @@ class ProductController extends Controller
                 'pageTitle' => $request->pageTitle,
                 'inventory' => $request->inventory,
                 'discount' => $request->discount,
+                'slug' => Str::slug($request->slug),
             ]);
+            //tag
+            ProductTag::where('product_id', $id)->delete();
+            foreach ($request->tags as $c) {
+                array_push($tags, ['tag_id' => $c, 'product_id' => $id]);
+            }
+            ProductTag::insert($tags);
+
+            //states
             for ($x = 0; $x < sizeof($states); $x++) {
                 array_push($dynamic_info, [
                     'type' => $states[$x],
@@ -132,13 +153,14 @@ class ProductController extends Controller
 
             DB::commit();
             return response()->json([
-                'msg' => Lang::get('messages.success', ['attribute' => 'محصول']),
+                'msg' => 'ویرایش محصول با موفقیت انجام شد.',
                 'product' => $product_id
             ]);
         } catch (Throwable $throwable) {
             DB::rollBack();
             return response()->json([
-                'errors' => Lang::get('messages.fail', ['attribute' => 'محصول'])
+                'errors' => Lang::get('messages.fail', ['attribute' => 'محصول']),
+                'throw' => $throwable
             ], 401);
         }
         return 'Not done!';
@@ -167,7 +189,7 @@ class ProductController extends Controller
     {
         //front will handle pagination
         // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
-        // $products = Cache::remember('productss', now()->addHour(2), function () {
+        // $products = Cache::remember('productss', now()->addMinute(1), function () {
         return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get();
         // });
         // return $products;

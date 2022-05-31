@@ -5,22 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Request_for_representation extends Model
+class Slider extends Model
 {
-    use HasFactory;
     protected $fillable = [
-        'full_name',
-        'phone_number',
-        'city',
-        'age',
-        'education',
-        'course',
-        'work_experience',
-        'job',
-        'selected_package',
-        'reasons',
-        'experts'
-        ];
+        'title',
+        'image',
+        'sub_title',
+        'text',
+        'link'
+    ];
     public function getCreatedAtAttribute($val)
     {
         return verta($val)->format('l d %B Y');
@@ -29,4 +22,5 @@ class Request_for_representation extends Model
     {
         return verta($val)->format('l d %B Y');
     }
+    use HasFactory;
 }
