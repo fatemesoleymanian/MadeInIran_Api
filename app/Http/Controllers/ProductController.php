@@ -182,7 +182,7 @@ class ProductController extends Controller
 
     public function showOne($id)
     {
-        return Product::with(['category', 'tag', 'state'])->where('id', $id)->first();
+        return Product::with(['category', 'tag', 'state','comment'])->where('id', $id)->first();
     }
 
     public function showAll()

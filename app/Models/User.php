@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return verta($val)->format('l d %B Y');
     }
+    public function comment()
+    {
+        return $this->hasMany(ProductComment::class, 'user_id');
+    }
 }

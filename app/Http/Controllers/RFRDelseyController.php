@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequesForRepresentation;
-use App\Models\Request_for_representation;
+use App\Models\RFRDelsey;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
-use Illuminate\Http\Request;
 
-class RequestForRepresentationController extends Controller
+class RFRDelseyController extends Controller
 {
     public function save(RequesForRepresentation $request)
     {
         $request->validated();
-        $res = Request_for_representation::create([
+        $res = RFRDelsey::create([
             'full_name' => $request->full_name,
             'phone_number' => $request->phone_number,
             'city' => $request->city,
@@ -42,11 +42,10 @@ class RequestForRepresentationController extends Controller
                 'experts' => $request->experts,
                 'created_at' => $res->created_at
             ], function ($message) {
-                 $message->to('pedichbiz@gmail.com');
-                $message->subject('فرم درخواست نمایندگی دستمال کاغذی رومیزی');
+                $message->to('pedichbiz@gmail.com');
+                $message->subject('فرم درخواست نمایندگی دستمال کاغذی دلسی');
             });
-        }
-        catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
             return response()->json([
                 'msg' => '0'
             ]);
@@ -55,12 +54,10 @@ class RequestForRepresentationController extends Controller
             return response()->json([
                 'msg' => 'اطلاعات با موفقیت ثبت شد!'
             ]);
-        }
-        else {
+        } else {
             return response()->json([
                 'msg' => $res
             ]);
         }
-
     }
 }

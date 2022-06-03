@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/under_const/save', [UnderConstructionController::class, 'save']);
 Route::get('/under_const/show', [UnderConstructionController::class, 'showAll']);
 Route::post('/catalog/representation', [RequestForRepresentationController::class, 'save']);
+Route::post('/catalog_delsey/representation', [\App\Http\Controllers\RFRDelseyController::class, 'save']);
 
 //Blog
 Route::get('/blogs', [BlogController::class, 'showAll']);
