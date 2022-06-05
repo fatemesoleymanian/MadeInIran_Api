@@ -14,7 +14,7 @@ class CardController extends Controller
     {
         $card_id = Card::where([
             'user_id' => $request->user_id,
-            'status' => 1
+            'status' => 0
         ])->first();
         $add = CardProduct::create([
             'card_id' => $card_id->id,
@@ -32,7 +32,7 @@ class CardController extends Controller
     {
         $card_id = Card::where([
             'user_id' => $user,
-            'status' => 1
+            'status' => 0
         ])->first();
 
         $products = CardProduct::with(['product', 'state'])->where('card_id', $card_id->id)->get();

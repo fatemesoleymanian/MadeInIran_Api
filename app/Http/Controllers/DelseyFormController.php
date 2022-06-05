@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequesForRepresentation;
-use App\Models\RFRDelsey;
+use App\Models\DelseyForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 
-class RFRDelseyController extends Controller
+class DelseyFormController extends Controller
 {
     public function save(RequesForRepresentation $request)
     {
         $request->validated();
-        $res = RFRDelsey::create([
+        $res = DelseyForm::create([
             'full_name' => $request->full_name,
             'phone_number' => $request->phone_number,
             'city' => $request->city,
@@ -42,10 +42,12 @@ class RFRDelseyController extends Controller
                 'experts' => $request->experts,
                 'created_at' => $res->created_at
             ], function ($message) {
-                $message->to('pedichbiz@gmail.com');
+//                $message->to('pedichbiz@gmail.com');
+                $message->to('soleymanian.usc@gmail.com');
                 $message->subject('فرم درخواست نمایندگی دستمال کاغذی دلسی');
             });
-        } catch (ExceptionInterface $e) {
+        }
+        catch (ExceptionInterface $e) {
             return response()->json([
                 'msg' => '0'
             ]);
@@ -54,10 +56,12 @@ class RFRDelseyController extends Controller
             return response()->json([
                 'msg' => 'اطلاعات با موفقیت ثبت شد!'
             ]);
-        } else {
+        }
+        else {
             return response()->json([
                 'msg' => $res
             ]);
         }
+
     }
 }

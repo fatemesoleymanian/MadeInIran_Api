@@ -7,14 +7,19 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DelseyFormController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\FQController;
+use App\Http\Controllers\FQFormController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductStateController;
 use App\Http\Controllers\RequestForRepresentationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UnderConstructionController;
 use App\Http\Controllers\Upload;
 use App\Http\Controllers\UserController;
@@ -27,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/under_const/save', [UnderConstructionController::class, 'save']);
 Route::get('/under_const/show', [UnderConstructionController::class, 'showAll']);
 Route::post('/catalog/representation', [RequestForRepresentationController::class, 'save']);
-Route::post('/catalog_delsey/representation', [\App\Http\Controllers\RFRDelseyController::class, 'save']);
+Route::post('/catalog_delsey/representation', [DelseyFormController::class, 'save']);
 
 //Blog
 Route::get('/blogs', [BlogController::class, 'showAll']);
@@ -35,6 +40,8 @@ Route::get('/blogs/{id}', [BlogController::class, 'showOne']);
 Route::get('/blogs_id/{id}', [BlogController::class, 'showIds']);
 Route::get('blogs/search/{str}', [BlogController::class, 'search']);
 Route::get('/blogs_latest', [BlogController::class, 'latestFour']);
+Route::get('/blogs-random', [BlogController::class, 'showSome']);
+
 
 //category for blog
 Route::get('/blog_categories', [BlogCategoryController::class, 'showAll']);
@@ -65,6 +72,12 @@ Route::get('/categories_with_department/{id}', [CategoryController::class, 'show
 Route::get('/categories_with_product', [CategoryController::class, 'showAllWithProduct']);
 Route::get('/categories_with_product/{id}', [CategoryController::class, 'showOneWithProduct']);
 
+//testimonial
+Route::post('/testimonial',[TestimonialController::class,'save']);
+Route::put('/testimonial{id}',[TestimonialController::class,'update']);
+Route::get('/testimonial',[TestimonialController::class,'show']);
+Route::delete('/testimonial{id}',[TestimonialController::class,'destroy']);
+
 //products
 Route::get('/products', [ProductController::class, 'showAll']);
 Route::get('/products/{id}', [ProductController::class, 'showOne']);
@@ -75,6 +88,8 @@ Route::get('/products_with_state/{id}', [ProductController::class, 'showOneWithS
 Route::get('/products_search/{str}', [ProductController::class, 'searchBoth']);
 Route::get('/just_products_search/{str}', [ProductController::class, 'searchProducts']);
 Route::get('/products_search_suggestion', [ProductController::class, 'searchSuggestion']);
+Route::get('/products_faq{id}', [ProductController::class, 'showFAQ']);
+Route::get('/products_random', [ProductController::class, 'showSome']);
 
 //store user
 Route::post('/login_or_reg', [UserController::class, 'loginOrRegister']);
@@ -87,7 +102,7 @@ Route::post('admin/auth/login', [AdminController::class, 'login']);
 Route::put('/products/{id}', [ProductController::class, 'update']);
 
 //slider for home page
-Route::get('/slider_home',[SliderController::class,'showHomeSlider']);
+Route::get('/slider_home', [SliderController::class, 'showHomeSlider']);
 
 ///////////////////**************** Needs Authentication *************************//////////
 
@@ -104,7 +119,7 @@ Route::delete('order/delete', [OrderController::class, 'delete']);
 Route::get('order/items{card}', [OrderController::class, 'showPastOrderItems']);
 
 
-//Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
     //store user
     Route::put('/update_acc', [UserController::class, 'update']);
     // Route::delete('/delete_acc', [UserController::class, 'deleteAccount']);
@@ -123,11 +138,11 @@ Route::get('order/items{card}', [OrderController::class, 'showPastOrderItems']);
     Route::delete('admin/delete', [AdminController::class, 'delete']);
 
     //slider for admin panel
-    Route::post('/slider',[SliderController::class,'create']);
-    Route::put('/slider',[SliderController::class,'update']);
-    Route::delete('/slider',[SliderController::class,'delete']);
-    Route::get('/slider',[SliderController::class,'showAll']);
-    Route::get('/slider{id}',[SliderController::class,'showOne']);
+    Route::post('/slider', [SliderController::class, 'create']);
+    Route::put('/slider', [SliderController::class, 'update']);
+    Route::delete('/slider', [SliderController::class, 'delete']);
+    Route::get('/slider', [SliderController::class, 'showAll']);
+    Route::get('/slider{id}', [SliderController::class, 'showOne']);
 
 
     //role
@@ -136,6 +151,11 @@ Route::get('order/items{card}', [OrderController::class, 'showPastOrderItems']);
     Route::get('admin/role', [RoleController::class, 'showAll']);
     Route::get('admin/role/{id}', [RoleController::class, 'showOne']);
     Route::delete('admin/role', [RoleController::class, 'delete']);
+
+    //Product Comments
+    Route::post('pcomment/save', [ProductCommentController::class, 'save']);
+    Route::put('pcomment/update{id}', [ProductCommentController::class, 'confirmComment']);
+    Route::get('pcomment/all', [ProductCommentController::class, 'showComments']);
 
 
     //upload image
@@ -170,12 +190,23 @@ Route::get('order/items{card}', [OrderController::class, 'showPastOrderItems']);
     Route::put('/categories/{id}', [CategoryController::class, 'update']);
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 
+    //FAQ
+    Route::post('/faq', [FQController::class, 'save']);
+    Route::put('/faq{id}', [FQController::class, 'update']);
+    Route::get('/faq', [FQController::class, 'showAll']);
+    Route::delete('/faq', [FQController::class, 'delete']);
+
+    //FAQ Form
+    Route::post('/faq_form', [FQFormController::class, 'save']);
+    Route::get('/faq_form', [FQFormController::class, 'show']);
+
     //products
     // Route::post('/products', [ProductController::class, 'save']);
     //    Route::put('/products/{id}', [ProductController::class, 'update']);
     // Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     //product filter
     Route::get('/products_filter/{type}', [ProductStateController::class, 'filterOnState']);
+    Route::get('/products_totaly', [ProductController::class, 'show']);
 
     //bookmark
     Route::post('/bookmark', [BookmarkController::class, 'save']);
@@ -205,7 +236,7 @@ Route::get('order/items{card}', [OrderController::class, 'showPastOrderItems']);
     Route::get('order/state/{id}', [OrderController::class, 'showState']);
     // Route::delete('order/delete', [OrderController::class, 'delete']);
     // Route::get('order/items{card}',[OrderController::class,'showPastOrderItems']);
-//});
+});
 
 //inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe
 //    Route::group(['middleware' => ['auth:sanctum'],[AdminCheck::class]], function () {

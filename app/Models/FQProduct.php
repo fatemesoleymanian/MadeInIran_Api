@@ -18,5 +18,6 @@ class FQProduct extends Model
         return verta($val)->format('l d %B Y');
     }
 
+
     use HasFactory;
 }

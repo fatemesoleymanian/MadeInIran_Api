@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Blog;
+use App\Models\FQ;
+use App\Models\FQProduct;
 use App\Models\Product;
 use App\Models\ProductState;
 use App\Models\ProductTag;
@@ -182,7 +184,13 @@ class ProductController extends Controller
 
     public function showOne($id)
     {
-        return Product::with(['category', 'tag', 'state','comment'])->where('id', $id)->first();
+        return Product::with(['category', 'tag', 'state', 'comment', 'faq'])
+            ->where('id', $id)->first();
+    }
+    public function showFAQ($id)
+    {
+        $faq_ids = FQProduct::where('product_id', $id)->get('fq_id');
+        return FQ::whereIn('id', $faq_ids)->get();
     }
 
     public function showAll()
@@ -191,6 +199,22 @@ class ProductController extends Controller
         // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
         // $products = Cache::remember('productss', now()->addMinute(1), function () {
         return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get();
+        // });
+        // return $products;
+    }
+
+    public function showSome()
+    {
+        // $products = Cache::remember('products_totaly', now()->addMinute(1), function () {
+        return Product::with(['category', 'tag', 'state',])->latest()->take(8)->get();
+        // });
+        // return $products;
+    }
+
+    public function show()
+    {
+        // $products = Cache::remember('products_totaly', now()->addMinute(1), function () {
+        return Product::orderByDesc('id')->select('name', 'id')->get();
         // });
         // return $products;
     }
@@ -269,41 +293,39 @@ class ProductController extends Controller
     {
         if ($str) {
 
-            if ($request->role_id == 12) {
-                $product = Product::with(['category', 'state', 'tag'])
-                    ->when($str != '', function (Builder $q) use ($str) {
-                        $q->where('name', 'LIKE', "%{$str}%")
-                            ->orWhereHas('category', function (Builder $builder) use ($str) {
-                                $builder->where('name', 'LIKE', "%{$str}%");
-                            })
-                            ->orWhereHas('tag', function (Builder $builder) use ($str) {
-                                $builder->where('name', 'LIKE', "%{$str}%");
-                            })
-                            ->orWhereHas('state', function (Builder $builder) use ($str) {
-                                $builder->where('type', 'LIKE', "%{$str}%");
-                            });
-                    })->paginate(10);
-            }
-
-            $blog = Blog::with(['tag', 'category'])
+            $product = Product::with(['category', 'state', 'tag'])
                 ->when($str != '', function (Builder $q) use ($str) {
-                    $q->where('title', 'LIKE', "%{$str}%")
+                    $q->where('name', 'LIKE', "%{$str}%")
                         ->orWhereHas('category', function (Builder $builder) use ($str) {
                             $builder->where('name', 'LIKE', "%{$str}%");
                         })
                         ->orWhereHas('tag', function (Builder $builder) use ($str) {
                             $builder->where('name', 'LIKE', "%{$str}%");
+                        })
+                        ->orWhereHas('state', function (Builder $builder) use ($str) {
+                            $builder->where('type', 'LIKE', "%{$str}%");
                         });
                 })->paginate(10);
-
-            $tag = DB::table('tags')->where('name', 'LIKE', "%{$str}%")->paginate(10);
-            //age paginate nmikhay ->get() bzar tash na paginate()
-            return response()->json([
-                'products' => $product,
-                'blogs' => $blog,
-                'tags' => $tag
-            ]);
         }
+
+        $blog = Blog::with(['tag', 'category'])
+            ->when($str != '', function (Builder $q) use ($str) {
+                $q->where('title', 'LIKE', "%{$str}%")
+                    ->orWhereHas('category', function (Builder $builder) use ($str) {
+                        $builder->where('name', 'LIKE', "%{$str}%");
+                    })
+                    ->orWhereHas('tag', function (Builder $builder) use ($str) {
+                        $builder->where('name', 'LIKE', "%{$str}%");
+                    });
+            })->paginate(10);
+
+        $tag = DB::table('tags')->where('name', 'LIKE', "%{$str}%")->paginate(10);
+        //age paginate nmikhay ->get() bzar tash na paginate()
+        return response()->json([
+            'products' => $product,
+            'blogs' => $blog,
+            'tags' => $tag
+        ]);
     }
 
     public function searchProducts($str)

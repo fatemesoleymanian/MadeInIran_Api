@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FQForm extends Model
 {
-    protected $fillable = ['full_name','phone_number','fq_id'];
+    protected $fillable = ['full_name', 'phone_number', 'fq_id'];
 
     public function getCreatedAtAttribute($val)
     {
@@ -16,6 +16,10 @@ class FQForm extends Model
     public function getUpdatedAtAttribute($val)
     {
         return verta($val)->format('l d %B Y');
+    }
+    public function faq()
+    {
+        return $this->belongsTo(FQ::class,'fq_id');
     }
 
     use HasFactory;

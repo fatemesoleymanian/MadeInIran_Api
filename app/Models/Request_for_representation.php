@@ -21,12 +21,5 @@ class Request_for_representation extends Model
         'reasons',
         'experts'
         ];
-    public function getCreatedAtAttribute($val)
-    {
-        return verta($val)->format('l d %B Y');
-    }
-    public function getUpdatedAtAttribute($val)
-    {
-        return verta($val)->format('l d %B Y');
-    }
+
 }

@@ -19,7 +19,7 @@ class FQ extends Model
 
     public function product()
     {
-        return $this->hasMany(FQProduct::class,'product_id');
+        return $this->belongsToMany(Product::class,'f_q_products','fq_id');
     }
     public function fq()
     {

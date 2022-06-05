@@ -108,7 +108,7 @@ class OrderController extends Controller
     {
         $card_id = Card::where([
             'user_id' => $user,
-            'status' => 0
+            'status' => 1
         ])->get('id');
 
         foreach ($card_id as $c) {
@@ -148,7 +148,6 @@ class OrderController extends Controller
     }
     public function showPastOrderItems($card)
     {
-
         $products = CardProduct::with(['product', 'state'])->where('card_id', $card)->get();
 
         //products
@@ -158,10 +157,8 @@ class OrderController extends Controller
 
         $total = 0;
         foreach ($products as $product) {
-            if ($product->product->discount == 0.00)
-                $total += $product->count * $product->state->price;
-            else
-                $total += $product->count * $product->state->discounted_price;
+
+            $total += $product->count * $product->state->discounted_price;
         }
 
         return response()->json([

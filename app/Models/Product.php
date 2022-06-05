@@ -53,5 +53,9 @@ class Product extends Model
     {
         return $this->hasMany(Bookmark::class, 'product_id');
     }
+    public function faq()
+    {
+        return $this->hasMany(FQProduct::class,'product_id');
+    }
     use HasFactory;
 }
