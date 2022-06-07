@@ -12,46 +12,46 @@ class TestimonialController extends Controller
     {
         $request->validated();
         $testmonial = Testimonial::create([
-            'name'=>$request->name,
-            'desc'=>$request->desc,
-            'position'=>$request->position,
+            'name' => $request->name,
+            'desc' => $request->desc,
+            'position' => $request->position,
         ]);
         if ($testmonial) return response()->json([
-            'msg'=>'با موفقیت ایجاد گردید.',
-            'testimonial'=>$testmonial
-        ],200);
+            'msg' => 'با موفقیت ایجاد گردید.',
+            'testimonial' => $testmonial
+        ], 200);
         else return response()->json([
-            'msg'=>'خطا در ثبت نظر.',
-                    ],401);
+            'msg' => 'خطا در ثبت نظر.',
+        ], 401);
     }
-    public function update(TestimonialRequest $request,$id)
+    public function update(TestimonialRequest $request, $id)
     {
         $request->validated();
-        $testmonial = Testimonial::where('id',$id)->update([
-            'name'=>$request->name,
-            'desc'=>$request->desc,
-            'position'=>$request->position,
+        $testmonial = Testimonial::where('id', $id)->update([
+            'name' => $request->name,
+            'desc' => $request->desc,
+            'position' => $request->position,
         ]);
         if ($testmonial) return response()->json([
-            'msg'=>'با موفقیت ویرایش گردید.',
-            'testimonial'=>$testmonial
-        ],200);
+            'msg' => 'با موفقیت ویرایش گردید.',
+            'testimonial' => $testmonial
+        ], 200);
         else return response()->json([
-            'msg'=>'خطا در ویرایش نظر.',
-        ],401);
+            'msg' => 'خطا در ویرایش نظر.',
+        ], 401);
     }
     public function show()
     {
         return Testimonial::orderByDesc('id')->get();
     }
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $delete = Testimonial::where('id',$id)->delete();
-        if ($delete==1) return response()->json([
-            'msg'=>'با موفقیت حذف گردید.',
-        ],200);
+        $delete = Testimonial::where('id', $request->id)->delete();
+        if ($delete == 1) return response()->json([
+            'msg' => 'با موفقیت حذف گردید.',
+        ], 200);
         else return response()->json([
-            'msg'=>'خطا در حذف نظر.',
-        ],401);
+            'msg' => 'خطا در حذف نظر.',
+        ], 401);
     }
 }

@@ -11,6 +11,8 @@ use App\Http\Controllers\DelseyFormController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FQController;
 use App\Http\Controllers\FQFormController;
+use App\Http\Controllers\JobProductionController;
+use App\Http\Controllers\JobProductionIdeaController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProductController;
@@ -33,6 +35,15 @@ Route::post('/under_const/save', [UnderConstructionController::class, 'save']);
 Route::get('/under_const/show', [UnderConstructionController::class, 'showAll']);
 Route::post('/catalog/representation', [RequestForRepresentationController::class, 'save']);
 Route::post('/catalog_delsey/representation', [DelseyFormController::class, 'save']);
+
+//job production empty
+Route::post('/job_production_empty',[JobProductionController::class,'save']);
+Route::get('/job_production_empty',[JobProductionController::class,'show']);
+
+//job production ideas
+Route::post('/job_production_ideas',[JobProductionIdeaController::class,'save']);
+Route::get('/job_production_ideas',[JobProductionIdeaController::class,'show']);
+
 
 //Blog
 Route::get('/blogs', [BlogController::class, 'showAll']);
@@ -73,10 +84,10 @@ Route::get('/categories_with_product', [CategoryController::class, 'showAllWithP
 Route::get('/categories_with_product/{id}', [CategoryController::class, 'showOneWithProduct']);
 
 //testimonial
-Route::post('/testimonial',[TestimonialController::class,'save']);
-Route::put('/testimonial{id}',[TestimonialController::class,'update']);
-Route::get('/testimonial',[TestimonialController::class,'show']);
-Route::delete('/testimonial{id}',[TestimonialController::class,'destroy']);
+Route::post('/testimonial', [TestimonialController::class, 'save']);
+Route::put('/testimonial{id}', [TestimonialController::class, 'update']);
+Route::get('/testimonial', [TestimonialController::class, 'show']);
+Route::delete('/testimonial', [TestimonialController::class, 'destroy']);
 
 //products
 Route::get('/products', [ProductController::class, 'showAll']);
