@@ -55,10 +55,6 @@ class Upload extends Controller
             'success' => 1,
             'msg' => 'فایل با موفقیت حذف گردید.'
         ]);
-        else  return response()->json([
-            'success' => 0,
-            'msg' => 'خطا در حذف فایل'
-        ]);
     }
     public function deleteGroupImages(Request $request)
     {

@@ -10,11 +10,11 @@ class Tag extends Model
     protected $fillable = ['name', 'type'];
     public  function blog()
     {
-        return $this->hasMany(BlogTag::class, 'tag_id');
+        return $this->belongsToMany(Blog::class, BlogTag::class, 'tag_id');
     }
     public  function product()
     {
-        return $this->hasMany(ProductTag::class, 'tag_id');
+        return $this->belongsToMany(Product::class, ProductTag::class, 'tag_id');
     }
 
     public function getCreatedAtAttribute($val)

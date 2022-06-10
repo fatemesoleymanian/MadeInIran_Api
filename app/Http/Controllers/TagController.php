@@ -26,7 +26,7 @@ class TagController extends Controller
     public function showAll()
     {
         // $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
-        return Tag::orderByDesc('id')->get();
+        return Tag::with(['blog', 'product'])->orderByDesc('id')->get();
         // });
         // return $tags;
     }
@@ -68,8 +68,16 @@ class TagController extends Controller
             'type' => $request->type
         ]);
     }
-    public  function destroy($id)
+    public  function destroy(Request $request)
     {
-        return Tag::where('id', $id)->delete();
+        return Tag::where('id', $request->id)->delete();
+    }
+    public function forProducts()
+    {
+        return Tag::where('type', 1)->orderByDesc('id')->get();
+    }
+    public function forblogs()
+    {
+        return Tag::where('type', 0)->orderByDesc('id')->get();
     }
 }
