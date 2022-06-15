@@ -33,6 +33,10 @@ class Admin  extends Authenticatable
     {
         return verta($val)->format('l d %B Y');
     }
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

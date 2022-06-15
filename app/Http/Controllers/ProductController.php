@@ -288,45 +288,6 @@ class ProductController extends Controller
         ]);
     }
 
-    ///********** search in tags , blogs and products in admin panel*****//
-    public function adminSearch($str)
-    {
-        if ($str) {
-
-            $product = Product::with(['category', 'state', 'tag'])
-                ->when($str != '', function (Builder $q) use ($str) {
-                    $q->where('name', 'LIKE', "%{$str}%")
-                        ->orWhereHas('category', function (Builder $builder) use ($str) {
-                            $builder->where('name', 'LIKE', "%{$str}%");
-                        })
-                        ->orWhereHas('tag', function (Builder $builder) use ($str) {
-                            $builder->where('name', 'LIKE', "%{$str}%");
-                        })
-                        ->orWhereHas('state', function (Builder $builder) use ($str) {
-                            $builder->where('type', 'LIKE', "%{$str}%");
-                        });
-                })->paginate(10);
-        }
-
-        $blog = Blog::with(['tag', 'category'])
-            ->when($str != '', function (Builder $q) use ($str) {
-                $q->where('title', 'LIKE', "%{$str}%")
-                    ->orWhereHas('category', function (Builder $builder) use ($str) {
-                        $builder->where('name', 'LIKE', "%{$str}%");
-                    })
-                    ->orWhereHas('tag', function (Builder $builder) use ($str) {
-                        $builder->where('name', 'LIKE', "%{$str}%");
-                    });
-            })->paginate(10);
-
-        $tag = DB::table('tags')->where('name', 'LIKE', "%{$str}%")->paginate(10);
-        //age paginate nmikhay ->get() bzar tash na paginate()
-        return response()->json([
-            'products' => $product,
-            'blogs' => $blog,
-            'tags' => $tag
-        ]);
-    }
 
     public function searchProducts($str)
     {

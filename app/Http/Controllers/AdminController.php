@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Blog;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -10,13 +12,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     ////////////////********* this methods have been tested => OK!
     public function login(Request $request)
     {
-        Validator::validate($request->all(),
+        Validator::validate(
+            $request->all(),
             [
                 'email' => "required|email",
                 'password' => "required|min:6|max:15",
@@ -27,7 +32,8 @@ class AdminController extends Controller
                 'password.required' => 'لطفا رمز عبور را وارد کنید!',
                 'password.min' => 'رمز عبور باید حداقل 6 کاراکتر باشد!',
                 'password.max' => 'رمز عبور باید حداکثر 15 کاراکتر باشد!'
-            ]);
+            ]
+        );
 
 
         $admin = Admin::where([
@@ -38,7 +44,6 @@ class AdminController extends Controller
             return response()->json([
                 'msg' => 'اطلاعات وارد شده صحیح نمیباشد!'
             ], 401);
-
         }
 
         $token = $admin->createToken('account')->plainTextToken;
@@ -51,7 +56,8 @@ class AdminController extends Controller
 
     public function register(Request $request)
     {
-        Validator::validate($request->all(),
+        Validator::validate(
+            $request->all(),
             [
                 'email' => "bail|required|email|unique:admins",
                 'password' => "required|min:6|max:15",
@@ -65,7 +71,8 @@ class AdminController extends Controller
                 'password.min' => 'رمز عبور باید حداقل 6 کاراکتر باشد!',
                 'password.max' => 'رمز عبور باید حداکثر 15 کاراکتر باشد!',
                 'email.unique' => 'کاربری با این ایمیل وجود دارد!',
-            ]);
+            ]
+        );
 
         $password = bcrypt($request->password);
         $admin = Admin::create([
@@ -84,9 +91,9 @@ class AdminController extends Controller
 
     public function showAll()
     {
-        $admins = Cache::remember('admins',now()->addHour(1),function (){
-            return Admin::all();
-        });
+        // $admins = Cache::remember('admins', now()->addHour(1), function () {
+        $admins = Admin::with('role')->orderByDesc('id')->get();
+        // });
         return response()->json(
             [
                 'admins' => $admins
@@ -106,7 +113,8 @@ class AdminController extends Controller
 
     public function update(Request $request)
     {
-        Validator::validate($request->all(),
+        Validator::validate(
+            $request->all(),
             [
                 'email' => "bail|required|email",
                 'password' => "required|min:6|max:15",
@@ -126,7 +134,8 @@ class AdminController extends Controller
                 'address.string' => 'لطفا آدرس را به درستی وارد کنید!',
                 'phone_number.digits' => 'لطفا شماره تلفن همراه را به درستی وارد کنید!',
                 'username.string' => 'لطفا نام کاربری را به درستی وارد کنید!',
-            ]);
+            ]
+        );
 
         $password = bcrypt($request->password);
         return Admin::where('id', $request->id)->update([
@@ -142,35 +151,40 @@ class AdminController extends Controller
     public function delete(Request $request)
     {
         return Admin::where('id', $request->id)->delete();
-
     }
 
     public function forgetPassword(Request $request)
     {
 
-        Validator::validate($request->all(),
+        Validator::validate(
+            $request->all(),
             ['email' => "required|email"],
-            ['email.required' => 'لطفا ایمیل خود را وارد کنید!',
-                'email.email' => 'لطفا ایمیل خود را به درستی وارد کنید!']);
+            [
+                'email.required' => 'لطفا ایمیل خود را وارد کنید!',
+                'email.email' => 'لطفا ایمیل خود را به درستی وارد کنید!'
+            ]
+        );
 
         $email = $request->email;
         $conf_code = rand(10000, 100000);
         $user = Admin::where('email', $email)->first();
 
         if (!$user) return response()->json([
-            'msg'=>'کاربری با این ایمیل در پنل وجود ندارد!'
-        ],401);
+            'msg' => 'کاربری با این ایمیل در پنل وجود ندارد!'
+        ], 401);
 
         try {
-            Mail::send('mail.conf_code', ['code' => $conf_code],
+            Mail::send(
+                'mail.conf_code',
+                ['code' => $conf_code],
                 function ($message) use ($request) {
                     $message->to($request->email);
                     $message->subject('کد تایید ساخت ایران');
-                });
+                }
+            );
             cache()->remember($email, 250, function () use ($conf_code) {
                 return $conf_code;
             });
-
         } catch (ExceptionInterface $e) {
             return response()->json([
                 'email' => '0'
@@ -183,9 +197,11 @@ class AdminController extends Controller
 
     public function resetPassword(Request $request)
     {
-        Validator::validate($request->all(),
+        Validator::validate(
+            $request->all(),
             ['code' => "required"],
-            ['code.required' => 'لطفا کد تایید را وارد کنید!']);
+            ['code.required' => 'لطفا کد تایید را وارد کنید!']
+        );
 
         $email = $request->email;
         $code = cache()->get($email);
@@ -198,7 +214,7 @@ class AdminController extends Controller
         return response()->json([
             'admin' => $admin,
             'token' => $token
-        ], 201);//redirect user to update password in front
+        ], 201); //redirect user to update password in front
 
     }
 
@@ -210,5 +226,44 @@ class AdminController extends Controller
                 'msg' => '.از حساب کاربری خود خارج شدید'
             ]
         );
+    }
+    ///********** search in tags , blogs and products in admin panel*****//
+    public function adminSearch($str)
+    {
+        if ($str) {
+
+            $product = Product::with(['category', 'state', 'tag'])
+                ->when($str != '', function (Builder $q) use ($str) {
+                    $q->where('name', 'LIKE', "%{$str}%")
+                        ->orWhereHas('category', function (Builder $builder) use ($str) {
+                            $builder->where('name', 'LIKE', "%{$str}%");
+                        })
+                        ->orWhereHas('tag', function (Builder $builder) use ($str) {
+                            $builder->where('name', 'LIKE', "%{$str}%");
+                        })
+                        ->orWhereHas('state', function (Builder $builder) use ($str) {
+                            $builder->where('type', 'LIKE', "%{$str}%");
+                        });
+                })->paginate(10);
+        }
+
+        $blog = Blog::with(['tag', 'category'])
+            ->when($str != '', function (Builder $q) use ($str) {
+                $q->where('title', 'LIKE', "%{$str}%")
+                    ->orWhereHas('category', function (Builder $builder) use ($str) {
+                        $builder->where('name', 'LIKE', "%{$str}%");
+                    })
+                    ->orWhereHas('tag', function (Builder $builder) use ($str) {
+                        $builder->where('name', 'LIKE', "%{$str}%");
+                    });
+            })->paginate(10);
+
+        $tag = DB::table('tags')->where('name', 'LIKE', "%{$str}%")->get();
+        //age paginate nmikhay ->get() bzar tash na paginate()
+        return response()->json([
+            'products' => $product,
+            'blogs' => $blog,
+            'tags' => $tag
+        ]);
     }
 }

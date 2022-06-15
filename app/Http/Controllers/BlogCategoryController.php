@@ -16,14 +16,14 @@ class BlogCategoryController extends Controller
     ////////////////********* this controller has been tested => OK!
     public function showAll()
     {
-        $categories = Cache::remember('category_for_blogs',now()->addHour(1),function (){
+        // $categories = Cache::remember('category_for_blogs', now()->addHour(1), function () {
         return  BlogCategory::with(['blog'])->orderByDesc('id')->get();
-        });
-        return $categories;
+        // });
+        // return $categories;
     }
     public function showOne($id)
     {
-        return BlogCategory::where('id',$id)->first();
+        return BlogCategory::where('id', $id)->first();
     }
     public function showAllWithBlog()
     {
@@ -31,29 +31,45 @@ class BlogCategoryController extends Controller
     }
     public function showOneWithBlog($id)
     {
-        return BlogCategory::with(['blog'])->where('id',$id)->first();
+        return BlogCategory::with(['blog'])->where('id', $id)->first();
     }
     public function update(Request $request)
     {
         $this->validate($request, [
             'name' => 'required',
+            'pageTitle' => 'required',
+            'metaKeyword' => 'required',
+            'metaDescription' => 'required',
         ]);
         return BlogCategory::where('id', $request->id)->update([
             'name' => $request->name,
+            'pageTitle' => $request->pageTitle,
+            'metaKeyword' => $request->metaKeyword,
+            'metaDescription' => $request->metaDescription,
         ]);
     }
-    public  function destroy($id)
+    public  function destroy(Request $id)
     {
-        return BlogCategory::where('id', $id)->delete();
+        return BlogCategory::where('id', $id->id)->delete();
     }
 
     public function save(Request $request)
     {
         $this->validate($request, [
             'name' => 'required',
+            'pageTitle' => 'required',
+            'metaKeyword' => 'required',
+            'metaDescription' => 'required',
         ]);
         return BlogCategory::create([
             'name' => $request->name,
+            'pageTitle' => $request->pageTitle,
+            'metaKeyword' => $request->metaKeyword,
+            'metaDescription' => $request->metaDescription,
         ]);
+    }
+    public function categoryList()
+    {
+        return BlogCategory::orderByDesc('id')->get();
     }
 }

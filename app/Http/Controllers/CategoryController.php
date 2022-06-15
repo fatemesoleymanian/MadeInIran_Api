@@ -17,7 +17,7 @@ class CategoryController extends Controller
             [
 
                 'name' => "bail|required|string",
-                'iconImage' => "bail|required|string",
+                'iconImage' => "string",
                 'department_id' => "bail|required|integer",
                 'metaDescription' => 'bail|required|max:100',
                 'metaKeyword' => 'bail|required|max:20',
@@ -28,7 +28,6 @@ class CategoryController extends Controller
                 'department_id.required' => 'لطفا دپارتمان را انتخاب کنید.',
                 'name.required' => 'لطفا نام دسته بندی را وارد کنید!',
                 'name.string' => 'لطفا نام دسته بندی را به درستی وارد کنید!',
-                'iconImage.required' => 'لطفا ادرس فایل را وارد کنید!',
                 'iconImage.string' => 'لطفا آدرس فایل را به درستی وارد کنید!',
                 'metaDescription.required' => 'لطفا توضیحات متا را به درستی وارد کنید!',
                 'metaDescription.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
@@ -56,14 +55,14 @@ class CategoryController extends Controller
             'errors' => Lang::get('messages.fail', ['attribute' => 'دسته بندی'])
         ]);
     }
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         Validator::validate(
             $request->all(),
             [
 
                 'name' => "bail|required|string",
-                'iconImage' => "bail|required|string",
+                'iconImage' => "string",
                 'department_id' => "bail|required|integer",
                 'metaDescription' => 'bail|required|max:100',
                 'metaKeyword' => 'bail|required|max:20',
@@ -74,7 +73,6 @@ class CategoryController extends Controller
                 'department_id.required' => 'لطفا دپارتمان را انتخاب کنید.',
                 'name.required' => 'لطفا نام دسته بندی را وارد کنید!',
                 'name.string' => 'لطفا نام دسته بندی را به درستی وارد کنید!',
-                'iconImage.required' => 'لطفا ادرس فایل را وارد کنید!',
                 'iconImage.string' => 'لطفا آدرس فایل را به درستی وارد کنید!',
                 'metaDescription.required' => 'لطفا توضیحات متا را به درستی وارد کنید!',
                 'metaDescription.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
@@ -84,7 +82,7 @@ class CategoryController extends Controller
                 'pageTitle.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
             ]
         );
-        $category = Category::where('id', $id)->update([
+        $category = Category::where('id', $request->id)->update([
             'name' => $request->name,
             'iconImage' => $request->iconImage,
             'metaDescription' => $request->metaDescription,
@@ -102,22 +100,22 @@ class CategoryController extends Controller
             'errors' => Lang::get('messages.fail', ['attribute' => 'دسته بندی'])
         ]);
     }
-    public function destroy($id)
+    public function destroy(Request $id)
     {
-        if (!$id) {
+        if (!$id->id) {
             return response()->json([
                 'errors' => Lang::get('messages.nochoosen')
             ], 401);
         }
-        $img = Category::where('id', $id)->get('iconImage');
+        $img = Category::where('id', $id->id)->get('iconImage');
         $imgg = $img[0]->iconImage;
         $upload = new Upload();
         $upload->handydelete($imgg);
-        return Category::where('id', $id)->delete();
+        return Category::where('id', $id->id)->delete();
     }
     public function showAll()
     {
-        return Category::orderByDesc('id')->get();
+        return Category::with(['department', 'product'])->orderByDesc('id')->get();
     }
     public function showOne($id)
     {

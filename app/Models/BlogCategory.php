@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlogCategory extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'pageTitle', 'metaKeyword', 'metaDescription'];
 
     public function getCreatedAtAttribute($val)
     {

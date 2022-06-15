@@ -23,39 +23,25 @@ class RoleController extends Controller
                 'name.required' => 'لطفا نام نقش را وارد کنید!',
                 'name.string' => 'لطفا نام نقش را به درستی وارد کنید!'
             ]);
-        $permissions = $request->permissions;
-        $create = $request->create;
-        $read = $request->read;
-        $update = $request->update;
-        $delete = $request->delete;
 
-        $permission = [];
-        DB::beginTransaction();
-        try {
+
             $role = Role::create(['name' => $request->name]);
-
-            for ($x = 0; $x < sizeof($permissions); $x++) {
-
-                array_push($permission, [
-                    'permission' => $permissions[$x],
+            for($i=1 ; $i<16 ; $i++)
+            {
+                Permission::create([
                     'role_id' => $role->id,
-                    'create' => $create[$x],
-                    'read' => $read[$x],
-                    'update' => $update[$x],
-                    'delete' => $delete[$x]
+                    'module_id' => $i,
+                    'create' => 0,
+                    'read' => 0,
+                    'update' => 0,
+                    'delete' => 0,
                 ]);
             }
-            Permission::insert($permission);
-            DB::commit();
+
+
             return response()->json([
                 'role' => $role
             ]);
-        } catch (Throwable $throwable) {
-            DB::rollBack();
-            return response()->json([
-                'errors' => Lang::get('messages.fail', ['attribute' => 'نقش'])
-            ], 401);
-        }
     }
 
     public function showAll()
@@ -84,40 +70,10 @@ class RoleController extends Controller
                 'name.required' => 'لطفا نام نقش را وارد کنید!',
                 'name.string' => 'لطفا نام نقش را به درستی وارد کنید!'
             ]);
-        $permissions = $request->permissions;
-        $create = $request->create;
-        $read = $request->read;
-        $update = $request->update;
-        $delete = $request->delete;
-
-        $permission = [];
-        DB::beginTransaction();
-        try {
             $role = Role::where('id', $request->id)->update(['name' => $request->name]);
-
-            for ($x = 0; $x < sizeof($permissions); $x++) {
-
-                array_push($permission, [
-                    'permission' => $permissions[$x],
-                    'role_id' => $request->id,
-                    'create' => $create[$x],
-                    'read' => $read[$x],
-                    'update' => $update[$x],
-                    'delete' => $delete[$x]
-                ]);
-            }
-            Permission::where('role_id', $request->id)->delete();
-            Permission::insert($permission);
-            DB::commit();
-            return response()->json([
+    return response()->json([
                 'role' => $role
             ], 201);
-        } catch (Throwable $throwable) {
-            DB::rollBack();
-            return response()->json([
-                'errors' => Lang::get('messages.fail', ['attribute' => 'نقش'])
-            ], 401);
-        }
     }
 
     public function delete(Request $request)

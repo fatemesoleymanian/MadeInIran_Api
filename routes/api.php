@@ -14,6 +14,7 @@ use App\Http\Controllers\FQFormController;
 use App\Http\Controllers\JobProductionController;
 use App\Http\Controllers\JobProductionIdeaController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductStateController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\UnderConstructionController;
 use App\Http\Controllers\Upload;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminCheck;
+use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +61,7 @@ Route::get('/blog_categories', [BlogCategoryController::class, 'showAll']);
 Route::get('/blog_categories/{id}', [BlogCategoryController::class, 'showOne']);
 Route::get('/blog_categories_with_blog', [BlogCategoryController::class, 'showAllWithBlog']);
 Route::get('/blog_categories_with_blog/{id}', [BlogCategoryController::class, 'showOneWithBlog']);
+Route::get('/blog_categories_list', [BlogCategoryController::class, 'categoryList']);
 
 
 //tag
@@ -140,7 +143,7 @@ Route::post('/logout', [UserController::class, 'logout']);
 
 
 //admin panel
-Route::get('/admin_search/{str}', [ProductController::class, 'adminSearch']);
+Route::get('/admin_search/{str}', [AdminController::class, 'adminSearch']);
 Route::post('admin/auth/register', [AdminController::class, 'register']);
 Route::post('admin/logout', [AdminController::class, 'logout']);
 Route::get('admin/show/{id}', [AdminController::class, 'showOne']);
@@ -163,6 +166,14 @@ Route::get('admin/role', [RoleController::class, 'showAll']);
 Route::get('admin/role/{id}', [RoleController::class, 'showOne']);
 Route::delete('admin/role', [RoleController::class, 'delete']);
 
+//permission
+Route::put('/permission', [PermissionController::class, 'change']);
+
+//module
+Route::get('/modules', function () {
+    return Module::all();
+});
+
 //Product Comments
 Route::post('pcomment/save', [ProductCommentController::class, 'save']);
 Route::put('pcomment/update{id}', [ProductCommentController::class, 'confirmComment']);
@@ -183,7 +194,7 @@ Route::post('/blogs', [BlogController::class, 'save']);
 
 //category for blog
 Route::put('/blog_categories', [BlogCategoryController::class, 'update']);
-Route::delete('/blog_categories/{id}', [BlogCategoryController::class, 'destroy']);
+Route::delete('/blog_categories', [BlogCategoryController::class, 'destroy']);
 Route::post('/blog_categories', [BlogCategoryController::class, 'save']);
 
 //tag
@@ -200,8 +211,8 @@ Route::delete('/departments', [DepartmentController::class, 'destroy']);
 
 //categories for products
 Route::post('/categories', [CategoryController::class, 'save']);
-Route::put('/categories/{id}', [CategoryController::class, 'update']);
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
+Route::put('/categories', [CategoryController::class, 'update']);
+Route::delete('/categories', [CategoryController::class, 'destroy']);
 
 //FAQ
 Route::post('/faq', [FQController::class, 'save']);

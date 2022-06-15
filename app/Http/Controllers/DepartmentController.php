@@ -56,7 +56,6 @@ class DepartmentController extends Controller
             [
 
                 'name' => "required|string",
-                'iconImage' => "required|string",
                 'metaDescription' => 'required|max:100',
                 'metaKeyword' => 'required|max:20',
                 'pageTitle' => 'required|max:100',
@@ -64,8 +63,6 @@ class DepartmentController extends Controller
             [
                 'name.required' => 'لطفا نام دپارتمان را وارد کنید!',
                 'name.string' => 'لطفا نام دپارتمان را به درستی وارد کنید!',
-                'iconImage.required' => 'لطفا ادرس فایل را وارد کنید!',
-                'iconImage.string' => 'لطفا آدرس فایل را به درستی وارد کنید!',
                 'metaDescription.required' => 'لطفا توضیحات متا را به درستی وارد کنید!',
                 'metaDescription.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
                 'metaKeyword.required' => 'لطفا کلمه کلیدی متا را به درستی وارد کنید!',

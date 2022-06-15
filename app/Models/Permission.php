@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Permission extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'role_id',
+        'module_id',
+        'create',
+        'update',
+        'read',
+        'delete',
+    ];
 
     public function getCreatedAtAttribute($val)
     {

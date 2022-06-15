@@ -121,7 +121,7 @@ class OrderController extends Controller
     //panel//all orders
     public function showAll()
     {
-        return Order::all();
+        return Order::with('card')->OrderByDesc('id')->get();
     }
 
     //show order state after pardakht
@@ -145,6 +145,7 @@ class OrderController extends Controller
     public function delete(Request $request)
     {
         return Order::where('id', $request->id)->delete();
+        //bargardandane vajbe hesabe karbar
     }
     public function showPastOrderItems($card)
     {

@@ -25,12 +25,13 @@ class BlogController extends Controller
             'user_id' => $request->user_id
         ]);
     }
+
     public function showAll()
     {
-        $bolgs = Cache::remember('blogs', now()->addHour(2), function () {
-            return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
-        });
-        return $bolgs;
+        // $bolgs = Cache::remember('blogs', now()->addHour(2), function () {
+        return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
+        // });
+        // return $bolgs;
     }
     public function showSome()
     {
@@ -63,7 +64,7 @@ class BlogController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|unique:blogs',
+            'title' => 'required',
             'post' => 'required',
             'post_excerpt' => 'required',
             'metaDescription' => 'required|max:100',
@@ -124,7 +125,7 @@ class BlogController extends Controller
     public function save(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|unique:blogs',
+            'title' => 'required',
             'post' => 'required',
             'post_excerpt' => 'required',
             'metaDescription' => 'required|max:100',
