@@ -42,6 +42,6 @@ class ProductCommentController extends Controller
     //panel
     public function showComments()
     {
-        return ProductComment::with(['user', 'product'])->orderByDesc('id')->get();
+        return ProductComment::with(['user', 'product'])->orderByDesc('id')->paginate(10);
     }
 }

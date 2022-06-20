@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Blog;
+use App\Models\Permission;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -36,24 +37,26 @@ class AdminController extends Controller
         );
 
 
-        $admin = Admin::where([
+        $admin = Admin::with('role')->where([
             'email' => $request->email
         ])->first();
         //create user token
         if (!$admin || !Hash::check($request->password, $admin->password)) {
             return response()->json([
-                'msg' => 'اطلاعات وارد شده صحیح نمیباشد!'
+                'message' => 'اطلاعات وارد شده صحیح نمیباشد!'
             ], 401);
         }
-
-        $token = $admin->createToken('account')->plainTextToken;
+        $permission = Permission::with('module')->where('role_id', $admin->role_id)->get();
+        $token = $admin->createToken('panel')->plainTextToken;
 
         return response()->json([
             'user' => $admin,
-            'token' => $token
+            'token' => $token,
+            'permission' => $permission
         ], 201);
     }
 
+    //super admin register others
     public function register(Request $request)
     {
         Validator::validate(
@@ -62,6 +65,9 @@ class AdminController extends Controller
                 'email' => "bail|required|email|unique:admins",
                 'password' => "required|min:6|max:15",
                 'role' => "required",
+                'phone_number' => "required",
+                'address' => "required",
+                'username' => "required",
             ],
             [
                 'email.required' => 'لطفا ایمیل را وارد کنید!',
@@ -78,7 +84,10 @@ class AdminController extends Controller
         $admin = Admin::create([
             'email' => $request->email,
             'password' => $password,
-            'role_id' => $request->role
+            'role_id' => $request->role,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'username' => $request->username,
         ]);
         if (!$admin) return response()->json([
             'msg' => 'خطا در ایجاد کاربر'
@@ -170,7 +179,7 @@ class AdminController extends Controller
         $user = Admin::where('email', $email)->first();
 
         if (!$user) return response()->json([
-            'msg' => 'کاربری با این ایمیل در پنل وجود ندارد!'
+            'message' => 'کاربری با این ایمیل در پنل وجود ندارد!'
         ], 401);
 
         try {
@@ -187,11 +196,13 @@ class AdminController extends Controller
             });
         } catch (ExceptionInterface $e) {
             return response()->json([
-                'email' => '0'
-            ]);
+                // 'message' => 'خطا در ارسال ایمیل به کاربر'
+                'message' => $e
+            ], 401);
         }
         return response()->json([
-            'msg' => 'کد تایید به شما ایمیل شد.'
+            'message' => 'کد تایید به شما ایمیل شد.',
+            'code' => $conf_code
         ]);
     }
 
@@ -206,14 +217,17 @@ class AdminController extends Controller
         $email = $request->email;
         $code = cache()->get($email);
         if ($code != $request->code) return response()->json([
-            'msg' => 'کد تایید وارد شده صحیح نیست!'
-        ]);
-        $admin = Admin::where('email', $email)->first();
-        $token = $admin->createToken('account')->plainTextToken;
+            'message' => 'کد تایید وارد شده صحیح نیست!'
+        ], 401);
+        $admin = Admin::with('role')->where('email', $email)->first();
+        $token = $admin->createToken('panel')->plainTextToken;
+        $permission = Permission::with('module')->where('role_id', $admin->role_id)->get();
 
         return response()->json([
             'admin' => $admin,
-            'token' => $token
+            'token' => $token,
+            'permission' => $permission
+
         ], 201); //redirect user to update password in front
 
     }
@@ -223,7 +237,7 @@ class AdminController extends Controller
         auth()->user()->tokens()->delete();
         return response()->json(
             [
-                'msg' => '.از حساب کاربری خود خارج شدید'
+                'message' => '.از حساب کاربری خود خارج شدید'
             ]
         );
     }
@@ -244,7 +258,7 @@ class AdminController extends Controller
                         ->orWhereHas('state', function (Builder $builder) use ($str) {
                             $builder->where('type', 'LIKE', "%{$str}%");
                         });
-                })->paginate(10);
+                })->get();
         }
 
         $blog = Blog::with(['tag', 'category'])
@@ -256,7 +270,7 @@ class AdminController extends Controller
                     ->orWhereHas('tag', function (Builder $builder) use ($str) {
                         $builder->where('name', 'LIKE', "%{$str}%");
                     });
-            })->paginate(10);
+            })->get();
 
         $tag = DB::table('tags')->where('name', 'LIKE', "%{$str}%")->get();
         //age paginate nmikhay ->get() bzar tash na paginate()

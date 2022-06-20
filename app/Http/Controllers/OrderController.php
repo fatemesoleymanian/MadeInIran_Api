@@ -121,7 +121,7 @@ class OrderController extends Controller
     //panel//all orders
     public function showAll()
     {
-        return Order::with('card')->OrderByDesc('id')->get();
+        return Order::with('card')->OrderByDesc('id')->paginate(10);
     }
 
     //show order state after pardakht

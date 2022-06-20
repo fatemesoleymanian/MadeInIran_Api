@@ -60,8 +60,8 @@ class UserController extends Controller
                 });
             } catch (ExceptionInterface $e) {
                 return response()->json([
-                    'email' => '0'
-                ]);
+                    'email' => $conf_code
+                ], 200);
             }
             return $status;
         }
@@ -171,7 +171,7 @@ class UserController extends Controller
 
     public function showAll()
     {
-        $users = User::orderByDesc('id')->get();
+        $users = User::orderByDesc('id')->paginate(10);
         return response()->json([
             'users' => $users
         ]);

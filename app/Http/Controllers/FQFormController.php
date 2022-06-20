@@ -20,16 +20,15 @@ class FQFormController extends Controller
             'full_name' => $request->full_name
         ]);
         if ($form) return response()->json([
-            'msg'=>'اطلاعات فرم با موفقیت ارسال شد! منتظر تماس کارشناسان ما بمانید.',
+            'msg' => 'اطلاعات فرم با موفقیت ارسال شد! منتظر تماس کارشناسان ما بمانید.',
             'faq_form' => $form
-        ],200);
+        ], 200);
         else return response()->json([
-            'msg'=>'خطایی در ارسال فرم رخ داد.',
-        ],401);
-
+            'msg' => 'خطایی در ارسال فرم رخ داد.',
+        ], 401);
     }
     public function show()
     {
-        return FQForm::with(['faq'])->orderByDesc('id')->get();
+        return FQForm::with(['faq'])->orderByDesc('id')->paginate(10);
     }
 }

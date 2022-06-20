@@ -30,6 +30,13 @@ class TagController extends Controller
         // });
         // return $tags;
     }
+    public function showAllPagi()
+    {
+        // $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
+        return Tag::with(['blog', 'product'])->orderByDesc('id')->paginate(10);
+        // });
+        // return $tags;
+    }
     public function showOne($id)
     {
         return Tag::where('id', $id)->first();

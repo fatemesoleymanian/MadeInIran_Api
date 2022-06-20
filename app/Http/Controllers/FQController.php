@@ -75,7 +75,7 @@ class FQController extends Controller
     }
     public function showAll()
     {
-        return FQ::with(['product'])->orderByDesc('id')->get();
+        return FQ::with(['product'])->orderByDesc('id')->paginate(10);
     }
     public function delete(Request $request)
     {

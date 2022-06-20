@@ -25,4 +25,8 @@ class Permission extends Model
     {
         return verta($val)->format('l d %B Y');
     }
+    public function module()
+    {
+        return $this->belongsTo(Module::class, 'module_id');
+    }
 }
