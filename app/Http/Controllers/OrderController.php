@@ -103,12 +103,12 @@ class OrderController extends Controller
         ]);
     }
 
-    //panel and store//show all past orders for user
+    //panel and store in profile //show all past orders for user
     public function showAllByUser($user)
     {
         $card_id = Card::where([
             'user_id' => $user,
-            'status' => 1
+            'status' => 0
         ])->get('id');
 
         foreach ($card_id as $c) {
@@ -117,6 +117,7 @@ class OrderController extends Controller
             ])->get();
         }
     }
+
 
     //panel//all orders
     public function showAll()
@@ -154,7 +155,7 @@ class OrderController extends Controller
         //products
         if (!$products) return response()->json([
             'msg' => 'این سفارش ثبت نگردیده است!'
-        ]);
+        ], 401);
 
         $total = 0;
         foreach ($products as $product) {

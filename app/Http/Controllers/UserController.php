@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Card;
+use App\Models\ProductComment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -143,6 +144,9 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => $password,
             'address' => $request->address,
+            'plaque' => $request->plaque,
+            'zip_code' => $request->zip_code,
+            'floor' => $request->floor,
         ]);
         return response()->json([
             'msg' => $user
@@ -175,6 +179,12 @@ class UserController extends Controller
         return response()->json([
             'users' => $users
         ]);
+    }
+
+    //user's comments in store
+    public function comments($id)
+    {
+        return ProductComment::where('user_id', $id)->get();
     }
     //forget password dige ndrim chon ramza ye bar msrfe
     //az jadvale reset password vase activation code estefade kn  ya cache

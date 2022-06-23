@@ -32,7 +32,7 @@ class CardController extends Controller
     {
         $card_id = Card::where([
             'user_id' => $user,
-            'status' => 0
+            'status' => 1 //1 be manaye fa'a va baz boodne cart hst
         ])->first();
 
         $products = CardProduct::with(['product', 'state'])->where('card_id', $card_id->id)->get();

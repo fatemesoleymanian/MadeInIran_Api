@@ -26,17 +26,10 @@ class BlogController extends Controller
         ]);
     }
 
-    public function showAllPagi()
-    {
-        // $bolgs = Cache::remember('blogs', now()->addHour(2), function () {
-        return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
-        // });
-        // return $bolgs;
-    }
     public function showAll()
     {
         // $bolgs = Cache::remember('blogs', now()->addHour(2), function () {
-        return Blog::with(['tag', 'category'])->orderByDesc('id')->get();
+        return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
         // });
         // return $bolgs;
     }

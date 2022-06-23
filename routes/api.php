@@ -49,7 +49,6 @@ Route::get('/job_production_ideas', [JobProductionIdeaController::class, 'show']
 
 //Blog
 Route::get('/blogs', [BlogController::class, 'showAll']);
-Route::get('/blogs_page', [BlogController::class, 'showAllPagi']);
 Route::get('/blogs/{id}', [BlogController::class, 'showOne']);
 Route::get('/blogs_id/{id}', [BlogController::class, 'showIds']);
 Route::get('blogs/search/{str}', [BlogController::class, 'search']);
@@ -129,6 +128,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/delete_acc', [UserController::class, 'deleteAccount']);
     Route::get('/users', [UserController::class, 'showAll']);
     Route::get('/show_acc/{id}', [UserController::class, 'show']);
+    Route::get('/show_comments{id}', [UserController::class, 'comments']);
     Route::post('/logout', [UserController::class, 'logout']);
 
 
