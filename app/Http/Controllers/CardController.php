@@ -14,7 +14,7 @@ class CardController extends Controller
     {
         $card_id = Card::where([
             'user_id' => $request->user_id,
-            'status' => 0
+            'status' => 1
         ])->first();
         $add = CardProduct::create([
             'card_id' => $card_id->id,

@@ -11,12 +11,19 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     //rize products and factor - total
-    public function saveCard(Request $request)
+    //vaghti pay ba success bood card ro 0 kn va carde jdid bsaz va order ro sbt kn
+    public function saveCardAndOrderAfterPay(Request $request)
     {
         $card_id = Card::where([
             'user_id' => $request->user,
             'status' => 1
-        ])->first();
+        ])->update('status',0);
+
+        //create new card
+        Card::create([
+            'status'=>1,
+            'user_id'=>$request->user
+        ]);
 
         $products = CardProduct::with(['product', 'state'])->where('card_id', $card_id->id)->get();
 
@@ -34,7 +41,7 @@ class OrderController extends Controller
             'status' => 1
         ], [
             'total' => $total,
-            'current_state' => 'منتظر تایید ادمین برای ثبت .'
+            'current_state' => 'ثبت سفارش'
         ]);
 
         return response()->json([

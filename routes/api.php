@@ -244,7 +244,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/card_dec_count', [CardProductController::class, 'decreaseQuantity']);
 
     //order
-    Route::post('order/step_1', [OrderController::class, 'saveCard']);
+    Route::post('order/step_1', [OrderController::class, 'saveCardAndOrderAfterPay']);
     Route::post('order/step_2', [OrderController::class, 'userInfo']);
     Route::get('order/step_3/{user}', [OrderController::class, 'showOrder']);
     Route::get('order/user/{user}', [OrderController::class, 'showUserInfo']);

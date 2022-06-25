@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+    const STATUS = ['ACCEPTED', 'PENDING', 'REJECTED'];
     protected $fillable = ['total', 'provider', 'status', 'order_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function order()
     {
