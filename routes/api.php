@@ -72,6 +72,8 @@ Route::get('/tags_with_blog', [TagController::class, 'showAllWithBlog']);
 Route::get('/tags_with_blog/{id}', [TagController::class, 'showOneWithBlog']);
 Route::get('/tags_with_product', [TagController::class, 'showAllWithProduct']);
 Route::get('/tags_with_product/{id}', [TagController::class, 'showOneWithProduct']);
+Route::get('/tags_only_pro', [TagController::class, 'forProducts']);
+Route::get('/tags_only_blog', [TagController::class, 'forblogs']);
 
 //department
 Route::get('/departments', [DepartmentController::class, 'showAll']);
@@ -193,8 +195,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/tags', [TagController::class, 'save']);
     Route::put('/tags', [TagController::class, 'update']);
     Route::delete('/tags', [TagController::class, 'destroy']);
-    Route::get('/tags_only_pro', [TagController::class, 'forProducts']);
-    Route::get('/tags_only_blog', [TagController::class, 'forblogs']);
+
 
     //department
     Route::post('/departments', [DepartmentController::class, 'save']);

@@ -29,6 +29,6 @@ class FQFormController extends Controller
     }
     public function show()
     {
-        return FQForm::with(['faq'])->orderByDesc('id')->paginate(10);
+        return FQForm::with(['faq'])->orderByDesc('id')->get();
     }
 }

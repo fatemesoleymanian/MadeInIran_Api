@@ -24,7 +24,7 @@ class BlogCategoryController extends Controller
     public function showAllPagi()
     {
         // $categories = Cache::remember('category_for_blogs', now()->addHour(1), function () {
-        return  BlogCategory::with(['blog'])->orderByDesc('id')->paginate(10);
+        return  BlogCategory::with(['blog'])->orderByDesc('id')->get();
         // });
         // return $categories;
     }

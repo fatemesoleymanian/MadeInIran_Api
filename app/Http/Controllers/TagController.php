@@ -33,7 +33,7 @@ class TagController extends Controller
     public function showAllPagi()
     {
         // $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
-        return Tag::with(['blog', 'product'])->orderByDesc('id')->paginate(10);
+        return Tag::with(['blog', 'product'])->orderByDesc('id')->get();
         // });
         // return $tags;
     }

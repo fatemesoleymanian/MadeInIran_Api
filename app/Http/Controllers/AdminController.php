@@ -46,6 +46,7 @@ class AdminController extends Controller
                 'message' => 'اطلاعات وارد شده صحیح نمیباشد!'
             ], 401);
         }
+
         $permission = Permission::with('module')->where('role_id', $admin->role_id)->get();
         $token = $admin->createToken('panel')->plainTextToken;
 

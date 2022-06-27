@@ -119,7 +119,7 @@ class CategoryController extends Controller
     }
     public function showAllPagi()
     {
-        return Category::with(['department', 'product'])->orderByDesc('id')->paginate(10);
+        return Category::with(['department', 'product'])->orderByDesc('id')->get();
     }
     public function showOne($id)
     {

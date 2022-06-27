@@ -28,9 +28,6 @@ class JobProductionController extends Controller
     }
     public function show()
     {
-        $users = JobProduction::orderByDesc('id')->paginate(10);
-        return response()->json([
-            'users' => $users
-        ]);
+        return JobProduction::orderByDesc('id')->paginate(10);
     }
 }

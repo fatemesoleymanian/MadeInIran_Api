@@ -175,10 +175,8 @@ class UserController extends Controller
 
     public function showAll()
     {
-        $users = User::orderByDesc('id')->paginate(10);
-        return response()->json([
-            'users' => $users
-        ]);
+//        return User::orderByDesc('created_at')->paginate(10);
+        return User::orderByDesc('created_at')->get();
     }
 
     //user's comments in store

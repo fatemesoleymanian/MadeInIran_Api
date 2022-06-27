@@ -207,7 +207,8 @@ class ProductController extends Controller
         //front will handle pagination
         // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
         // $products = Cache::remember('productss', now()->addMinute(1), function () {
-        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->paginate(10);
+//        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->paginate(10);
+        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get();
         // });
         // return $products;
     }

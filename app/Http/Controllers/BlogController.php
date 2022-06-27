@@ -29,7 +29,8 @@ class BlogController extends Controller
     public function showAll()
     {
         // $bolgs = Cache::remember('blogs', now()->addHour(2), function () {
-        return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
+//        return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
+        return Blog::with(['tag', 'category'])->orderByDesc('id')->get();
         // });
         // return $bolgs;
     }
