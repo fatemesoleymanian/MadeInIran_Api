@@ -28,6 +28,6 @@ class JobProductionController extends Controller
     }
     public function show()
     {
-        return JobProduction::orderByDesc('id')->paginate(10);
+        return JobProduction::orderByDesc('id')->get();
     }
 }

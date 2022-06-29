@@ -68,9 +68,9 @@ class BlogController extends Controller
             'title' => 'required',
             'post' => 'required',
             'post_excerpt' => 'required',
-            'metaDescription' => 'required|max:100',
-            'metaKeyword' => 'required|max:100',
-            'pageTitle' => 'required|max:100',
+            'metaDescription' => 'required',
+            'metaKeyword' => 'required',
+            'pageTitle' => 'required|max:200',
             'category_id' => 'required',
             'tag_id' => 'required',
         ]);
@@ -87,7 +87,7 @@ class BlogController extends Controller
                 'metaDescription' => $request->metaDescription,
                 'metaKeyword' => $request->metaKeyword,
                 'pageTitle' => $request->pageTitle,
-                'slug' => Str::slug($request->title),
+                'slug' => Str::slug($request->slug),
                 'category_id' => $categories,
                 'featuredImage' => $request->featuredImage
             ]);
@@ -129,9 +129,9 @@ class BlogController extends Controller
             'title' => 'required',
             'post' => 'required',
             'post_excerpt' => 'required',
-            'metaDescription' => 'required|max:100',
-            'metaKeyword' => 'required|max:100',
-            'pageTitle' => 'required|max:100',
+            'metaDescription' => 'required',
+            'metaKeyword' => 'required',
+            'pageTitle' => 'required|max:200',
             'category_id' => 'required',
             'tag_id' => 'required',
             'featuredImage' => 'required'
@@ -150,7 +150,7 @@ class BlogController extends Controller
                     'metaDescription' => $request->metaDescription,
                     'metaKeyword' => $request->metaKeyword,
                     'pageTitle' => $request->pageTitle,
-                    'slug' => Str::slug($request->title),
+                    'slug' => Str::slug($request->slug),
                     'category_id' => $categories,
                     'featuredImage' => $request->featuredImage
                 ]
