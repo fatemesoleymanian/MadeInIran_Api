@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     const STATUS = ['ACCEPTED', 'PENDING', 'REJECTED'];
-    protected $fillable = ['total', 'provider', 'status', 'order_id'];
+    protected $guarded = [];
 
     public function user()
     {

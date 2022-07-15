@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\commentRequest;
 use App\Models\ProductComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductCommentController extends Controller
 {
@@ -28,10 +29,13 @@ class ProductCommentController extends Controller
     //panel
     public function confirmComment($id, Request $request)
     {
+
         $confirm = ProductComment::where('id', $id)->update(array('status' => $request->status));
-        if ($confirm) return response()->json([
-            'msg' => 'ثبت توسط ادمین.'
-        ]);
+        if ($confirm) {
+            return response()->json([
+                'msg' => 'ثبت توسط ادمین.'
+            ]);
+        }
         else {
             return response()->json([
                 'msg' => 'خطا در ثبت توسط ادمین.'

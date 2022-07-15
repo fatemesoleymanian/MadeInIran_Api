@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EmailJob;
 use App\Models\Card;
 use App\Models\ProductComment;
 use App\Models\User;
@@ -48,6 +49,13 @@ class UserController extends Controller
             if ($user) $status = 1;
 
             try {
+                //email with job and queue
+//                $details['view'] = 'mail.conf_code';
+//                $details['conf_code'] = $conf_code;
+//                $details['key'] = $request->key;
+//                dispatch(new EmailJob($details));
+
+                //no queue
                 Mail::send(
                     'mail.conf_code',
                     ['code' => $conf_code],
@@ -56,7 +64,7 @@ class UserController extends Controller
                         $message->subject('کد تایید ساخت ایران');
                     }
                 );
-                cache()->remember($key, 200, function () use ($conf_code) {
+                cache()->remember($key, 250, function () use ($conf_code) {
                     return $conf_code;
                 });
             } catch (ExceptionInterface $e) {

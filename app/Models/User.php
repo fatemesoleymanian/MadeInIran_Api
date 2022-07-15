@@ -54,4 +54,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProductComment::class, 'user_id');
     }
+    public function card()
+    {
+        return $this->hasMany(Card::class, 'user_id');
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
 }

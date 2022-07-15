@@ -22,12 +22,13 @@ class Upload extends Controller
             'image.mimes' => 'jpeg,jpg,png,svg میباشد فرمت های قابل قبول برای عکس!',
         ]);
         $picName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path($request->location), $picName);
+//        $request->image->move(public_path($request->location), $picName);
+        $request->image->storeAs("public/$request->location",$picName);
         return response()->json([
             'success' => 1,
             // 'file'=>["url"=>"https://api.madein-iran.com/$request->location/$picName"]
-            'file' => ["url" => "/$request->location/$picName"]
-            //            'file'=>["url"=> Storage::url("$request->location/$picName")]
+//            'file' => ["url" => "/$request->location/$picName"]
+                        'file'=>["url"=> Storage::url("$request->location/$picName")]
         ]);
         //age in response ro ngrfti bedun ke anjam nshde
     }
@@ -37,12 +38,10 @@ class Upload extends Controller
     {
         $request->validated();
         $picName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path($request->location), $picName);
+        $request->image->storeAs("public/$request->location",$picName);
         return response()->json([
             'success' => 1,
-            // 'file'=>["url"=>"https://api.madein-iran.com/$request->location/$picName"]
-            'file' => ["url" => "/$request->location/$picName"]
-            //            'file'=>["url"=> Storage::url("$request->location/$picName")]
+            'file'=>["url"=> Storage::url("$request->location/$picName")]
         ]);
         //age in response ro ngrfti bedun ke anjam nshde
     }
@@ -50,10 +49,15 @@ class Upload extends Controller
     public function deleteUploaded(Request $request)
     {
         $path = parse_url($request->imageName);
+
         $remove = File::delete(public_path($path['path']));
-        if ($remove)  return response()->json([
+        if ($remove) return response()->json([
             'success' => 1,
             'msg' => 'فایل با موفقیت حذف گردید.'
+        ]);
+        else  return response()->json([
+            'success' => 0,
+            'msg' => 'خطا در حذف فایل'
         ]);
     }
     public function deleteGroupImages(Request $request)

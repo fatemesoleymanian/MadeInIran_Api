@@ -15,27 +15,27 @@ class Zarinpal
     /**
      * @var Payment
      */
-    protected $payment;
+    private $payment;
 
     /**
      * @var Invoice
      */
-    protected $invoice;
+    private $invoice;
 
     /**
      * @var
      */
-    protected $txId;
+    private $txId;
 
     /**
      * @var
      */
-    protected $result;
+    private $result;
 
     /**
      * @var
      */
-    protected $referenceId;
+    private $referenceId;
 
     /**
      * Zarinpal constructor.
@@ -47,19 +47,11 @@ class Zarinpal
     }
 
     /**
-     * @return Zarinpal
-     */
-    public static function service(): Zarinpal
-    {
-        return new static();
-    }
-
-    /**
      * @param $amount
      * @return Zarinpal
      * @throws Exception
      */
-    protected function setAmount($amount): Zarinpal
+    public function setAmount($amount): Zarinpal
     {
         $this->invoice->amount($amount);
         return $this;
@@ -69,7 +61,7 @@ class Zarinpal
      * @param string $description
      * @return Zarinpal
      */
-    protected function setDescription(string $description): Zarinpal
+    public function setDescription(string $description): Zarinpal
     {
         $this->invoice->detail(['description' => $description]);
         return $this;
@@ -79,7 +71,7 @@ class Zarinpal
      * @return Zarinpal
      * @throws Exception
      */
-    protected function pay(): Zarinpal
+    public function pay(): Zarinpal
     {
         $this->payment->purchase($this->invoice, function ($driver, $txId) {
             $this->txId = $txId;
@@ -90,7 +82,7 @@ class Zarinpal
     /**
      * @return mixed
      */
-    protected function getTransactionId()
+    public function getTransactionId()
     {
         return $this->txId;
     }
@@ -103,7 +95,7 @@ class Zarinpal
      * @throws InvoiceNotFoundException
      * @throws Exception
      */
-    protected function verify($amount, $txId): Zarinpal
+    public function verify($amount, $txId): Zarinpal
     {
         try {
             $this->referenceId = $this->payment->amount($amount)->transactionId($txId)->verify()->getReferenceId();
@@ -119,7 +111,7 @@ class Zarinpal
         }
     }
 
-    protected function getReferenceId()
+    public function getReferenceId()
     {
         return $this->referenceId;
     }

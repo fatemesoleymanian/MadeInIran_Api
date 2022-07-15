@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Card extends Model
 {
-    protected $fillable = ['status', 'user_id'];
+    protected $guarded = [];
 
     public function getCreatedAtAttribute($val)
     {
@@ -25,6 +25,15 @@ class Card extends Model
     public function product()
     {
         return $this->hasMany(Product::class, 'product_id',);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class,'card_products');
+    }
+    public function order()
+    {
+        return $this->belongsTo(Order::class,'order_id');
     }
 
     use HasFactory;

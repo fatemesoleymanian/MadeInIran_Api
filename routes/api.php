@@ -23,6 +23,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UnderConstructionController;
 use App\Http\Controllers\Upload;
 use App\Http\Controllers\UserController;
@@ -255,6 +256,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('order/state/{id}', [OrderController::class, 'showState']);
     Route::delete('order/delete', [OrderController::class, 'delete']);
     Route::get('order/items{card}', [OrderController::class, 'showPastOrderItems']);
+
+    //transactions and payment
+    Route::post('/payment',[TransactionController::class,'payment']);
+    Route::post('/payment_verify',[TransactionController::class,'verify']);
 });
 
 //inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe
@@ -299,4 +304,10 @@ Route::get('/cache-clear', function () {
 
 Route::get('/config-clear', function () {
     Artisan::call('config:clear');
+});
+Route::get('/foo', function () {
+    Artisan::call('storage:link');
+});
+Route::get('/queue-listen', function () {
+    Artisan::call('queue:listen');
 });

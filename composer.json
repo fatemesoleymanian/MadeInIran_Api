@@ -1,6 +1,7 @@
 {
     "name": "laravel/laravel",
     "type": "project",
+    "version": "8.0.2",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
@@ -12,6 +13,7 @@
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
+        "shetabit/multipay": "^1.16",
         "shetabit/payment": "^4.3"
     },
     "require-dev": {
