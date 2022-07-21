@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobProduction extends Model
 {
-    protected $fillable = ['phone_number','full_name'];
+    protected $fillable = ['phone_number','full_name','product'];
     public function getCreatedAtAttribute($val)
     {
         return verta($val)->format('l d %B Y');

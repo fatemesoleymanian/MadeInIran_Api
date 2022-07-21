@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Testimonial extends Model
 {
-    protected $fillable = ['name', 'desc', 'position'];
+    protected $fillable = ['name', 'desc', 'position','video'];
     public function getCreatedAtAttribute($val)
     {
         return verta($val)->format('l d %B Y');

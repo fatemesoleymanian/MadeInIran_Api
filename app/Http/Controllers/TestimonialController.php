@@ -15,6 +15,7 @@ class TestimonialController extends Controller
             'name' => $request->name,
             'desc' => $request->desc,
             'position' => $request->position,
+            'video' => $request->video,
         ]);
         if ($testmonial) return response()->json([
             'msg' => 'با موفقیت ایجاد گردید.',
@@ -31,6 +32,7 @@ class TestimonialController extends Controller
             'name' => $request->name,
             'desc' => $request->desc,
             'position' => $request->position,
+            'video' => $request->video,
         ]);
         if ($testmonial) return response()->json([
             'msg' => 'با موفقیت ویرایش گردید.',

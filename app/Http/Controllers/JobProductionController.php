@@ -17,6 +17,7 @@ class JobProductionController extends Controller
         $user = JobProduction::create([
             'full_name' => $request->full_name,
             'phone_number' => $request->phone_number,
+             'product' => $request->product,
         ]);
         //create response
         $response = [

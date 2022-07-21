@@ -109,6 +109,8 @@ Route::get('/just_products_search/{str}', [ProductController::class, 'searchProd
 Route::get('/products_search_suggestion', [ProductController::class, 'searchSuggestion']);
 Route::get('/products_faq{id}', [ProductController::class, 'showFAQ']);
 Route::get('/products_random', [ProductController::class, 'showSome']);
+Route::get('/products_totaly', [ProductController::class, 'show']);
+
 
 //store user
 Route::post('/login_or_reg', [UserController::class, 'loginOrRegister']);
@@ -226,7 +228,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     //product filter
     Route::get('/products_filter/{type}', [ProductStateController::class, 'filterOnState']);
-    Route::get('/products_totaly', [ProductController::class, 'show']);
 
     //bookmark
     Route::post('/bookmark', [BookmarkController::class, 'save']);
