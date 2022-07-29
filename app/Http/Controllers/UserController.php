@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Jobs\EmailJob;
 use App\Models\Card;
-use App\Models\ProductComment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -69,7 +68,7 @@ class UserController extends Controller
                 });
             } catch (ExceptionInterface $e) {
                 return response()->json([
-                    'email' => $conf_code
+                    'email' => $e
                 ], 200);
             }
             return $status;
@@ -187,11 +186,7 @@ class UserController extends Controller
         return User::orderByDesc('created_at')->get();
     }
 
-    //user's comments in store
-    public function comments($id)
-    {
-        return ProductComment::where('user_id', $id)->get();
-    }
+
     //forget password dige ndrim chon ramza ye bar msrfe
     //az jadvale reset password vase activation code estefade kn  ya cache
 

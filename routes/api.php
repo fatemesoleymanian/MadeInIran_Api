@@ -125,6 +125,8 @@ Route::put('/products/{id}', [ProductController::class, 'update']);
 //slider for home page
 Route::get('/slider_home', [SliderController::class, 'showHomeSlider']);
 
+
+
 ///////////////////**************** Needs Authentication *************************//////////
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -133,7 +135,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/delete_acc', [UserController::class, 'deleteAccount']);
     Route::get('/users', [UserController::class, 'showAll']);
     Route::get('/show_acc/{id}', [UserController::class, 'show']);
-    Route::get('/show_comments{id}', [UserController::class, 'comments']);
     Route::post('/logout', [UserController::class, 'logout']);
 
 
@@ -171,8 +172,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Product Comments
     Route::post('pcomment/save', [ProductCommentController::class, 'save']);
-    Route::put('pcomment/update{id}', [ProductCommentController::class, 'confirmComment']);
-    Route::get('pcomment/all', [ProductCommentController::class, 'showComments']);
+//    Route::put('pcomment/update{id}', [ProductCommentController::class, 'confirmComment']);
+    Route::get('pcomment/all', [ProductCommentController::class, 'showRequests']);
 
 
     //upload image

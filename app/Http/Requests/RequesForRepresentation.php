@@ -26,7 +26,7 @@ class RequesForRepresentation extends FormRequest
         return   [
             'full_name' => "bail|required",
             'phone_number' => "bail|required|digits:11",
-            'city' => "bail|required|max:40"
+            'city' => "bail|required|max:50"
         ];
     }
 }

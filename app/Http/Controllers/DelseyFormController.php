@@ -42,8 +42,8 @@ class DelseyFormController extends Controller
                 'experts' => $request->experts,
                 'created_at' => $res->created_at
             ], function ($message) {
-//                $message->to('pedichbiz@gmail.com');
-                $message->to('soleymanian.usc@gmail.com');
+                $message->to('pedichbiz@gmail.com');
+//                $message->to('soleymanian.usc@gmail.com');
                 $message->subject('فرم درخواست نمایندگی دستمال کاغذی دلسی');
             });
         }

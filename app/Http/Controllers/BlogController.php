@@ -70,7 +70,7 @@ class BlogController extends Controller
             'post_excerpt' => 'required',
             'metaDescription' => 'required',
             'metaKeyword' => 'required',
-            'pageTitle' => 'required|max:200',
+            'pageTitle' => 'required',
             'category_id' => 'required',
             'tag_id' => 'required',
         ]);
@@ -131,7 +131,7 @@ class BlogController extends Controller
             'post_excerpt' => 'required',
             'metaDescription' => 'required',
             'metaKeyword' => 'required',
-            'pageTitle' => 'required|max:200',
+            'pageTitle' => 'required',
             'category_id' => 'required',
             'tag_id' => 'required',
             'featuredImage' => 'required'
@@ -167,7 +167,8 @@ class BlogController extends Controller
         } catch (Throwable $throwable) {
             DB::rollBack();
             return response()->json([
-                'errors' => Lang::get('messages.blogfailed')
+                'errors' => Lang::get('messages.blogfailed'),
+                'msg'=>$throwable
             ], 401);
         }
         return 'Not done!';
