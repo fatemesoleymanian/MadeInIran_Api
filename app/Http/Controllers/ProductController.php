@@ -184,7 +184,7 @@ class ProductController extends Controller
 
     public function showOne($id)
     {
-        return Product::with(['category', 'tag', 'state', 'faq'])
+        return Product::with(['category', 'tag', 'state', 'faq','comment'])
             ->where('id', $id)->first();
     }
     public function showFAQ($id)
@@ -198,7 +198,7 @@ class ProductController extends Controller
         //front will handle pagination
         // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
         // $products = Cache::remember('productss', now()->addMinute(1), function () {
-        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get();
+        return Product::with(['category', 'tag', 'state','comment'])->orderByDesc('id')->get();
         // });
         // return $products;
     }
@@ -208,7 +208,7 @@ class ProductController extends Controller
         // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
         // $products = Cache::remember('productss', now()->addMinute(1), function () {
 //        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->paginate(10);
-        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get();
+        return Product::with(['category', 'tag', 'state','comment'])->orderByDesc('id')->get();
         // });
         // return $products;
     }

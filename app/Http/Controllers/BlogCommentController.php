@@ -3,23 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\commentRequest;
-use App\Http\Requests\RequesForRepresentation;
-use App\Models\Catalog;
-use App\Models\ProductComment;
-use Illuminate\Support\Facades\Mail;
-use Symfony\Component\Mailer\Exception\ExceptionInterface;
+use App\Models\BlogComment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class ProductCommentController extends Controller
+class BlogCommentController extends Controller
 {
     //store
     public function save(commentRequest $request)
     {
         $request->validated();
-        $comment = ProductComment::create([
+        $comment = BlogComment::create([
             'user_id' => $request->user,
-            'product_id' => $request->product,
+            'blog_id' => $request->blog,
             'comment' => $request->comment,
         ]);
         if ($comment) return response()->json([
@@ -28,13 +23,18 @@ class ProductCommentController extends Controller
         else return response()->json([
             'msg' => 'خطایی در ثبت دیدگاه رخ داد!'
         ]);
+
     }
-
     //panel
-    public function confirmComment($id, Request $request)
+    public function show()
     {
+        return BlogComment::with(['blog','user'])->orderByDesc('id')->get();
 
-        $confirm = ProductComment::where('id', $id)->update(array('status' => $request->status));
+    }
+    //panel
+    public function setStatus($id,Request $request)
+    {
+        $confirm = BlogComment::where('id', $id)->update(array('status' => $request->status));
         if ($confirm) {
             return response()->json([
                 'msg' => 'ثبت توسط ادمین.'
@@ -46,11 +46,4 @@ class ProductCommentController extends Controller
             ]);
         }
     }
-
-    //panel
-    public function show()
-    {
-        return ProductComment::with(['product','user'])->orderByDesc('id')->get();
-    }
-
 }

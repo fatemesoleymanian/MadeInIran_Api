@@ -178,7 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Kavenegar\Laravel\ServiceProvider::class,
-        Shetabit\Payment\Provider\PaymentServiceProvider::class
+//        Shetabit\Payment\Provider\PaymentServiceProvider::class
 
     ],
 
@@ -197,7 +197,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Kavenegar' => Kavenegar\Laravel\Facade::class,
         'Verta' => Hekmatinasser\Verta\Verta::class,
-        'Payment' => Shetabit\Payment\Facade\Payment::class,
+//        'Payment' => Shetabit\Payment\Facade\Payment::class,
 
     ])->toArray(),
 

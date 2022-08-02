@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogLike extends Model
+class BlogComment extends Model
 {
-    protected $fillable = ['user_id', 'blog_id'];
+    use HasFactory;
+    protected $guarded = [];
 
     public function getCreatedAtAttribute($val)
     {
@@ -17,6 +18,12 @@ class BlogLike extends Model
     {
         return verta($val)->format('l d %B Y');
     }
-
-    use HasFactory;
+    public function blog()
+    {
+        return $this->belongsTo(Blog::class,'blog_id')->select('id','title');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id')->select('id','name');
+    }
 }

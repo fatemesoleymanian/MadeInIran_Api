@@ -44,5 +44,9 @@ class Blog extends Model
     {
         return $this->belongsToMany(Tag::class, BlogTag::class);
     }
+    public function comment()
+    {
+        return $this->hasMany(BlogComment::class);
+    }
     use HasFactory;
 }

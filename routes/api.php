@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogCategoryController;
+use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardProductController;
+use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DelseyFormController;
 use App\Http\Controllers\DepartmentController;
@@ -136,6 +138,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users', [UserController::class, 'showAll']);
     Route::get('/show_acc/{id}', [UserController::class, 'show']);
     Route::post('/logout', [UserController::class, 'logout']);
+    Route::get('/show_comments{id}', [UserController::class, 'showCommentsUserMade']);
 
 
     //admin panel
@@ -172,8 +175,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Product Comments
     Route::post('pcomment/save', [ProductCommentController::class, 'save']);
-//    Route::put('pcomment/update{id}', [ProductCommentController::class, 'confirmComment']);
-    Route::get('pcomment/all', [ProductCommentController::class, 'showRequests']);
+    Route::put('pcomment/update{id}', [ProductCommentController::class, 'confirmComment']);
+    Route::get('pcomment/all', [ProductCommentController::class, 'show']);
+
+    //Product representation ( catalog)
+    Route::post('product_represent',[CatalogController::class,'save']);
+    Route::get('product_represent',[CatalogController::class,'showRequests']);
+
+    //blog comments
+    Route::post('post_comment', [BlogCommentController::class, 'save']);
+    Route::put('post_set_status{id}', [BlogCommentController::class, 'setStatus']);
+    Route::get('posts_comments', [BlogCommentController::class, 'show']);
 
 
     //upload image

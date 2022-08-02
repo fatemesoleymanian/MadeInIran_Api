@@ -186,6 +186,12 @@ class UserController extends Controller
         return User::orderByDesc('created_at')->get();
     }
 
+    public function showCommentsUserMade($id)
+    {
+        return User::with(['comment','blogComment'])->where('id',$id)->get();
+
+    }
+
 
     //forget password dige ndrim chon ramza ye bar msrfe
     //az jadvale reset password vase activation code estefade kn  ya cache

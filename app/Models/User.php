@@ -54,6 +54,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProductComment::class, 'user_id');
     }
+    public function blogComment()
+    {
+        return $this->hasMany(BlogComment::class, 'user_id');
+    }
     public function card()
     {
         return $this->hasMany(Card::class, 'user_id');

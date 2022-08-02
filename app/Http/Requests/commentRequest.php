@@ -24,7 +24,7 @@ class commentRequest extends FormRequest
     public function rules()
     {
         return   [
-            'comment' => "bail|required|max:2000",
+            'comment' => "bail|required|max:20000",
         ];
     }
     public function messages()

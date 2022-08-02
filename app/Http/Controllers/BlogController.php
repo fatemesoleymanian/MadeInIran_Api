@@ -60,7 +60,7 @@ class BlogController extends Controller
     }
     public function showOne($id)
     {
-        return Blog::with(['tag', 'category'])->where('id', $id)->first();
+        return Blog::with(['tag', 'category','comment'])->where('id', $id)->first();
     }
     public function update($id, Request $request)
     {

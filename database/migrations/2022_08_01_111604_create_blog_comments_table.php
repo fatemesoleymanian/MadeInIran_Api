@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('blog_likes', function (Blueprint $table) {
+        Schema::create('blog_comments', function (Blueprint $table) {
             $table->id();
-//            $table->foreignId('user_id')
+      //      $table->foreignId('user_id')
 //                ->constrained()
 //                ->onUpdate('cascade')
 //                ->onDelete('cascade');
@@ -23,6 +23,8 @@ return new class extends Migration
 //                ->constrained()
 //                ->onUpdate('cascade')
 //                ->onDelete('cascade');
+            $table->text('comment');
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blog_likes');
+        Schema::dropIfExists('blog_comments');
     }
 };
