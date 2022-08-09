@@ -10,7 +10,6 @@ class TestimonialController extends Controller
 {
     public function save(TestimonialRequest $request)
     {
-        $request->validated();
         $testmonial = Testimonial::create([
             'name' => $request->name,
             'desc' => $request->desc,
@@ -27,7 +26,6 @@ class TestimonialController extends Controller
     }
     public function update(TestimonialRequest $request, $id)
     {
-        $request->validated();
         $testmonial = Testimonial::where('id', $id)->update([
             'name' => $request->name,
             'desc' => $request->desc,

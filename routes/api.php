@@ -93,9 +93,9 @@ Route::get('/categories_with_product', [CategoryController::class, 'showAllWithP
 Route::get('/categories_with_product/{id}', [CategoryController::class, 'showOneWithProduct']);
 
 //testimonial
+Route::get('/testimonial', [TestimonialController::class, 'show']);
 Route::post('/testimonial', [TestimonialController::class, 'save']);
 Route::put('/testimonial{id}', [TestimonialController::class, 'update']);
-Route::get('/testimonial', [TestimonialController::class, 'show']);
 Route::delete('/testimonial', [TestimonialController::class, 'destroy']);
 
 //products
@@ -127,6 +127,8 @@ Route::put('/products/{id}', [ProductController::class, 'update']);
 //slider for home page
 Route::get('/slider_home', [SliderController::class, 'showHomeSlider']);
 
+//Product representation ( catalog)
+Route::get('product_represent',[CatalogController::class,'showRequests']);
 
 
 ///////////////////**************** Needs Authentication *************************//////////
@@ -157,7 +159,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/slider', [SliderController::class, 'showAll']);
     Route::get('/slider{id}', [SliderController::class, 'showOne']);
 
-
     //role
     Route::post('admin/role', [RoleController::class, 'save']);
     Route::put('admin/role', [RoleController::class, 'update']);
@@ -173,6 +174,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return Module::all();
     });
 
+
     //Product Comments
     Route::post('pcomment/save', [ProductCommentController::class, 'save']);
     Route::put('pcomment/update{id}', [ProductCommentController::class, 'confirmComment']);
@@ -180,13 +182,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Product representation ( catalog)
     Route::post('product_represent',[CatalogController::class,'save']);
-    Route::get('product_represent',[CatalogController::class,'showRequests']);
 
     //blog comments
     Route::post('post_comment', [BlogCommentController::class, 'save']);
     Route::put('post_set_status{id}', [BlogCommentController::class, 'setStatus']);
     Route::get('posts_comments', [BlogCommentController::class, 'show']);
-
 
     //upload image
     Route::post('/upload', [Upload::class, 'uploadImage']);
@@ -206,12 +206,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/blog_categories', [BlogCategoryController::class, 'save']);
     Route::get('/blog_categories_pagi', [BlogCategoryController::class, 'showAllPagi']);
 
-
     //tag
     Route::post('/tags', [TagController::class, 'save']);
     Route::put('/tags', [TagController::class, 'update']);
     Route::delete('/tags', [TagController::class, 'destroy']);
-
 
     //department
     Route::post('/departments', [DepartmentController::class, 'save']);
@@ -223,7 +221,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/categories', [CategoryController::class, 'update']);
     Route::delete('/categories', [CategoryController::class, 'destroy']);
     Route::get('/categories_pagi', [CategoryController::class, 'showAllPagi']);
-
 
     //FAQ
     Route::post('/faq', [FQController::class, 'save']);
@@ -325,3 +322,5 @@ Route::get('/foo', function () {
 Route::get('/queue-listen', function () {
     Artisan::call('queue:listen');
 });
+
+
