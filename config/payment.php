@@ -10,7 +10,7 @@ return [
     | You can switch to a different driver at runtime.
     |
     */
-//    'default' => 'zarinpal',
+    'default' => 'zarinpal',
 
     /*
     |--------------------------------------------------------------------------
@@ -253,8 +253,8 @@ return [
             'zaringateApiVerificationUrl' => 'https://ir.zarinpal.com/pg/services/WebGate/wsdl',
 
             'mode' => 'sandbox', // can be normal, sandbox, zaringate
-            'merchantId' => '1234',
-            'callbackUrl' => 'https://storedemo.madein-iran.com/orders',
+            'merchantId' => '12345',
+            'callbackUrl' => 'https://madein-iran.com/orders',
             'description' => 'پرداخت برای ساخت ایران',
         ],
         'zibal' => [
@@ -265,7 +265,7 @@ return [
 
             'mode' => 'normal', // can be normal, direct
 
-            'merchantId' => '',
+            'merchantId' => '12345',
             'callbackUrl' => 'http://yoursite.com/path/to',
             'description' => 'payment using zibal',
         ],

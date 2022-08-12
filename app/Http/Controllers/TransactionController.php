@@ -8,11 +8,13 @@ use App\Models\CardProduct;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Shetabit\Multipay\Exceptions\InvalidPaymentException;
 use Shetabit\Multipay\Exceptions\InvoiceNotFoundException;
 use Shetabit\Multipay\Invoice;
-use Shetabit\Multipay\Payment;
+use Shetabit\Payment\Facade\Payment;
 
 class TransactionController extends Controller
 {
@@ -46,11 +48,12 @@ class TransactionController extends Controller
 
     }
 
+
     public function payment(Request $request)
     {
         $user = $request->user();
         $card = $request->user()->card->last()->id;
-//        $amount = $card->products()->withSum('state','discounted_price')->first()->state_sum_discounted_price;
+        // $amount = $card->products()->withSum('state','discounted_price')->first()->state_sum_discounted_price;
         $products = CardProduct::with(['product', 'state'])->where('card_id', $card)->get();
 
         //products
@@ -62,36 +65,20 @@ class TransactionController extends Controller
         foreach ($products as $product) {
             $amount += $product->count * $product->state->discounted_price;
         }
-        //to integer
         //be rial
-        $amount = intval($amount)*10;
+        $amount = $amount * 10;
 
         try {
             $invoice = (new Invoice)->amount($amount);
-
-            $payment = new Payment();
-             $payment->via('zarinpal')->purchase($invoice, function($driver, $transactionId) use ($user,$amount) {
-                echo $driver;
+            return Payment::purchase($invoice, function ($driver, $transactionId) use ($user, $amount) {
                 $user->transactions()->create([
                     'amount' => $amount,
                     'tx_id' => $transactionId,
                 ]);
-            });
-            return $payment->pay()->render();
-        } catch (\Exception $e) {
-            dd( $e);
+            })->pay()->render();
+        } catch (InvalidPaymentException | InvoiceNotFoundException $exception) {
+            throw new Exception($exception->getMessage());
         }
-
-//        //pay
-//        try {
-//            $transaction_id = $this->zarinpal->setAmount($amount)->pay()->getTransactionId();
-//            $user->transactions()->create([
-//                'amount' => $amount,
-//                'tx_id' => $transaction_id,
-//            ]);
-//        } catch (\Exception $e) {
-//            return $e;
-//        }
 
 
     }
@@ -99,7 +86,7 @@ class TransactionController extends Controller
     public function verify(Request $request)
     {
         //real payment
-        $token = $request->query('Authority');
+        $token = $request->Authority;
         $transaction = $request->user()->transactions->last();
         $amount = $transaction->amount;
         try {
@@ -113,7 +100,7 @@ class TransactionController extends Controller
                 'status' => 1,
                 'user_id' => $request->user()->id
             ]);
-            $order=Order::updateOrCreate([
+            $order = Order::updateOrCreate([
                 'card_id' => $card_id->id,
                 'status' => 1
             ], [
@@ -137,3 +124,4 @@ class TransactionController extends Controller
         }
     }
 }
+
