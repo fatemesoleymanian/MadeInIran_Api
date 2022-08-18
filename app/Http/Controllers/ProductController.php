@@ -197,10 +197,13 @@ class ProductController extends Controller
     {
         //front will handle pagination
         // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
-        // $products = Cache::remember('productss', now()->addMinute(1), function () {
-        return Product::with(['category', 'tag', 'state','comment'])->orderByDesc('id')->get();
-        // });
-        // return $products;
+         $products = Cache::remember('products_show_all', now()->addHours(3), function () {
+        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get([
+            'category_id','created_at','description_excerpt','discount','id','image','inventory','metaDescription','metaKeyword',
+            'name','pageTitle','slug','updated_at'
+        ]);
+         });
+         return $products;
     }
     public function showAllPagi()
     {
@@ -215,18 +218,18 @@ class ProductController extends Controller
 
     public function showSome()
     {
-        // $products = Cache::remember('products_totaly', now()->addMinute(1), function () {
-        return Product::with(['category', 'tag', 'state',])->latest()->take(8)->get();
-        // });
-        // return $products;
+         $products = Cache::remember('products_random', now()->addHour(1), function () {
+        return Product::with(['category', 'tag', 'state',])->latest()->take(6)->get();
+         });
+         return $products;
     }
 
     public function show()
     {
-        // $products = Cache::remember('products_totaly', now()->addMinute(1), function () {
+         $products = Cache::remember('products_totaly', now()->addHour(1), function () {
         return Product::orderByDesc('id')->select('name', 'id')->get();
-        // });
-        // return $products;
+         });
+         return $products;
     }
 
     public function showOneWithCategory($id)

@@ -49,7 +49,7 @@ class TransactionController extends Controller
     }
 
 
-    public function payment(Request $request)
+    public function payment(Request $request): JsonResponse
     {
         $user = $request->user();
         $card = $request->user()->card->last()->id;

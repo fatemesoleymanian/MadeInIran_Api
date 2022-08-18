@@ -15,6 +15,7 @@ use App\Http\Controllers\FQController;
 use App\Http\Controllers\FQFormController;
 use App\Http\Controllers\JobProductionController;
 use App\Http\Controllers\JobProductionIdeaController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductCommentController;
@@ -129,6 +130,11 @@ Route::get('/slider_home', [SliderController::class, 'showHomeSlider']);
 
 //Product representation ( catalog)
 Route::get('product_represent',[CatalogController::class,'showRequests']);
+
+
+//Newsletter
+Route::post('add_new_receiver',[NewsletterController::class,'addNewReceiver']);
+Route::get('show_all_receivers',[NewsletterController::class,'showAllReceivers']);
 
 
 ///////////////////**************** Needs Authentication *************************//////////
@@ -271,6 +277,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //transactions and payment
     Route::post('/payment',[TransactionController::class,'payment']);
     Route::post('/payment_verify',[TransactionController::class,'verify']);
+
 });
 
 //inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe

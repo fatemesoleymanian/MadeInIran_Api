@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 
@@ -86,7 +87,10 @@ class SliderController extends Controller
     //home page (no authentication)
     public function showHomeSlider()
     {
-        return Slider::orderByDesc('id')->get();
+        $slides = Cache::remember('slider_home', now()->addHour(1), function () {
+            return Slider::orderByDesc('id')->get();
+        });
+        return $slides;
     }
     public function showOne($id)
     {

@@ -36,10 +36,10 @@ class BlogController extends Controller
     }
     public function showSome()
     {
-        // $blogs = Cache::remember('blogs_totaly', now()->addMinute(1), function () {
+         $blogs = Cache::remember('blogs_random', now()->addHours(3), function () {
         return Blog::with(['category', 'tag'])->latest()->take(3)->get();
-        // });
-        // return $blogs;
+         });
+         return $blogs;
     }
 
     public function latestFour()
