@@ -16,10 +16,10 @@ class BlogCategoryController extends Controller
     ////////////////********* this controller has been tested => OK!
     public function showAll()
     {
-        // $categories = Cache::remember('category_for_blogs', now()->addHour(1), function () {
+         $categories = Cache::remember('categories_for_blogs', now()->addHours(2), function () {
         return  BlogCategory::with(['blog'])->orderByDesc('id')->get();
-        // });
-        // return $categories;
+         });
+         return $categories;
     }
     public function showAllPagi()
     {

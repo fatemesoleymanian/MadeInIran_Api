@@ -28,11 +28,10 @@ class BlogController extends Controller
 
     public function showAll()
     {
-        // $bolgs = Cache::remember('blogs', now()->addHour(2), function () {
-//        return Blog::with(['tag', 'category'])->orderByDesc('id')->paginate(10);
+         $bolgs = Cache::remember('blogs_all', now()->addHours(2), function () {
         return Blog::with(['tag', 'category'])->orderByDesc('id')->get();
-        // });
-        // return $bolgs;
+         });
+         return $bolgs;
     }
     public function showSome()
     {
@@ -44,7 +43,7 @@ class BlogController extends Controller
 
     public function latestFour()
     {
-        $bolgs = Cache::remember('latest_four_blogs', now()->addHour(2), function () {
+        $bolgs = Cache::remember('latest_four_blogs', now()->addHours(2), function () {
             return Blog::with(['tag', 'category'])->orderByDesc('id')->take(4)->get();
         });
         return $bolgs;
