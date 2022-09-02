@@ -12,7 +12,8 @@ class Slider extends Model
         'image',
         'sub_title',
         'text',
-        'link'
+        'link',
+        'button_content',
     ];
     public function getCreatedAtAttribute($val)
     {

@@ -27,6 +27,7 @@ class SliderController extends Controller
             'text' => $request->text,
             'sub_title' => $request->sub_title,
             'title' => $request->title,
+            'button_content' => $request->button_content,
         ]);
         if ($slider) {
             return response()->json([
@@ -58,6 +59,7 @@ class SliderController extends Controller
             'text' => $request->text,
             'sub_title' => $request->sub_title,
             'title' => $request->title,
+            'button_content' => $request->button_content,
         ]);
         if ($slider) {
             return response()->json([
@@ -87,8 +89,8 @@ class SliderController extends Controller
     //home page (no authentication)
     public function showHomeSlider()
     {
-        $slides = Cache::remember('slider_home', now()->addHour(1), function () {
-            return Slider::orderByDesc('id')->get();
+        $slides = Cache::remember('slider_home', now()->addHour(), function () {
+            return Slider::query()->orderBy('id')->get();
         });
         return $slides;
     }
