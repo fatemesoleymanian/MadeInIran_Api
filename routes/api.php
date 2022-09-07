@@ -70,7 +70,6 @@ Route::get('/blog_categories_list', [BlogCategoryController::class, 'categoryLis
 
 //tag
 Route::get('/tags', [TagController::class, 'showAll']);
-Route::get('/tags_pagi', [TagController::class, 'showAllPagi']);
 Route::get('/tags/{id}', [TagController::class, 'showOne']);
 Route::get('/tags_with_blog', [TagController::class, 'showAllWithBlog']);
 Route::get('/tags_with_blog/{id}', [TagController::class, 'showOneWithBlog']);
@@ -101,7 +100,6 @@ Route::delete('/testimonial', [TestimonialController::class, 'destroy']);
 
 //products
 Route::get('/products', [ProductController::class, 'showAll']);
-Route::get('/products_page', [ProductController::class, 'showAllPagi']);
 Route::get('/products/{id}', [ProductController::class, 'showOne']);
 Route::get('/products_with_category', [ProductController::class, 'showAllWithCategory']);
 Route::get('/products_with_category/{id}', [ProductController::class, 'showOneWithCategory']);
@@ -210,7 +208,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/blog_categories', [BlogCategoryController::class, 'update']);
     Route::delete('/blog_categories', [BlogCategoryController::class, 'destroy']);
     Route::post('/blog_categories', [BlogCategoryController::class, 'save']);
-    Route::get('/blog_categories_pagi', [BlogCategoryController::class, 'showAllPagi']);
 
     //tag
     Route::post('/tags', [TagController::class, 'save']);
@@ -226,7 +223,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/categories', [CategoryController::class, 'save']);
     Route::put('/categories', [CategoryController::class, 'update']);
     Route::delete('/categories', [CategoryController::class, 'destroy']);
-    Route::get('/categories_pagi', [CategoryController::class, 'showAllPagi']);
 
     //FAQ
     Route::post('/faq', [FQController::class, 'save']);

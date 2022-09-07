@@ -21,13 +21,7 @@ class BlogCategoryController extends Controller
          });
          return $categories;
     }
-    public function showAllPagi()
-    {
-        // $categories = Cache::remember('category_for_blogs', now()->addHour(1), function () {
-        return  BlogCategory::with(['blog'])->orderByDesc('id')->get();
-        // });
-        // return $categories;
-    }
+
     public function showOne($id)
     {
         return BlogCategory::where('id', $id)->first();

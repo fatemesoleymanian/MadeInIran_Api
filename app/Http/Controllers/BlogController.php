@@ -28,17 +28,19 @@ class BlogController extends Controller
 
     public function showAll()
     {
-         $bolgs = Cache::remember('blogs_all', now()->addHours(48), function () {
-        return Blog::with(['tag', 'category'])->orderByDesc('id')->get();
-         });
-         return $bolgs;
+//         $bolgs = Cache::remember('blogs_all', now()->addHours(48), function () {
+//        return Blog::with(['tag', 'category'])->orderByDesc('id')->get();
+             return Blog::with(['tag', 'category'])->take(5)->get();
+//         });
+//         return $bolgs;
     }
     public function showSome()
     {
-         $blogs = Cache::remember('blogs_random', now()->addHours(48), function () {
-        return Blog::with(['category', 'tag'])->latest()->take(3)->get();
-         });
-         return $blogs;
+//         $blogs = Cache::remember('blogs_random', now()->addHours(48), function () {
+//        return Blog::with(['category', 'tag'])->latest()->take(3)->get();
+             return Blog::with(['tag', 'category'])->take(3)->get();
+//         });
+//         return $blogs;
     }
 
     public function latestFour()

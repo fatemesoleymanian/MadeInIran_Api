@@ -196,24 +196,10 @@ class ProductController extends Controller
     public function showAll()
     {
         //front will handle pagination
-        // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
          $products = Cache::remember('products_show_all', now()->addHour(), function () {
-        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get([
-            'category_id','created_at','description_excerpt','discount','id','image','inventory','metaDescription','metaKeyword',
-            'name','pageTitle','slug','updated_at'
-        ]);
+        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get()->makeHidden(['description']);
          });
          return $products;
-    }
-    public function showAllPagi()
-    {
-        //front will handle pagination
-        // return Product::with(['bookmark', 'category', 'tag', 'state'])->orderByDesc('id')->get();
-        // $products = Cache::remember('productss', now()->addMinute(1), function () {
-//        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->paginate(10);
-        return Product::with(['category', 'tag', 'state','comment'])->orderByDesc('id')->get();
-        // });
-        // return $products;
     }
 
     public function showSome()

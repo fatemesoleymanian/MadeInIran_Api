@@ -117,10 +117,6 @@ class CategoryController extends Controller
     {
         return Category::with(['department', 'product'])->orderByDesc('id')->get();
     }
-    public function showAllPagi()
-    {
-        return Category::with(['department', 'product'])->orderByDesc('id')->get();
-    }
     public function showOne($id)
     {
         return Category::where('id', $id)->first();

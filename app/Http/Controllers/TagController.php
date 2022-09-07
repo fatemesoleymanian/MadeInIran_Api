@@ -25,18 +25,12 @@ class TagController extends Controller
     }
     public function showAll()
     {
-        // $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
+         $tags = Cache::remember('tags_for_blogs',now()->addHours(4),function (){
         return Tag::with(['blog', 'product'])->orderByDesc('id')->get();
-        // });
-        // return $tags;
+         });
+         return $tags;
     }
-    public function showAllPagi()
-    {
-        // $tags = Cache::remember('tags_for_blogs',now()->addHour(1),function (){
-        return Tag::with(['blog', 'product'])->orderByDesc('id')->get();
-        // });
-        // return $tags;
-    }
+
     public function showOne($id)
     {
         return Tag::where('id', $id)->first();
