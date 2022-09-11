@@ -31,5 +31,10 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
+    public function department_linked()
+    {
+        return $this->belongsTo(Department::class, 'department_id')->select(['id','name']);
+    }
+
     use HasFactory;
 }

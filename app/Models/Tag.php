@@ -17,6 +17,7 @@ class Tag extends Model
         return $this->belongsToMany(Product::class, ProductTag::class, 'tag_id');
     }
 
+
     public function getCreatedAtAttribute($val)
     {
         return verta($val)->format('l d %B Y');

@@ -30,6 +30,10 @@ class TagController extends Controller
          });
          return $tags;
     }
+    public function showInAdmin()
+    {
+        return Tag::with(['blog', 'product'])->orderByDesc('id')->get();
+    }
 
     public function showOne($id)
     {

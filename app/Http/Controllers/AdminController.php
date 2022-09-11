@@ -90,6 +90,7 @@ class AdminController extends Controller
             'address' => $request->address,
             'username' => $request->username,
         ]);
+
         if (!$admin) return response()->json([
             'msg' => 'خطا در ایجاد کاربر'
         ], 402);

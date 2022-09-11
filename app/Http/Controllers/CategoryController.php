@@ -117,6 +117,10 @@ class CategoryController extends Controller
     {
         return Category::with(['department', 'product'])->orderByDesc('id')->get();
     }
+    public function showInAdmin()
+    {
+        return Category::with(['department_linked', 'product'])->orderByDesc('id')->get();
+    }
     public function showOne($id)
     {
         return Category::where('id', $id)->first();

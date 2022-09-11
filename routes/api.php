@@ -208,11 +208,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/blog_categories', [BlogCategoryController::class, 'update']);
     Route::delete('/blog_categories', [BlogCategoryController::class, 'destroy']);
     Route::post('/blog_categories', [BlogCategoryController::class, 'save']);
+    Route::get('/admin/blog_categories', [BlogCategoryController::class, 'showInAdmin']);
 
     //tag
     Route::post('/tags', [TagController::class, 'save']);
     Route::put('/tags', [TagController::class, 'update']);
     Route::delete('/tags', [TagController::class, 'destroy']);
+    Route::get('/admin/tags', [TagController::class, 'showInAdmin']);
 
     //department
     Route::post('/departments', [DepartmentController::class, 'save']);
@@ -223,6 +225,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/categories', [CategoryController::class, 'save']);
     Route::put('/categories', [CategoryController::class, 'update']);
     Route::delete('/categories', [CategoryController::class, 'destroy']);
+    Route::get('/admin/categories', [CategoryController::class, 'showInAdmin']);
 
     //FAQ
     Route::post('/faq', [FQController::class, 'save']);
@@ -238,6 +241,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/products', [ProductController::class, 'save']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    //show in admin
+    Route::get('/admin/products', [ProductController::class, 'showProductsInPanel']);
     //product filter
     Route::get('/products_filter/{type}', [ProductStateController::class, 'filterOnState']);
 

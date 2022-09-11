@@ -22,6 +22,11 @@ class BlogCategoryController extends Controller
          return $categories;
     }
 
+    public function showInAdmin()
+    {
+        return  BlogCategory::with(['blog'])->orderByDesc('id')->get();
+    }
+
     public function showOne($id)
     {
         return BlogCategory::where('id', $id)->first();

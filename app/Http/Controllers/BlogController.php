@@ -52,8 +52,8 @@ class BlogController extends Controller
     }
     public function showIds($id)
     {
-        $id_before = Blog::where('id', '<', $id)->first();
-        $id_after = Blog::where('id', '>', $id)->first();
+        $id_before = Blog::where('id', '<', $id)->pluck('id')->first();
+        $id_after = Blog::where('id', '>', $id)->pluck('id')->first();
         return response()->json([
             'after' => $id_after,
             'before' => $id_before,

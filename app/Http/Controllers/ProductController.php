@@ -193,6 +193,11 @@ class ProductController extends Controller
         return FQ::whereIn('id', $faq_ids)->get();
     }
 
+    public function showProductsInPanel()
+    {
+        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get()->makeHidden(['description']);
+    }
+
     public function showAll()
     {
         //front will handle pagination
