@@ -25,10 +25,10 @@ class TagController extends Controller
     }
     public function showAll()
     {
-         $tags = Cache::remember('tags_for_blogs',now()->addHours(4),function (){
+//         $tags = Cache::remember('tags_for_blogs',now()->addHours(4),function (){
         return Tag::with(['blog', 'product'])->orderByDesc('id')->get();
-         });
-         return $tags;
+//         });
+//         return $tags;
     }
     public function showInAdmin()
     {

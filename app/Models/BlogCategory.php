@@ -20,7 +20,13 @@ class BlogCategory extends Model
 
     public  function blog()
     {
-        return $this->hasMany(Blog::class, 'category_id');
+        return $this->hasMany(Blog::class, 'category_id')->select(['title',
+            'post_excerpt',
+            'slug',
+            'featuredImage',
+            'metaDescription',
+            'metaKeyword',
+            'category_id',]);
     }
 
     use HasFactory;

@@ -10,11 +10,26 @@ class Tag extends Model
     protected $fillable = ['name', 'type'];
     public  function blog()
     {
-        return $this->belongsToMany(Blog::class, BlogTag::class, 'tag_id');
+        return $this->belongsToMany(Blog::class, BlogTag::class, 'tag_id')->select([
+            'title',
+            'post_excerpt',
+            'slug',
+            'featuredImage',
+            'pageTitle',
+            'category_id',
+        ]);
     }
     public  function product()
     {
-        return $this->belongsToMany(Product::class, ProductTag::class, 'tag_id');
+        return $this->belongsToMany(Product::class, ProductTag::class, 'tag_id')->select([
+            'pageTitle',
+            'name',
+            'image',
+            'description_excerpt',
+            'category_id',
+            'discount',
+            'slug'
+        ]);
     }
 
 

@@ -28,25 +28,48 @@ class BlogController extends Controller
 
     public function showAll()
     {
-//         $bolgs = Cache::remember('blogs_all', now()->addHours(48), function () {
-//        return Blog::with(['tag', 'category'])->orderByDesc('id')->get();
-             return Blog::with(['tag', 'category'])->take(5)->get();
-//         });
-//         return $bolgs;
+         $bolgs = Cache::remember('blogs_all', now()->addHours(3), function () {
+        return Blog::query()->select(['title',
+            'post_excerpt',
+            'slug',
+            'featuredImage',
+            'metaDescription',
+            'metaKeyword',
+            'pageTitle',
+            'category_id',])->
+        with(['tag', 'category'])->orderByDesc('id')->get();
+         });
+         return $bolgs;
     }
     public function showSome()
     {
-//         $blogs = Cache::remember('blogs_random', now()->addHours(48), function () {
-//        return Blog::with(['category', 'tag'])->latest()->take(3)->get();
-             return Blog::with(['tag', 'category'])->take(3)->get();
-//         });
-//         return $blogs;
+         $blogs = Cache::remember('blogs_random', now()->addHours(3), function () {
+        return Blog::query()->select([
+            'title',
+            'post_excerpt',
+            'slug',
+            'featuredImage',
+            'metaDescription',
+            'metaKeyword',
+            'pageTitle',
+            'category_id',
+        ])->with(['category', 'tag'])->latest()->take(3)->get();
+         });
+         return $blogs;
     }
 
     public function latestFour()
     {
-        $bolgs = Cache::remember('latest_four_blogs', now()->addHours(48), function () {
-            return Blog::with(['tag', 'category'])->orderByDesc('id')->take(4)->get();
+        $bolgs = Cache::remember('latest_four_blogs', now()->addHours(3), function () {
+            return Blog::query()->select([
+                'title',
+                'post_excerpt',
+                'slug',
+                'featuredImage',
+                'metaDescription',
+                'metaKeyword',
+                'category_id',
+            ])->with(['tag', 'category'])->orderByDesc('id')->take(4)->get();
         });
         return $bolgs;
     }

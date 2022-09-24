@@ -29,7 +29,15 @@ class Category extends Model
     }
     public function product()
     {
-        return $this->hasMany(Product::class, 'category_id');
+        return $this->hasMany(Product::class, 'category_id')->select([
+            'pageTitle',
+            'name',
+            'image',
+            'description_excerpt',
+            'category_id',
+            'discount',
+            'slug'
+        ]);
     }
     public function department_linked()
     {
