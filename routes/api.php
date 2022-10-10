@@ -9,6 +9,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardProductController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DelseyFormController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FQController;
@@ -279,7 +280,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/payment',[TransactionController::class,'payment']);
     Route::post('/payment_verify',[TransactionController::class,'verify']);
 
+    //customers
+    Route::post('/customers/new',[CustomerController::class,'indexCustomer']);
+    Route::put('/customers/edit/{id}',[CustomerController::class,'editCustomer']);
+    Route::delete('/customers/delete/{id}',[CustomerController::class,'deleteCustomer']);
+    Route::get('/customers/all',[CustomerController::class,'showCustomers']);
+    Route::post('/customers/login',[CustomerController::class,'checkAccess']);
+
 });
+
+//upload video
+Route::post('upload/video',[Upload::class,'uploadVideo']);
 
 //inja ba middleware check miknim blogger joz blog be chizi dstresi ndashte bashe
 //    Route::group(['middleware' => ['auth:sanctum'],[AdminCheck::class]], function () {

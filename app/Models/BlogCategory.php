@@ -20,8 +20,7 @@ class BlogCategory extends Model
 
     public  function blog()
     {
-        return $this->hasMany(Blog::class, 'category_id')->select(['title',
-            'post_excerpt',
+        return $this->hasMany(Blog::class, 'category_id')->select(['id','title',
             'slug',
             'featuredImage',
             'metaDescription',

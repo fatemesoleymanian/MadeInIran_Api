@@ -93,4 +93,17 @@ class Upload extends Controller
             'msg' => 'خطا در حذف فایل'
         ]);
     }
+
+    public function uploadVideo(Request $request)
+    {
+        $picName = time() . '.' . $request->video->extension();
+//        $request->image->move(public_path($request->location), $picName);
+        $request->video->storeAs("public/$request->location",$picName);
+        return response()->json([
+            'success' => 1,
+            // 'file'=>["url"=>"https://api.madein-iran.com/$request->location/$picName"]
+//            'file' => ["url" => "/$request->location/$picName"]
+            'file'=>["url"=> Storage::url("$request->location/$picName")]
+        ]);
+    }
 }

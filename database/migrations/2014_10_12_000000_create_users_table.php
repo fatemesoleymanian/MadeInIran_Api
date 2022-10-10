@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('zip_code', 12)->nullable();
             $table->text('address')->nullable();
             $table->rememberToken();
+            $table->boolean('is_customer')->default(0);
             $table->timestamps();
         });
     }

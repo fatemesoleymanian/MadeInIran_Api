@@ -36,7 +36,9 @@ class BlogController extends Controller
             'metaDescription',
             'metaKeyword',
             'pageTitle',
-            'category_id',])->
+            'category_id',
+            'id',
+            ])->
         with(['tag', 'category'])->orderByDesc('id')->get();
          });
          return $bolgs;
@@ -53,6 +55,7 @@ class BlogController extends Controller
             'metaKeyword',
             'pageTitle',
             'category_id',
+            'id',
         ])->with(['category', 'tag'])->latest()->take(3)->get();
          });
          return $blogs;
@@ -69,6 +72,7 @@ class BlogController extends Controller
                 'metaDescription',
                 'metaKeyword',
                 'category_id',
+                'id',
             ])->with(['tag', 'category'])->orderByDesc('id')->take(4)->get();
         });
         return $bolgs;

@@ -33,7 +33,7 @@ class Category extends Model
             'pageTitle',
             'name',
             'image',
-            'description_excerpt',
+            'id',
             'category_id',
             'discount',
             'slug'
