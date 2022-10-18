@@ -20,6 +20,7 @@ class CustomerController extends Controller
     {
         $new_customer = $this->customerObj->query()->create([
             'user_name' => $request->user_name,
+            'name' => $request->name,
             'password' => Hash::make($request->password),
         ]);
         return response()->json([
@@ -37,6 +38,7 @@ class CustomerController extends Controller
     {
         $edit_customer = $this->customerObj->query()->find($id)->update([
             'user_name' => $request->user_name,
+            'name' => $request->name,
             'password' => Hash::make($request->password),
         ]);
         return response()->json([

@@ -18,7 +18,9 @@ class Customer extends Model
     protected $fillable = [
         'user_name',
         'password',
+        'name'
     ];
+    protected $hidden =['password'];
 
     public function getCreatedAtAttribute($val)
     {

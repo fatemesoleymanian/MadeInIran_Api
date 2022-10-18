@@ -38,6 +38,7 @@ class BlogController extends Controller
             'pageTitle',
             'category_id',
             'id',
+            'created_at',
             ])->
         with(['tag', 'category'])->orderByDesc('id')->get();
          });
@@ -56,6 +57,7 @@ class BlogController extends Controller
             'pageTitle',
             'category_id',
             'id',
+            'created_at',
         ])->with(['category', 'tag'])->latest()->take(3)->get();
          });
          return $blogs;

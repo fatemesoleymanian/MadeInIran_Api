@@ -18,6 +18,7 @@ class Blog extends Model
         'pageTitle',
         'views',
         'category_id',
+        'created_at',
 
     ];
     public function getCreatedAtAttribute($val)
