@@ -118,6 +118,9 @@ Route::get('/products_totaly', [ProductController::class, 'show']);
 Route::post('/login_or_reg', [UserController::class, 'loginOrRegister']);
 Route::post('/confirm_code', [UserController::class, 'finishLogin']);
 
+//customers transition
+Route::post('/test/create', [UserController::class, 'createAccountForCustomer']);
+
 //admin panel
 Route::post('admin/forget_password', [AdminController::class, 'forgetPassword']);
 Route::post('admin/reset_password', [AdminController::class, 'resetPassword']);

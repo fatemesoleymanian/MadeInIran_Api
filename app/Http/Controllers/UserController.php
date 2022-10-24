@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Jobs\EmailJob;
 use App\Models\Card;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
@@ -15,21 +18,58 @@ use Kavenegar\KavenegarApi;
 class UserController extends Controller
 {
     ////////////////********* this methods have been tested => OK!
+    public function createAccountForCustomer()
+    {
+        $clients = Customer::query()->get();
+        foreach ($clients as $client){
+            DB::beginTransaction();
+            try {
+                $user = User::query()->create([
+                    'name' => $client->name,
+                    'phone_number' => $client->user_name,
+                    'password' => $client->password,
+                ]);
+                $card = Card::create([
+                    'user_id' => $user->id,
+                    'status' => 1
+                ]);
+                DB::commit();
+            }
+            catch (\Exception $exception){
+                DB::rollBack();
+                throw new \Exception($exception->getMessage());
+            }
+        }
+    }
+
     public function loginOrRegister(Request $request)
     {
         $key = $request->key;
         $conf_code = rand(10000, 100000);
+        $status = 0;
+
         // phone number
         if (str_starts_with($key, '09')) {
-            $kavenegar = new KavenegarApi(config('kavenegar.apikey'));
-            $kavenegar->Send(
-                '0018018949161',
-                '09908285709',
-                'کد تایید ساخت ایران :' . $conf_code
+            Validator::validate(
+                $request->all(),
+                ['key' => "required"],
+                ['key.required' => 'لطفا شماره تلفن همراه یا ایمیل خود را وارد کنید!']
             );
+            $user = User::where('phone_number', $key)->first();
+            //login flag
+            if ($user) $status = 1;
+
+            $kavenegar = new KavenegarApi(config('kavenegar.apikey'));
+             $kavenegar->VerifyLookup(
+                $key,
+                $conf_code,
+                null, null, 'verify', $type = null
+            );
+
             cache()->remember($key, 250, function () use ($conf_code) {
                 return $conf_code;
             });
+            return $status;
         }
         //EMAIL
         else {
@@ -43,8 +83,8 @@ class UserController extends Controller
             );
 
             $user = User::where('email', $key)->first();
-            $status = 0;
-            //login
+
+            //login flag
             if ($user) $status = 1;
 
             try {
