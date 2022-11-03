@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\EmailJob;
-use App\Models\Card;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,10 +28,10 @@ class UserController extends Controller
                     'phone_number' => $client->user_name,
                     'password' => $client->password,
                 ]);
-                $card = Card::create([
-                    'user_id' => $user->id,
-                    'status' => 1
-                ]);
+//                $card = Card::create([
+//                    'user_id' => $user->id,
+//                    'status' => 1
+//                ]);
                 DB::commit();
             }
             catch (\Exception $exception){
@@ -125,7 +124,6 @@ class UserController extends Controller
         );
         $key = $request->key;
         $code = cache()->get($key);
-        $card = null;
 
         if ($code == $request->code) {
             $user = User::where('phone_number', $key)->orWhere('email', $key)->first();
@@ -141,10 +139,6 @@ class UserController extends Controller
                         'email' => $key
                     ]);
                 }
-                $card = Card::create([
-                    'user_id' => $user->id,
-                    'status' => 1
-                ]);
             }
 
             $token = $user->createToken('account')->plainTextToken;
@@ -152,7 +146,6 @@ class UserController extends Controller
             return response()->json([
                 'user' => $user,
                 'token' => $token,
-                'card' => $card
             ], 201);
         }
         return response()->json([
