@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequesForRepresentation;
+use App\Models\Admin;
 use App\Models\Catalog;
+use App\Notifications\UserActions;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 
 class CatalogController extends Controller
@@ -30,10 +34,18 @@ class CatalogController extends Controller
             'work_experience' => $request->work_experience,
             'job' => $request->job,
             'selected_package' => $request->selected_package,
+            'selected_model' => $request->selected_model,
             'product' => $request->product,
             'reasons' => $request->reasons,
             'experts' => $request->experts
         ]);
+
+
+        //create notification
+        $data = ['action'=>'فرم درخواست نمایندگی'];
+        $admin = Admin::query()->first();
+        Notification::send($admin,new UserActions($data));
+        //end
 
         try {
             Mail::send('mail.catalog_form', [
@@ -46,6 +58,7 @@ class CatalogController extends Controller
                 'work_experience' => $request->work_experience,
                 'job' => $request->job,
                 'selected_package' => $request->selected_package,
+                'selected_model' => $request->selected_model,
                 'reasons' => $request->reasons,
                 'experts' => $request->experts,
                 'created_at' => $res->created_at
@@ -71,5 +84,22 @@ class CatalogController extends Controller
             ]);
         }
 
+    }
+
+    public function filter(Request $request)
+    {
+
+        return Catalog::query()->when($request->model != '' && $request->state != '', function (Builder $q) use ($request){
+            $q->where([
+            'selected_package' => $request->state
+        ])->orWhere('selected_model',$request->model);
+        })
+            ->when($request->model != '', function (Builder $q) use ($request){
+                $q->where('selected_model',$request->model);
+            })
+            ->when($request->state != '', function (Builder $q) use ($request){
+                $q->where('selected_package' , $request->state);
+            })
+            ->get();
     }
 }

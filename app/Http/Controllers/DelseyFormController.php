@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequesForRepresentation;
+use App\Models\Admin;
 use App\Models\DelseyForm;
+use App\Notifications\UserActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 
 class DelseyFormController extends Controller
@@ -26,6 +29,12 @@ class DelseyFormController extends Controller
             'reasons' => $request->reasons,
             'experts' => $request->experts
         ]);
+
+        //create notification
+        $data = ['action'=>'فرم دلسی '];
+        $admin = Admin::query()->first();
+        Notification::send($admin,new UserActions($data));
+        //end
 
         try {
             Mail::send('mail.catalog_form', [

@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\EmailJob;
+use App\Models\Admin;
 use App\Models\Customer;
 use App\Models\User;
+use App\Notifications\UserActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 use Kavenegar\KavenegarApi;
@@ -19,26 +22,35 @@ class UserController extends Controller
     ////////////////********* this methods have been tested => OK!
     public function createAccountForCustomer()
     {
-        $clients = Customer::query()->get();
-        foreach ($clients as $client){
-            DB::beginTransaction();
-            try {
-                $user = User::query()->create([
-                    'name' => $client->name,
-                    'phone_number' => $client->user_name,
-                    'password' => $client->password,
-                ]);
-//                $card = Card::create([
-//                    'user_id' => $user->id,
-//                    'status' => 1
+        $user=User::query()->find(283);
+        $customer = Customer::query()->find(79);
+
+        return User::query()->where('id',283)->update([
+            'name' => $customer->name,
+            'phone_number' => $customer->user_name,
+            'password' => $customer->password,
+        ]);
+//
+//        $clients = Customer::query()->latest()->take(3)->get();
+//        foreach ($clients as $client){
+//            DB::beginTransaction();
+//            try {
+//                $user = User::query()->create([
+//                    'name' => $client->name,
+//                    'phone_number' => $client->user_name,
+//                    'password' => $client->password,
 //                ]);
-                DB::commit();
-            }
-            catch (\Exception $exception){
-                DB::rollBack();
-                throw new \Exception($exception->getMessage());
-            }
-        }
+////                $card = Card::create([
+////                    'user_id' => $user->id,
+////                    'status' => 1
+////                ]);
+//                DB::commit();
+//            }
+//            catch (\Exception $exception){
+//                DB::rollBack();
+//                throw new \Exception($exception->getMessage());
+//            }
+//        }
     }
 
     public function loginOrRegister(Request $request)
@@ -139,6 +151,12 @@ class UserController extends Controller
                         'email' => $key
                     ]);
                 }
+                //create notification
+                $data = ['action'=>'ایجاد حساب کاربری'];
+                $admin = Admin::query()->first();
+                Notification::send($admin,new UserActions($data));
+                //end
+
             }
 
             $token = $user->createToken('account')->plainTextToken;

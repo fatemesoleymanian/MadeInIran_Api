@@ -49,11 +49,12 @@ class AdminController extends Controller
 
         $permission = Permission::with('module')->where('role_id', $admin->role_id)->get();
         $token = $admin->createToken('panel')->plainTextToken;
+        
 
         return response()->json([
             'user' => $admin,
             'token' => $token,
-            'permission' => $permission
+            'permission' => $permission,
         ], 201);
     }
 

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Bookmark;
+use App\Notifications\UserActions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class BookmarkController extends Controller
 {
@@ -15,6 +18,13 @@ class BookmarkController extends Controller
             'product_id' => $request->product,
             'user_id' => $request->user
         ]);
+
+        //create notification
+        $data = ['action'=>'افزودن محصول به علاقمندیها'];
+        $admin = Admin::query()->first();
+        Notification::send($admin,new UserActions($data));
+        //end
+
         return response()->json([
             'msg' => $bookmark
         ]);

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    use HasFactory ;
+    use HasFactory;
 
 
     /**
@@ -20,7 +20,7 @@ class Customer extends Model
         'password',
         'name'
     ];
-    protected $hidden =['password'];
+    protected $hidden = ['password'];
 
     public function getCreatedAtAttribute($val)
     {
@@ -30,5 +30,4 @@ class Customer extends Model
     {
         return verta($val)->format('l d %B Y');
     }
-
 }

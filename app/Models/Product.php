@@ -17,7 +17,8 @@ class Product extends Model
         'description',
         'category_id',
         'discount',
-        'slug'
+        'slug',
+        'has_models'
     ];
 
     public function getCreatedAtAttribute($val)
@@ -45,6 +46,10 @@ class Product extends Model
     public function state()
     {
         return $this->hasMany(ProductState::class, 'product_id');
+    }
+    public function model()
+    {
+        return $this->hasMany(ProductModel::class, 'product_id');
     }
     public function card()
     {

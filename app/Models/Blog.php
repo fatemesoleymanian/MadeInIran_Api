@@ -19,7 +19,7 @@ class Blog extends Model
         'views',
         'category_id',
         'created_at',
-
+        'id'
     ];
     public function getCreatedAtAttribute($val)
     {

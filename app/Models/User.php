@@ -26,7 +26,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token'
     ];
 
     /**
@@ -63,4 +63,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class, 'user_id');
     }
 
+//    public function test()
+//    {
+//        //list of notifications
+//        $this->notifications()->get();
+//        //create a notification
+//        $this->notify();
+//    }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\JobProductionIdea;
+use App\Notifications\UserActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Notification;
 
 class JobProductionIdeaController extends Controller
 {
@@ -20,6 +23,13 @@ class JobProductionIdeaController extends Controller
             'phone_number' => $request->phone_number,
             'description' => $request->description,
         ]);
+
+        $data = ['action' => 'فرم تقاضای خط تولید با ایده'];
+        //create notification
+        $admin = Admin::query()->first();
+        Notification::send($admin, new UserActions($data));
+        //end
+
         //create response
         $response = [
             'user' => $user,

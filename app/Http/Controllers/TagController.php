@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\BlogTag;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -17,11 +18,12 @@ class TagController extends Controller
             'name' => 'required|string|unique:tags',
             'type' => 'required' //0=> blog  1=>product
         ]);
-
-        return Tag::create([
+        $data = [
             'name' => $request->name,
             'type' => $request->type
-        ]);
+        ];
+        $tag = Tag::create($data);
+        return $tag;
     }
     public function showAll()
     {

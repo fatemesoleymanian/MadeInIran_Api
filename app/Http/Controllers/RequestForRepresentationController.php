@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequesForRepresentation;
+use App\Models\Admin;
 use App\Models\Request_for_representation;
+use App\Notifications\UserActions;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 use Illuminate\Http\Request;
 
@@ -26,6 +29,12 @@ class RequestForRepresentationController extends Controller
             'reasons' => $request->reasons,
             'experts' => $request->experts
         ]);
+
+        $data = [ 'action' => 'فرم درخواست نمایندگی دستمال کاغذی رومیزی'];
+        //create notification
+        $admin = Admin::query()->first();
+        Notification::send($admin, new UserActions($data));
+        //end
 
         try {
             Mail::send('mail.catalog_form', [

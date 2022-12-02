@@ -13,6 +13,10 @@ class ProductState extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function model()
+    {
+        return $this->belongsTo(ProductModel::class);
+    }
 
     public function getCreatedAtAttribute($val)
     {

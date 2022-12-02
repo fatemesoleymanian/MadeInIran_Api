@@ -12,4 +12,8 @@ class ProductStateController extends Controller
         return ProductState::with(['product'])->where('type','=',$type)->paginate(10);
     }
 
+    public function showAll()
+    {
+      return ProductState::query()->get(['type']);
+    }
 }

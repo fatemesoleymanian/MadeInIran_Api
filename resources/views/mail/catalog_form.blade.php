@@ -9,6 +9,7 @@
     <h6 style="font-size: 18px;font-weight: 500">سوابق شغلی : {{$work_experience}}</h6>
     <h6 style="font-size: 18px;font-weight: 500">شغل فعلی : {{$job}}</h6>
     <h6 style="font-size: 18px;font-weight: 500">پکیج مدنظر : {{$selected_package}}</h6>
+    <h6 style="font-size: 18px;font-weight: 500">حالت مدنظر : {{$selected_model}}</h6>
     <h6 style="font-size: 18px;font-weight: 500">کارشناس مربوطه : {{$experts}}</h6>
     <h6 style="font-size: 18px;font-weight: 500"> دلایل دریافت نمایندگی : {{$reasons}}</h6>
     <h6 style="font-size: 18px;font-weight: 500">  تاریخ ثبت فرم  : {{$created_at}}</h6>

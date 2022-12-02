@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\commentRequest;
 use App\Http\Requests\RequesForRepresentation;
+use App\Models\Admin;
 use App\Models\Catalog;
 use App\Models\ProductComment;
+use App\Notifications\UserActions;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +25,13 @@ class ProductCommentController extends Controller
             'product_id' => $request->product,
             'comment' => $request->comment,
         ]);
+
+        $data = ['action' => 'ایجاد کامنت برای محصول'];
+        //create notification
+        $admin = Admin::query()->first();
+        Notification::send($admin, new UserActions($data));
+        //end
+
         if ($comment) return response()->json([
             'msg' => 'دیدگاه شما ثبت شد و پس از تایید ادمین قابل مشاهده می باشد.'
         ]);

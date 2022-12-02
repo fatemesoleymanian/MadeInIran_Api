@@ -8,6 +8,7 @@ use App\Models\Blog;
 use App\Models\FQ;
 use App\Models\FQProduct;
 use App\Models\Product;
+use App\Models\ProductModel;
 use App\Models\ProductState;
 use App\Models\ProductTag;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,10 +28,13 @@ class ProductController extends Controller
     {
         //ATTENTION :: discounted_price ghymte hale hazere, che mahsool off bkhre che nkhre , price age mahsool off bkhre ghymte ghdime age nkhre 0e
         $request->validated();
-        $states = $request->states;
-        $costs = $request->costs;
-        $off = $request->off;
-        $dynamic_info = [];
+//        $states = $request->states;
+//        $costs = $request->costs;
+//        $off = $request->off;
+//        $dynamic_info = [];
+        $descriptions = $request->descriptions;
+        $names = $request->names;
+        $models = [];
         $tags = [];
 
         DB::beginTransaction();
@@ -44,7 +48,7 @@ class ProductController extends Controller
                 'metaDescription' => $request->metaDescription,
                 'metaKeyword' => $request->metaKeyword,
                 'pageTitle' => $request->pageTitle,
-                'discount' => $request->discount,
+                'has_models' => $request->has_models,
                 'slug' => Str::slug($request->slug),
             ]);
 
@@ -53,22 +57,37 @@ class ProductController extends Controller
             }
             ProductTag::insert($tags);
 
+            if ($request->has_models ){
+//
+//                for ($x = 0; $x < sizeof($states); $x++) {
+//                    array_push($dynamic_info, [
+//                        'type' => $states[$x],
+//                        'price' => $costs[$x],
+//                        'product_id' => $product_id->id,
+//                        'discounted_price' => $off[$x]
+//                    ]);
+//                }
+//                ProductState::insert($dynamic_info);
+//
+//            }
+//            else{
 
-            for ($x = 0; $x < sizeof($states); $x++) {
-                array_push($dynamic_info, [
-                    'type' => $states[$x],
-                    'price' => $costs[$x],
-                    'product_id' => $product_id->id,
-                    'discounted_price' => $off[$x]
-                ]);
+                for ($x = 0; $x < sizeof($names); $x++) {
+                    array_push($models, [
+                        'name' => $names[$x],
+                        'description' => $descriptions[$x],
+                        'product_id' => $product_id->id,
+                    ]);
+                }
+                ProductModel::query()->insert($models);
             }
-            ProductState::insert($dynamic_info);
             DB::commit();
             return response()->json([
                 'msg' => Lang::get('messages.success', ['attribute' => 'محصول']),
                 'product' => $product_id
             ]);
-        } catch (Throwable $throwable) {
+        }
+        catch (Throwable $throwable) {
             DB::rollBack();
             return response()->json([
                 'errors' => Lang::get('messages.fail', ['attribute' => 'محصول']),
@@ -78,14 +97,85 @@ class ProductController extends Controller
         return 'Not done!';
     }
 
+    public function editStatesForModel(Request $request)
+    {
+        $product_id = $request->product_id;
+        $model_id = $request->model_id;
+
+        Product::where('id',$product_id)->update(['discount' => $request->discount]);
+
+        $states = $request->states;
+        $costs = $request->costs;
+        if ($request->off)  $off = $request->off;
+        $dynamic_info = [];
+
+        for ($x = 0; $x < sizeof($states); $x++) {
+            array_push($dynamic_info, [
+                'type' => $states[$x],
+                'price' => $costs[$x],
+                'product_id' => $product_id,
+                'discounted_price' => $off[$x],
+                'model_id' => $model_id
+            ]);
+        }
+        ProductState::query()->where(['product_id'=>$product_id,'model_id'=>$model_id])->delete();
+        $result = ProductState::insert($dynamic_info);
+
+        if ($result) return response()->json([
+            'msg' => Lang::get('messages.success', ['attribute' => 'ظرفیت ها']),
+        ]);
+
+        return response()->json([
+        'errors' => Lang::get('messages.fail', ['attribute' => 'ظرفیت ها']),
+        ], 401);
+
+
+
+    }
+    public function editStates(Request $request)
+    {
+        $product_id = $request->product_id;
+         Product::query()->where('id',$product_id)->update(['discount' => $request->discount]);
+
+        $states = $request->states;
+        $costs = $request->costs;
+        if ($request->off)  $off = $request->off;
+        $dynamic_info = [];
+
+        for ($x = 0; $x < sizeof($states); $x++) {
+            array_push($dynamic_info, [
+                'type' => $states[$x],
+                'price' => $costs[$x],
+                'product_id' => $product_id,
+                'discounted_price' => $off[$x],
+            ]);
+        }
+        ProductState::query()->where('product_id',$product_id)->delete();
+        $result = ProductState::insert($dynamic_info);
+
+        if ($result) return response()->json([
+            'msg' => Lang::get('messages.success', ['attribute' => 'ظرفیت ها']),
+        ]);
+
+        return response()->json([
+        'errors' => Lang::get('messages.fail', ['attribute' => 'ظرفیت ها']),
+        ], 401);
+
+
+
+    }
+
     public function update(UpdateProductRequest $request, $id)
     {
         $request->validated();
         $tags = [];
-        $states = $request->states;
-        $costs = $request->costs;
-        $off = $request->off;
-        $ids = $request->ids;
+//        $states = $request->states;
+//        $costs = $request->costs;
+//        $off = $request->off;
+//        $ids = $request->ids;
+        $descriptions = $request->descriptions;
+        $names = $request->names;
+        $models = [];
 
         $dynamic_info = array();
 
@@ -101,7 +191,7 @@ class ProductController extends Controller
                 'metaKeyword' => $request->metaKeyword,
                 'pageTitle' => $request->pageTitle,
                 'inventory' => $request->inventory,
-                'discount' => $request->discount,
+                'has_models' => $request->has_models,
                 'slug' => Str::slug($request->slug),
             ]);
             //tag
@@ -112,47 +202,58 @@ class ProductController extends Controller
             ProductTag::insert($tags);
 
             //states
-            for ($x = 0; $x < sizeof($states); $x++) {
-                array_push($dynamic_info, [
-                    'type' => $states[$x],
-                    'price' => $costs[$x],
-                    'discounted_price' => $off[$x],
-                    'product_id' => $id,
-                ]);
+            if ($request->has_models) {
+//                for ($x = 0; $x < sizeof($states); $x++) {
+//                    array_push($dynamic_info, [
+//                        'type' => $states[$x],
+//                        'price' => $costs[$x],
+//                        'discounted_price' => $off[$x],
+//                        'product_id' => $id,
+//                    ]);
+//                }
+//            $old = ProductState::where('product_id', $id)->get('id');
+//
+//            if (sizeof($old) > sizeof($dynamic_info)) {
+//                $x = 0;
+//                foreach ($old as $o) {
+//                    $x = 0;
+//                    $flag = false;
+//                    foreach ($ids as $i) {
+//                        if ($o->id == $i) {
+//                            ProductState::find($i)->update($dynamic_info[$x]);
+//                            $flag = true;
+//                            break;
+//                        }
+//                        $x++;
+//                    }
+//                    if ($flag == false) ProductState::find($o->id)->delete();
+//                }
+//            } else if (sizeof($old) < sizeof($dynamic_info)) {
+//                $x = 0;
+//                foreach ($dynamic_info as $d) {
+//                    if (isset($dynamic_info[$x]) && isset($ids[$x])) ProductState::find($ids[$x])->update($dynamic_info[$x]);
+//                    if (!isset($ids[$x])) ProductState::insert($d);
+//                    $x++;
+//                }
+//            } else {
+//                $x = 0;
+//                foreach ($old as $o) {
+//                    ProductState::find($ids[$x])->update($dynamic_info[$x]);
+//                    $x++;
+//                }
+//            }
+//        }
+                ProductState::query()->where('product_id', $id)->delete();
+                for ($x = 0; $x < sizeof($names); $x++) {
+                    array_push($models, [
+                        'name' => $names[$x],
+                        'description' => $descriptions[$x],
+                        'product_id' => $id,
+                    ]);
+                }
+                ProductModel::query()->where('product_id', $id)->delete();
+                ProductModel::query()->insert($models);
             }
-            $old = ProductState::where('product_id', $id)->get('id');
-
-            if (sizeof($old) > sizeof($dynamic_info)) {
-                $x = 0;
-                foreach ($old as $o) {
-                    $x = 0;
-                    $flag = false;
-                    foreach ($ids as $i) {
-                        if ($o->id == $i) {
-                            ProductState::find($i)->update($dynamic_info[$x]);
-                            $flag = true;
-                            break;
-                        }
-                        $x++;
-                    }
-                    if ($flag == false)  ProductState::find($o->id)->delete();
-                }
-            } else if (sizeof($old) < sizeof($dynamic_info)) {
-                $x = 0;
-                foreach ($dynamic_info as $d) {
-                    if (isset($dynamic_info[$x]) && isset($ids[$x])) ProductState::find($ids[$x])->update($dynamic_info[$x]);
-                    if (!isset($ids[$x])) ProductState::insert($d);
-                    $x++;
-                }
-            } else {
-                $x = 0;
-                foreach ($old as $o) {
-                    ProductState::find($ids[$x])->update($dynamic_info[$x]);
-                    $x++;
-                }
-            }
-
-
             DB::commit();
             return response()->json([
                 'msg' => 'ویرایش محصول با موفقیت انجام شد.',
@@ -184,7 +285,7 @@ class ProductController extends Controller
 
     public function showOne($id)
     {
-        return Product::with(['category', 'tag', 'state', 'faq','comment'])
+        return Product::with(['category', 'tag', 'state', 'faq','comment','model'])
             ->where('id', $id)->first();
     }
     public function showFAQ($id)
@@ -195,14 +296,14 @@ class ProductController extends Controller
 
     public function showProductsInPanel()
     {
-        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get()->makeHidden(['description']);
+        return Product::with(['category', 'tag', 'state','model'])->orderByDesc('id')->get()->makeHidden(['description']);
     }
 
     public function showAll()
     {
         //front will handle pagination
          $products = Cache::remember('products_show_all', now()->addHour(), function () {
-        return Product::with(['category', 'tag', 'state'])->orderByDesc('id')->get()->makeHidden(['description']);
+        return Product::with(['category', 'tag', 'state','model'])->orderByDesc('id')->get()->makeHidden(['description']);
          });
          return $products;
     }
@@ -210,7 +311,7 @@ class ProductController extends Controller
     public function showSome()
     {
          $products = Cache::remember('products_random', now()->addHour(), function () {
-        return Product::with(['category', 'tag', 'state',])->latest()->take(6)->get();
+        return Product::with(['category', 'tag', 'state','model'])->latest()->take(6)->get();
          });
          return $products;
     }

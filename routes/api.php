@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminNotificationsController;
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\BlogController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductModelController;
 use App\Http\Controllers\ProductStateController;
 use App\Http\Controllers\RequestForRepresentationController;
 use App\Http\Controllers\RoleController;
@@ -190,6 +192,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //Product representation ( catalog)
     Route::post('product_represent',[CatalogController::class,'save']);
+    Route::post('/catalog/filter',[CatalogController::class,'filter']);
 
     //blog comments
     Route::post('post_comment', [BlogCommentController::class, 'save']);
@@ -245,10 +248,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/products', [ProductController::class, 'save']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-    //show in admin
+    Route::post('/products/states_to_models', [ProductController::class, 'editStatesForModel']);
+    Route::post('/products/states', [ProductController::class, 'editStates']);
+//    //show in admin
     Route::get('/admin/products', [ProductController::class, 'showProductsInPanel']);
     //product filter
     Route::get('/products_filter/{type}', [ProductStateController::class, 'filterOnState']);
+
+    //show product states
+    Route::get('product_states',[ProductStateController::class,'showAll']);
+
+    //show product models
+    Route::get('product_models',[ProductModelController::class,'showAll']);
 
     //bookmark
     Route::post('/bookmark', [BookmarkController::class, 'save']);
@@ -290,7 +301,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/customers/all',[CustomerController::class,'showCustomers']);
     Route::post('/customers/login',[CustomerController::class,'checkAccess']);
 
+    //notifications
+    Route::get('/admin/count_unread_notifications',[AdminNotificationsController::class,'countUnreadNotifications']);
+    Route::get('/admin/read_notifications',[AdminNotificationsController::class,'readNotifications']);
+    Route::get('/admin/unread_notifications',[AdminNotificationsController::class,'unreadNotifications']);
+    Route::post('/admin/mark_as_read_notifications',[AdminNotificationsController::class,'markAllAsReadNotification']);
+
 });
+
+
 
 //upload video
 Route::post('upload/video',[Upload::class,'uploadVideo']);

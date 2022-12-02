@@ -4,18 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\DatabaseNotification;
 
-class Slider extends Model
+
+class Notification extends Model
 {
-    protected $fillable = [
-        'title',
-        'image',
-        'sub_title',
-        'text',
-        'link',
-        'button_content',
-    ];
-
+    protected $guarded = [];
     public function getCreatedAtAttribute($val)
     {
         return verta($val)->format('l d %B Y');
@@ -24,5 +18,6 @@ class Slider extends Model
     {
         return verta($val)->format('l d %B Y');
     }
+
     use HasFactory;
 }

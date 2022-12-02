@@ -27,13 +27,10 @@ class CreateProductRequest extends FormRequest
             'name' => "bail|required|string",
             'image' => "bail|required|string",
             'description_excerpt' => "bail|required|string",
-            'description' => "bail|required",
             'category_id' => "bail|required|integer",
             'metaDescription' => 'bail|required',
             'metaKeyword' => 'bail|required',
             'pageTitle' => 'required|max:200',
-            'states' => 'required',
-            'costs' => 'required',
             'tags' => 'required',
             'slug' => 'required'
         ];
@@ -45,7 +42,6 @@ class CreateProductRequest extends FormRequest
             'tags.required' => 'لطفا حداقل یک تگ برای محصول وارد کنید!',
             'slug.required' => 'لطفا نشانک محصول وارد کنید!',
             'description_excerpt.required' => 'لطفا چکیده توضیحات محصول را وارد کنید!',
-            'description.required' => 'لطفا توضیحات محصول را وارد کنید!',
             'category_id.required' => 'لطفا دسته بندی محصول را وارد کنید!',
             'category_id.integer' => 'لطفا دسته بندی محصول را به درستی وارد کنید!',
             'name.string' => 'لطفا نام محصول را به درستی وارد کنید!',
@@ -55,8 +51,6 @@ class CreateProductRequest extends FormRequest
             'metaDescription.required' => 'لطفا توضیحات متا را به درستی وارد کنید!',
             'metaKeyword.required' => 'لطفا کلمه کلیدی متا را به درستی وارد کنید!',
             'pageTitle.required' => 'لطفا تیتر صفحه را به درستی وارد کنید!',
-            'states.required' => 'لطفا اطلاعات متغیر محصول را وارد کنید!',
-            'costs.required' => 'لطفا اطلاعات متغیر محصول را وارد کنید!',
             'pageTitle.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
         ];
     }
