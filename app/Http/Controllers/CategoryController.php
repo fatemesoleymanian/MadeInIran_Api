@@ -15,7 +15,6 @@ class CategoryController extends Controller
         Validator::validate(
             $request->all(),
             [
-
                 'name' => "bail|required|string",
                 'iconImage' => "string",
                 'department_id' => "bail|required|integer",
@@ -28,7 +27,6 @@ class CategoryController extends Controller
                 'department_id.required' => 'لطفا دپارتمان را انتخاب کنید.',
                 'name.required' => 'لطفا نام دسته بندی را وارد کنید!',
                 'name.string' => 'لطفا نام دسته بندی را به درستی وارد کنید!',
-                'iconImage.string' => 'لطفا آدرس فایل را به درستی وارد کنید!',
                 'metaDescription.required' => 'لطفا توضیحات متا را به درستی وارد کنید!',
                 'metaDescription.max' => 'حداکثر تعداد حروف 100 حرف میباشد!',
                 'metaKeyword.required' => 'لطفا کلمه کلیدی متا را به درستی وارد کنید!',

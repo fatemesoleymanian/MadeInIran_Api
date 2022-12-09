@@ -22,20 +22,20 @@ class UserController extends Controller
     ////////////////********* this methods have been tested => OK!
     public function createAccountForCustomer()
     {
-        $user=User::query()->find(283);
-        $customer = Customer::query()->find(79);
+//        $user=User::query()->find(124);
+        $customer = Customer::query()->find(75);
 
-        return User::query()->where('id',283)->update([
+        return User::query()->where('id',105)->update([
             'name' => $customer->name,
             'phone_number' => $customer->user_name,
             'password' => $customer->password,
         ]);
-//
-//        $clients = Customer::query()->latest()->take(3)->get();
+////
+//        $clients = Customer::query()->where('id','>','79')->get();
 //        foreach ($clients as $client){
 //            DB::beginTransaction();
 //            try {
-//                $user = User::query()->create([
+//                $user = User::query()->updateOrCreate([
 //                    'name' => $client->name,
 //                    'phone_number' => $client->user_name,
 //                    'password' => $client->password,
@@ -51,6 +51,8 @@ class UserController extends Controller
 //                throw new \Exception($exception->getMessage());
 //            }
 //        }
+//        return Customer::query()->where('user_name','09389214041')->first();
+//        return User::query()->where('phone_number','09389214041')->first();
     }
 
     public function loginOrRegister(Request $request)

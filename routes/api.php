@@ -302,12 +302,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/customers/login',[CustomerController::class,'checkAccess']);
 
     //notifications
-    Route::get('/admin/count_unread_notifications',[AdminNotificationsController::class,'countUnreadNotifications']);
     Route::get('/admin/read_notifications',[AdminNotificationsController::class,'readNotifications']);
     Route::get('/admin/unread_notifications',[AdminNotificationsController::class,'unreadNotifications']);
     Route::post('/admin/mark_as_read_notifications',[AdminNotificationsController::class,'markAllAsReadNotification']);
 
 });
+Route::get('/admin/count_unread_notifications',[AdminNotificationsController::class,'countUnreadNotifications']);
 
 
 
