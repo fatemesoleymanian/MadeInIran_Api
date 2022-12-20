@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Jobs\EmailJob;
 use App\Models\Admin;
 use App\Models\Customer;
@@ -22,44 +23,174 @@ class UserController extends Controller
     ////////////////********* this methods have been tested => OK!
     public function createAccountForCustomer()
     {
-//        $user=User::query()->find(124);
-        $customer = Customer::query()->find(75);
-
-        return User::query()->where('id',105)->update([
-            'name' => $customer->name,
-            'phone_number' => $customer->user_name,
-            'password' => $customer->password,
-        ]);
-////
-//        $clients = Customer::query()->where('id','>','79')->get();
-//        foreach ($clients as $client){
-//            DB::beginTransaction();
-//            try {
-//                $user = User::query()->updateOrCreate([
-//                    'name' => $client->name,
-//                    'phone_number' => $client->user_name,
-//                    'password' => $client->password,
-//                ]);
-////                $card = Card::create([
-////                    'user_id' => $user->id,
-////                    'status' => 1
-////                ]);
-//                DB::commit();
-//            }
-//            catch (\Exception $exception){
-//                DB::rollBack();
-//                throw new \Exception($exception->getMessage());
-//            }
-//        }
-//        return Customer::query()->where('user_name','09389214041')->first();
-//        return User::query()->where('phone_number','09389214041')->first();
+        //        $user=User::query()->find(124);
+//        $customer = Customer::query()->find(75);
+//
+//        return User::query()->where('id', 105)->update([
+//            'name' => $customer->name,
+//            'phone_number' => $customer->user_name,
+//            'password' => $customer->password,
+//        'is_customer' => 1
+//        ]);
+        //
+        $clients = Customer::query()->get();
+        foreach ($clients as $client)
+        {
+            DB::beginTransaction();
+            try {
+            User::query()->where('phone_number',$client->user_name)
+                ->update([
+                   'is_customer' => 1
+                ]);
+                DB::commit();
+            }
+            catch (\Exception $exception){
+                DB::rollBack();
+                throw new \Exception($exception->getMessage());
+            }
+        }
+//                $clients = Customer::query()->where('id','>','126')->get();
+//                foreach ($clients as $client){
+//                    DB::beginTransaction();
+//                    try {
+//                        $user = User::query()->updateOrCreate([
+//                            'name' => $client->name,
+//                            'phone_number' => $client->user_name,
+//                            'password' => $client->password,
+//                            'is_customer' => 1
+//                        ]);
+//        //                $card = Card::create([
+//        //                    'user_id' => $user->id,
+//        //                    'status' => 1
+//        //                ]);
+//                        DB::commit();
+//                    }
+//                    catch (\Exception $exception){
+//                        DB::rollBack();
+//                        throw new \Exception($exception->getMessage());
+//                    }
+//                }
+//                return Customer::query()->where('user_name','09389214041')->first();
+//                return User::query()->where('phone_number','09389214041')->first();
     }
 
-    public function loginOrRegister(Request $request)
+    public function login(LoginRequest $request)
     {
+        $request->validated();
+        $user = User::where('phone_number', $request->username)->orWhere('email', $request->username)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'اطلاعات وارد شده صحیح نمیباشد!'
+            ]);
+        }
+
+        $token = $user->createToken('account')->plainTextToken;
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ], 201);
+    }
+
+    public function forgetPassword(Request $request)
+    {
+        Validator::validate(
+            $request->all(),
+            ['username' => "required"],
+            [
+                'email.required' => 'لطفا نام کاربری خود را وارد کنید!',
+            ]
+        );
+
+        $username = $request->username;
+        $otp = rand(10000, 1000000);
+        $user = User::where('phone_number', $request->username)->orWhere('email', $request->username)->first();
+
+        if (!$user) return response()->json([
+            'message' => 'نام کاربری درسیستم وجود ندارد!'
+        ],200);
+
+        // phone number
+        if (str_starts_with($username, '09')) {
+
+            $kavenegar = new KavenegarApi(config('kavenegar.apikey'));
+            $kavenegar->VerifyLookup(
+                $username,
+                $otp,
+                null,
+                null,
+                'verify',
+                $type = null
+            );
+
+            cache()->remember($username, 250, function () use ($otp) {
+                return $otp;
+            });
+            return response()->json(['message' => 'رمز یکبار مصرف به شما پیامک شد.'],201);
+        }
+        //EMAIL
+        else {
+
+            try {
+                //email with job and queue
+                //                $details['view'] = 'mail.conf_code';
+                //                $details['conf_code'] = $conf_code;
+                //                $details['key'] = $request->key;
+                //                dispatch(new EmailJob($details));
+
+                //no queue
+                Mail::send(
+                    'mail.forget_password',
+                    ['code' => $otp],
+                    function ($message) use ($request) {
+                        $message->to($request->username);
+                        $message->subject('ساخت ایران');
+                    }
+                );
+                cache()->remember($username, 250, function () use ($otp) {
+                    return $otp;
+                });
+                return response()->json(['message' => 'رمز یکبار مصرف به شما ایمیل شد.'],201);
+            } catch (ExceptionInterface $e) {
+                return response()->json([
+                    'email' => $e
+                ], 200);
+            }
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        Validator::validate(
+            $request->all(),
+            ['otp' => "required"],
+            ['otp.required' => 'لطفا رمز یکبار مصرف را وارد کنید!']
+        );
+
+        $username = $request->username;
+        $otp = cache()->get($username);
+        if ($otp != $request->otp) return response()->json([
+            'message' => 'رمز وارد شده صحیح نیست!'
+        ], 200);
+
+        $user = User::where('phone_number', $request->username)->orWhere('email', $request->username)->first();
+        $token = $user->createToken('account')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ], 201);
+
+    }
+
+    public function register(Request $request)
+    {
+        $user = User::where('phone_number', $request->key)->orWhere('email', $request->key)->first();
+        if ($user)  return response()->json([
+            'message' => 'این کاربر در سیستم وجود دارد!'
+        ], 200);
+
         $key = $request->key;
         $conf_code = rand(10000, 100000);
-        $status = 0;
 
         // phone number
         if (str_starts_with($key, '09')) {
@@ -68,21 +199,21 @@ class UserController extends Controller
                 ['key' => "required"],
                 ['key.required' => 'لطفا شماره تلفن همراه یا ایمیل خود را وارد کنید!']
             );
-            $user = User::where('phone_number', $key)->first();
-            //login flag
-            if ($user) $status = 1;
 
             $kavenegar = new KavenegarApi(config('kavenegar.apikey'));
-             $kavenegar->VerifyLookup(
+            $kavenegar->VerifyLookup(
                 $key,
                 $conf_code,
-                null, null, 'verify', $type = null
+                null,
+                null,
+                'verify',
+                $type = null
             );
 
             cache()->remember($key, 250, function () use ($conf_code) {
                 return $conf_code;
             });
-            return $status;
+            return response()->json(['message' => 'کد تایید به شما پیامک شد.'],201);
         }
         //EMAIL
         else {
@@ -95,17 +226,12 @@ class UserController extends Controller
                 ]
             );
 
-            $user = User::where('email', $key)->first();
-
-            //login flag
-            if ($user) $status = 1;
-
             try {
                 //email with job and queue
-//                $details['view'] = 'mail.conf_code';
-//                $details['conf_code'] = $conf_code;
-//                $details['key'] = $request->key;
-//                dispatch(new EmailJob($details));
+                //                $details['view'] = 'mail.conf_code';
+                //                $details['conf_code'] = $conf_code;
+                //                $details['key'] = $request->key;
+                //                dispatch(new EmailJob($details));
 
                 //no queue
                 Mail::send(
@@ -119,17 +245,17 @@ class UserController extends Controller
                 cache()->remember($key, 250, function () use ($conf_code) {
                     return $conf_code;
                 });
+                return response()->json(['message' => 'کد تایید به شما ایمیل شد.'],201);
+
             } catch (ExceptionInterface $e) {
                 return response()->json([
                     'email' => $e
-                ], 200);
+                ]);
             }
-            return $status;
         }
     }
 
-
-    public function finishLogin(Request $request)
+    public function finishRegister(Request $request)
     {
         Validator::validate(
             $request->all(),
@@ -140,10 +266,7 @@ class UserController extends Controller
         $code = cache()->get($key);
 
         if ($code == $request->code) {
-            $user = User::where('phone_number', $key)->orWhere('email', $key)->first();
-
             //register
-            if (!$user) {
                 if (str_starts_with($key, '09')) {
                     $user = User::create([
                         'phone_number' => $key
@@ -154,12 +277,10 @@ class UserController extends Controller
                     ]);
                 }
                 //create notification
-                $data = ['action'=>'ایجاد حساب کاربری'];
+                $data = ['action' => 'ایجاد حساب کاربری'];
                 $admin = Admin::query()->first();
-                Notification::send($admin,new UserActions($data));
+                Notification::send($admin, new UserActions($data));
                 //end
-
-            }
 
             $token = $user->createToken('account')->plainTextToken;
 
@@ -235,14 +356,13 @@ class UserController extends Controller
 
     public function showAll()
     {
-//        return User::orderByDesc('created_at')->paginate(10);
+        //        return User::orderByDesc('created_at')->paginate(10);
         return User::orderByDesc('created_at')->get();
     }
 
     public function showCommentsUserMade($id)
     {
-        return User::with(['comment','blogComment'])->where('id',$id)->get();
-
+        return User::with(['comment', 'blogComment'])->where('id', $id)->get();
     }
 
 

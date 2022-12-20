@@ -49,7 +49,7 @@ class AdminController extends Controller
 
         $permission = Permission::with('module')->where('role_id', $admin->role_id)->get();
         $token = $admin->createToken('panel')->plainTextToken;
-        
+
 
         return response()->json([
             'user' => $admin,
@@ -191,7 +191,7 @@ class AdminController extends Controller
                 ['code' => $conf_code],
                 function ($message) use ($request) {
                     $message->to($request->email);
-                    $message->subject('کد تایید ساخت ایران');
+                    $message->subject('کد تایید میم استودیو');
                 }
             );
             cache()->remember($email, 250, function () use ($conf_code) {

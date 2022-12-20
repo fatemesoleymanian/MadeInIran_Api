@@ -117,8 +117,11 @@ Route::get('/products_totaly', [ProductController::class, 'show']);
 
 
 //store user
-Route::post('/login_or_reg', [UserController::class, 'loginOrRegister']);
-Route::post('/confirm_code', [UserController::class, 'finishLogin']);
+Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/forget_password', [UserController::class, 'forgetPassword']);
+Route::post('/reset_password', [UserController::class, 'resetPassword']);
+Route::post('/confirm_code', [UserController::class, 'finishRegister']);
 
 //customers transition
 Route::post('/test/create', [UserController::class, 'createAccountForCustomer']);
