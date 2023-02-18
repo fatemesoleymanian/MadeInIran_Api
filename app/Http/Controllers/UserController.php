@@ -23,33 +23,34 @@ class UserController extends Controller
     ////////////////********* this methods have been tested => OK!
     public function createAccountForCustomer()
     {
-        //        $user=User::query()->find(124);
-//        $customer = Customer::query()->find(75);
-//
-//        return User::query()->where('id', 105)->update([
+//        return User::query()->find(399);
+//                $user=User::query()->find(637);
+//        $customer = Customer::query()->find(160);
+//////
+//        return User::query()->where('id', 637)->update([
 //            'name' => $customer->name,
 //            'phone_number' => $customer->user_name,
 //            'password' => $customer->password,
 //        'is_customer' => 1
 //        ]);
         //
-        $clients = Customer::query()->get();
-        foreach ($clients as $client)
-        {
-            DB::beginTransaction();
-            try {
-            User::query()->where('phone_number',$client->user_name)
-                ->update([
-                   'is_customer' => 1
-                ]);
-                DB::commit();
-            }
-            catch (\Exception $exception){
-                DB::rollBack();
-                throw new \Exception($exception->getMessage());
-            }
-        }
-//                $clients = Customer::query()->where('id','>','126')->get();
+//        $clients = Customer::query()->get();
+//        foreach ($clients as $client)
+//        {
+//            DB::beginTransaction();
+//            try {
+//            User::query()->where('phone_number',$client->user_name)
+//                ->update([
+//                   'is_customer' => 1
+//                ]);
+//                DB::commit();
+//            }
+//            catch (\Exception $exception){
+//                DB::rollBack();
+//                throw new \Exception($exception->getMessage());
+//            }
+//        }
+//                $clients = Customer::query()->where('id','>','159')->get();
 //                foreach ($clients as $client){
 //                    DB::beginTransaction();
 //                    try {
@@ -70,8 +71,8 @@ class UserController extends Controller
 //                        throw new \Exception($exception->getMessage());
 //                    }
 //                }
-//                return Customer::query()->where('user_name','09389214041')->first();
-//                return User::query()->where('phone_number','09389214041')->first();
+//                return Customer::query()->where('user_name','09039137214')->first();
+                return User::query()->where('phone_number','09137686428')->first();
     }
 
     public function login(LoginRequest $request)

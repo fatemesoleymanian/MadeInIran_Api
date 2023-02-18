@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Newsletter;
 use App\Services\NewsletterService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NewsletterController extends Controller
 {
@@ -26,8 +28,14 @@ class NewsletterController extends Controller
     ];
        return $this->serviceObj->addUserToNewslettersReceivers($parametersObject);
     }
+
     public function showAllReceivers()
     {
         return $this->serviceObj->showNewslettersReceivers();
+    }
+    public function distinctHundred()
+    {
+//        return DB::table('newsletters')->distinct()->count('phone_number');
+        return Newsletter::query()->select('phone_number', 'full_name')->distinct()->paginate(100);
     }
 }

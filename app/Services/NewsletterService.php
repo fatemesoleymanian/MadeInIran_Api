@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Admin;
 use App\Models\Newsletter;
 use App\Notifications\UserActions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 
@@ -39,6 +40,7 @@ class NewsletterService
     {
         return $this->newslettersModelObj->orderByDesc('id')->get();
     }
+
 
 
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CampaignOneController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardProductController;
 use App\Http\Controllers\CatalogController;
@@ -53,6 +54,9 @@ Route::get('/job_production_empty', [JobProductionController::class, 'show']);
 Route::post('/job_production_ideas', [JobProductionIdeaController::class, 'save']);
 Route::get('/job_production_ideas', [JobProductionIdeaController::class, 'show']);
 
+//campaigns
+Route::post('/campaign-one/form',[CampaignOneController::class,'store']);
+Route::get('/campaign-one/form',[CampaignOneController::class,'index']);
 
 //Blog
 Route::get('/blogs', [BlogController::class, 'showAll']);
@@ -142,6 +146,7 @@ Route::get('product_represent',[CatalogController::class,'showRequests']);
 //Newsletter
 Route::post('add_new_receiver',[NewsletterController::class,'addNewReceiver']);
 Route::get('show_all_receivers',[NewsletterController::class,'showAllReceivers']);
+Route::get('show_distinct',[NewsletterController::class,'distinctHundred']);
 
 
 ///////////////////**************** Needs Authentication *************************//////////

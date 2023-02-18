@@ -18,14 +18,34 @@ class CustomerController extends Controller
     }
     public function indexCustomer(Request $request)
     {
+        $password = Hash::make($request->password);
         $new_customer = $this->customerObj->query()->create([
             'user_name' => $request->user_name,
             'name' => $request->name,
-            'password' => Hash::make($request->password),
+            'password' => $password,
         ]);
-        return response()->json([
-            'response' => 'مشتری افزوده شد.',
-            'return' => $new_customer
+        $data = [
+            'name' => $request->name,
+            'phone_number' => $request->user_name,
+            'password' => $password,
+            'is_customer' => 1
+        ];
+        if ($new_customer) {
+            $update_or_create = '';
+            $user = User::query()->where('phone_number',$request->user_name)->first();
+            if ($user){
+                $update_or_create = $user->update($data);
+            }else{
+               $update_or_create = User::query()->create($data);
+            }
+            return response()->json([
+                'user' => $update_or_create,
+                'response' => 'مشتری افزوده شد.',
+                'return' => $new_customer
+            ]);
+        }
+        else  return response()->json([
+            'response' => 'خطایی بوجود آمد!'
         ]);
     }
 
@@ -36,12 +56,19 @@ class CustomerController extends Controller
 
     public function editCustomer($id ,Request $request)
     {
+        $password = Hash::make($request->password);
         $edit_customer = $this->customerObj->query()->find($id)->update([
             'user_name' => $request->user_name,
             'name' => $request->name,
-            'password' => Hash::make($request->password),
+            'password' => $password,
+        ]);
+        $user = User::query()->where('phone_number',$request->user_name)->update([
+            'name' => $request->name,
+            'password' => $password,
+            'is_customer' => 1
         ]);
         return response()->json([
+            'user' => $user,
             'response' => 'اطلاعات مشتری آپدیت شد.',
             'return' => $edit_customer
         ]);
