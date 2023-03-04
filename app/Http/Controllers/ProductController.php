@@ -350,10 +350,10 @@ class ProductController extends Controller
     {
         $product = Product::orderByDesc('id')->get('name');
         $tag = DB::table('tags')->orderByDesc('id')->get('name');
-        $blog = Blog::orderByDesc('id')->get('title');
+//        $blog = Blog::orderByDesc('id')->get('title');
         return response()->json([
             'products' => $product,
-            'blogs' => $blog,
+//            'blogs' => $blog,
             'tags' => $tag
         ]);
     }
