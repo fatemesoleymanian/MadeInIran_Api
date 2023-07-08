@@ -107,7 +107,7 @@ Route::delete('/testimonial', [TestimonialController::class, 'destroy']);
 
 //products
 Route::get('/products', [ProductController::class, 'showAll']);
-Route::get('/products/{id}', [ProductController::class, 'showOne']);
+Route::get('/products/{slug}', [ProductController::class, 'showOne']);
 Route::get('/products_with_category', [ProductController::class, 'showAllWithCategory']);
 Route::get('/products_with_category/{id}', [ProductController::class, 'showOneWithCategory']);
 Route::get('/products_with_state', [ProductController::class, 'showAllWithState']);
@@ -149,6 +149,7 @@ Route::get('show_all_receivers',[NewsletterController::class,'showAllReceivers']
 Route::get('show_distinct',[NewsletterController::class,'distinctHundred']);
 
 
+
 ///////////////////**************** Needs Authentication *************************//////////
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -169,6 +170,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('admins/show', [AdminController::class, 'showAll']);
     Route::put('admin/edit', [AdminController::class, 'update']);
     Route::delete('admin/delete', [AdminController::class, 'delete']);
+
+
+    //admin reply comments
+    Route::post('admin/reply', [AdminController::class, 'reply']);
 
     //slider for admin panel
     Route::post('/slider', [SliderController::class, 'create']);

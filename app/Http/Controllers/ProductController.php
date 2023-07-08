@@ -283,10 +283,10 @@ class ProductController extends Controller
         return Product::where('id', $id)->delete();
     }
 
-    public function showOne($id)
+    public function showOne($slug)
     {
         return Product::with(['category', 'tag', 'state', 'faq','comment','model'])
-            ->where('id', $id)->first();
+            ->where('slug', $slug)->first();
     }
     public function showFAQ($id)
     {

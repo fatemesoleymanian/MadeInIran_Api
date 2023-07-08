@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\commentRequest;
 use App\Models\Admin;
 use App\Models\Blog;
 use App\Models\Permission;
 use App\Models\Product;
+use App\Models\ProductComment;
 use App\Models\User;
+use App\Notifications\UserActions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Mailer\Exception\ExceptionInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -281,6 +285,24 @@ class AdminController extends Controller
             'products' => $product,
             'blogs' => $blog,
             'tags' => $tag
+        ]);
+    }
+
+    public function reply(commentRequest $request)
+    {
+        $request->validated();
+        $comment = ProductComment::create([
+            'user_id' => $request->user_id,
+            'product_id' => $request->product_id,
+            'comment' => $request->comment,
+            'status' => $request->status
+        ]);
+
+        if ($comment) return response()->json([
+            'msg' => 'دیدگاه شما ثبت شد .'
+        ]);
+        else return response()->json([
+            'msg' => 'خطایی در ثبت دیدگاه رخ داد!'
         ]);
     }
 }
